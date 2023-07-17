@@ -1,0 +1,15 @@
+{
+  "name": "social-media-app",
+  "version": "1.0.0",
+  "description": "It is a mern stack social media app with a chatting app integrated in it",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Koushik Sarkar",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "nodemon": "^3.0.1"
+  }
+}
