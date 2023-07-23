@@ -1,0 +1,48 @@
+.followercardbox {
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    border-radius: 1.5rem;
+    gap: 1rem;
+    font-size: 15px;
+    max-height: 45vh;
+    overflow: auto;
+    background: var(--cardColor);
+    padding-left: 10px;
+    padding-right: 10px;
+
+}
+
+.indivFollower {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.indivFollower>div {
+    display: flex;
+    gap: 10px;
+
+}
+
+.userphoto {
+    width: 3.2rem;
+    height: 3.2rem;
+    border-radius: 50%;
+
+}
+
+.followerdetails {
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+
+}
+
+.followerbtn {
+    height: 2rem;
+    padding-left: 20px;
+    padding-right: 20px;
+}
