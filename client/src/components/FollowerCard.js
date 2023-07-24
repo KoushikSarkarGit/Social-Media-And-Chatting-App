@@ -42,8 +42,8 @@ export default function FollowerCard() {
                 <h3>Your Followers </h3>
 
                 {
-                    followerdata.map((person) => {
-                        return <div className="indivFollower">
+                    followerdata.map((person, index) => {
+                        return <div className="indivFollower" key={index * 3}>
                             <div>
 
                                 <img src={person.img} alt="userphoto" className='userphoto' />

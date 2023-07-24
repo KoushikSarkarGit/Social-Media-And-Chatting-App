@@ -1,6 +1,8 @@
 import './App.css';
 import Home from './pages/Home';
+import Loginpage from './pages/Loginpage';
 import Profilepage from './pages/Profilepage';
+import SignUpPage from './pages/SignUpPage';
 
 function App() {
   return (
@@ -9,8 +11,10 @@ function App() {
       <div className="backgroundblur" style={{ top: '-18%', right: '0%' }}    ></div>
       <div className="backgroundblur" style={{ top: '37%', left: '-10%' }}    ></div>
 
-      <Home />
-      {/* <Profilepage /> */}
+      {/* <Home /> */}
+      <Profilepage />
+      {/* <Loginpage /> */}
+      {/* <SignUpPage /> */}
     </div>
   );
 }

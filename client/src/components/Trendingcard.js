@@ -38,8 +38,8 @@ export default function Trendingcard() {
 
 
             {
-                trenddata.map((item) => {
-                    return <div className="singletrend">
+                trenddata.map((item, index) => {
+                    return <div className="singletrend" key={index * 2}>
                         <span>#{item.name}</span>
 
                         <span>{item.shares} shares</span>

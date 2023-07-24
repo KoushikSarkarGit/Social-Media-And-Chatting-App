@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import '../pagecss/profiledetails.css'
 import { UilPen } from "@iconscout/react-unicons";
+import Profiledetailsmodal from './Profiledetailsmodal';
 
 export default function ProfileDetails() {
 
@@ -51,10 +52,15 @@ export default function ProfileDetails() {
                 <span>
                     <b>Bio </b>
                 </span>
-                <span> Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea temporibus sunt nostrum consequuntur esse deleniti aperiam sit at labore, veniam unde. Quae aspernatur necessitatibus ipsa incidunt, modi quod natus aliquid?</span>
+                <span> Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea temporibus sunt nostrum consequuntur esse deleniti aperiam sit at...</span>
             </div>
 
-            <button className="basicbutton logout-button">Logout</button>
+            <Profiledetailsmodal pmodal={pmodal} setpmodal={setpmodal} />
+            <div className="btncontainer">
+                <button className="basicbutton logout-button" onClick={() => setpmodal(true)} >See More</button>
+                <button className="basicbutton logout-button">Logout</button>
+            </div>
+
         </div>
     )
 }
