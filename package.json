@@ -4,13 +4,17 @@
   "description": "It is a mern stack social media app with a chatting app integrated in it",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
   "author": "Koushik Sarkar",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.20.2",
     "concurrently": "^8.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "mongoose": "^7.4.1",
     "nodemon": "^3.0.1"
   }
 }
