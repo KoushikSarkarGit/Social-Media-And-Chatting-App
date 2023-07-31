@@ -37,11 +37,9 @@ const userRegistration = async (req, res) => {
         return res.status(200).json({ success: true, CreatedUser, msg: 'Registration successful' });
 
     } catch (error) {
-        res.status(501).json({ success, message: error.message });
+        res.status(501).json({ success, msg: error.message });
     }
 };
-
-
 
 // user login controller
 
@@ -72,8 +70,6 @@ const loginBackend = async (req, res) => {
     }
 }
 
-
-
 // get a User controller
 const getSingleUser = async (req, res) => {
     const id = req.params.id;
@@ -92,21 +88,42 @@ const getSingleUser = async (req, res) => {
 };
 
 
+// update user details
+const updateUserDetails = async (req, res) => {
+    const id = req.params.id;
+    const hashednewpassword = '';
+    const { profilePicture, coverPicture } = req.files;
 
+    const { username, curuserid, adminstatus, phone, firstname, lastname, newpassword, bio, livesin, worksAt, relationship } = req.fields;
 
+    if (id === curuserid || adminstatus) {
+        try {
+            if (newpassword) {
+                hashednewpassword = await encrytpassword(newpassword);
+            }
 
+            const updateduser = await Usermodel.findByIdAndUpdate(curuserid, {
+                username: username,
+                phone: phone,
+                firstname: firstname,
+                lastname: lastname,
+                password: hashednewpassword,
+                bio: bio,
+                livesin: livesin,
+                worksAt: worksAt,
+                relationship: relationship
+            }, {
+                new: true,
+            });
 
-
-
-
-
-
-
-
-
-
-
-
+            res.status(200).json(updateduser);
+        } catch (error) {
+            res.status(500).json({ success: false, error });
+        }
+    } else {
+        res.status(403).json({ success: false, msg: "Access Denied! you can only update your own profile" });
+    }
+};
 
 
 
