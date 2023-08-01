@@ -1,12 +1,12 @@
 const express = require('express');
-const { userRegistration, loginBackend, getSingleUser } = require('../Controllers/Usercontroller');
+const { userRegistration, loginBackend, getSingleUser, updateUserDetails } = require('../Controllers/Usercontroller');
 const router = express.Router();
-const cloudinary = require('../Tools/CloudinarySetup')
+
 const formidable = require('express-formidable')
 const path = require('path')
 //temporary
 const fs = require('fs')
-
+const cloudinary = require('../Tools/CloudinarySetup')
 
 const generateBase64Image = async (imagePath) => {
     try {
@@ -68,5 +68,8 @@ router.post('/photo-upload', formidable(), async (req, res) => {
 
 
 })
+
+
+router.post('/update-userdetails', formidable(), updateUserDetails)
 
 module.exports = router

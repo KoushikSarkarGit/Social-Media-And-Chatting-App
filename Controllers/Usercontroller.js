@@ -3,6 +3,8 @@ const Usermodel = require('../Models/Usermodel')
 const bcrypt = require('bcrypt')
 const { validationResult } = require('express-validator');
 const { encrytpassword, checkpassword } = require('../Middlewares/Encryptiontools')
+const createBase64AndUpload = require('../Tools/ImageToBase64')
+
 const jwt = require('jsonwebtoken')
 require('dotenv').config();
 
@@ -94,6 +96,22 @@ const updateUserDetails = async (req, res) => {
     const hashednewpassword = '';
     const { profilePicture, coverPicture } = req.files;
 
+    const imageurl1 = '';
+    const imageurl2 = '';
+    if (profilePicture) {
+        imageurl1 = await createBase64AndUpload(profilePicture.path);
+    }
+
+    if (coverPicture) {
+        imageurl2 = await createBase64AndUpload(coverPicture.path);
+    }
+
+
+
+
+
+
+
     const { username, curuserid, adminstatus, phone, firstname, lastname, newpassword, bio, livesin, worksAt, relationship } = req.fields;
 
     if (id === curuserid || adminstatus) {
@@ -132,4 +150,4 @@ const updateUserDetails = async (req, res) => {
 
 
 
-module.exports = { userRegistration, loginBackend, getSingleUser }
+module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails }
