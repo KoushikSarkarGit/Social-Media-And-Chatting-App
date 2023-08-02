@@ -1,5 +1,5 @@
 const express = require('express');
-const { userRegistration, loginBackend, getSingleUser, updateUserDetails } = require('../Controllers/Usercontroller');
+const { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic } = require('../Controllers/Usercontroller');
 const router = express.Router();
 const formidable = require('express-formidable')
 const { valtokenchecker, extractIdFromToken } = require('../Middlewares/Encryptiontools')
@@ -15,6 +15,16 @@ router.post('/login', loginBackend)
 router.get('/getuser/:id', getSingleUser)
 
 //update user details
-router.post('/update-userdetails/:id', valtokenchecker, extractIdFromToken, updateUserDetails)
+router.put('/update-userdetails/:id', valtokenchecker, extractIdFromToken, updateUserDetails)
+
+// update profile picture
+router.put('/update-profilepic/:id', valtokenchecker, extractIdFromToken, formidable(), updateProfilepic)
+
+// update cover picture
+router.put('/update-coverpic/:id', valtokenchecker, extractIdFromToken, formidable(), updateCoverpic)
+
+
+
+
 
 module.exports = router

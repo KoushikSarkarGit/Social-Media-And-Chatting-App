@@ -125,24 +125,28 @@ const updateUserDetails = async (req, res) => {
 };
 
 
-// update cover pic
+// update profile pic
 
 const updateProfilepic = async (req, res) => {
     const id = req.params.id;
 
+    const { curuserid } = req.body;
+
     const { profilePicture } = req.files;
-    const imageurl1 = '';
+    let picturename = `$profilepic of ${curuserid}`
+    let imageurl1 = '';
     if (profilePicture) {
-        imageurl1 = await createBase64AndUpload(profilePicture.path);
+        imageurl1 = await createBase64AndUpload(profilePicture.path, picturename);
     }
 
+    let adminresult = await checkAdmin(curuserid);
 
-    if (id === curuserid || adminstatus) {
+    if (id === curuserid || adminresult) {
         try {
 
             const updateduser = await Usermodel.findByIdAndUpdate(curuserid, { profilePicture: imageurl1 }, { new: true, });
 
-            res.status(200).json(updateduser);
+            res.status(200).json(updateduser.profilePicture);
         } catch (error) {
             res.status(500).json({ success: false, error });
         }
@@ -155,12 +159,40 @@ const updateProfilepic = async (req, res) => {
 
 
 
-// update profile pic
+// update cover pic
+
+const updateCoverpic = async (req, res) => {
+    const id = req.params.id;
+
+    const { curuserid } = req.body;
+
+    const { coverPicture } = req.files;
+    let imageurl1 = '';
+    let picturename = `$coverfilepic of ${curuserid}`
+
+    if (coverPicture) {
+        imageurl1 = await createBase64AndUpload(coverPicture.path, picturename);
+    }
+
+    let adminresult = await checkAdmin(curuserid);
+
+    if (id === curuserid || adminresult) {
+        try {
+
+            const updateduser = await Usermodel.findByIdAndUpdate(curuserid, { coverPicture: imageurl1 }, { new: true, });
+
+            res.status(200).json(updateduser.coverPicture);
+        } catch (error) {
+            res.status(500).json({ success: false, error });
+        }
+
+
+    } else {
+        res.status(403).json({ success: false, msg: "Access Denied! you can only update your own profile" });
+    }
+};
 
 
 
 
-
-
-
-module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails }
+module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic }

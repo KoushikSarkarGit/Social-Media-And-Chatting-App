@@ -1,7 +1,7 @@
 const fs = require('fs')
 const cloudinary = require('../Tools/CloudinarySetup')
 
-const createBase64AndUpload = async (imagepath) => {
+const createBase64AndUpload = async (imagepath, imgName) => {
 
 
     try {
@@ -13,6 +13,7 @@ const createBase64AndUpload = async (imagepath) => {
         //cloudinary upload
         const uploadedfile = await cloudinary.uploader.upload(tobeuploadedimage, {
             upload_preset: 'SocialMediaApp',
+            public_id: imgName
 
         });
 
@@ -23,5 +24,9 @@ const createBase64AndUpload = async (imagepath) => {
     }
 
 }
+
+
+
+
 
 module.exports = createBase64AndUpload;
