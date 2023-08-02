@@ -21,7 +21,7 @@ const SocialmediaUserschema = new Schema({
     },
 
     phone: {
-        type: String,
+        type: Number,
 
     },
     firstname: {

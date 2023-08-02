@@ -4,6 +4,8 @@ const bcrypt = require('bcrypt')
 const { validationResult } = require('express-validator');
 const { encrytpassword, checkpassword } = require('../Middlewares/Encryptiontools')
 const createBase64AndUpload = require('../Tools/ImageToBase64')
+const { checkAdmin } = require('../Tools/checkingFunction')
+
 
 const jwt = require('jsonwebtoken')
 require('dotenv').config();
@@ -93,56 +95,67 @@ const getSingleUser = async (req, res) => {
 // update user details
 const updateUserDetails = async (req, res) => {
     const id = req.params.id;
-    const hashednewpassword = '';
-    const { profilePicture, coverPicture } = req.files;
+    let hashednewpassword = '';
+    let adminresult = null;
+    const { curuserid, adminstatus, newpassword } = req.body;
 
-    const imageurl1 = '';
-    const imageurl2 = '';
-    if (profilePicture) {
-        imageurl1 = await createBase64AndUpload(profilePicture.path);
+    if (adminstatus) {
+        adminresult = await checkAdmin(curuserid);
     }
 
-    if (coverPicture) {
-        imageurl2 = await createBase64AndUpload(coverPicture.path);
-    }
-
-
-
-
-
-
-
-    const { username, curuserid, adminstatus, phone, firstname, lastname, newpassword, bio, livesin, worksAt, relationship } = req.fields;
-
-    if (id === curuserid || adminstatus) {
+    if (id === curuserid || adminresult) {
         try {
             if (newpassword) {
                 hashednewpassword = await encrytpassword(newpassword);
             }
 
-            const updateduser = await Usermodel.findByIdAndUpdate(curuserid, {
-                username: username,
-                phone: phone,
-                firstname: firstname,
-                lastname: lastname,
-                password: hashednewpassword,
-                bio: bio,
-                livesin: livesin,
-                worksAt: worksAt,
-                relationship: relationship
-            }, {
+            const updateduser = await Usermodel.findByIdAndUpdate(id, { ...req.body, password: hashednewpassword }, {
                 new: true,
             });
 
-            res.status(200).json(updateduser);
+            res.status(200).json({ success: true, updateduser });
         } catch (error) {
-            res.status(500).json({ success: false, error });
+            res.status(500).json({ success: false, msg: error.message });
         }
+
+
     } else {
         res.status(403).json({ success: false, msg: "Access Denied! you can only update your own profile" });
     }
 };
 
+
+// update cover pic
+
+const updateProfilepic = async (req, res) => {
+    const id = req.params.id;
+
+    const { profilePicture } = req.files;
+    const imageurl1 = '';
+    if (profilePicture) {
+        imageurl1 = await createBase64AndUpload(profilePicture.path);
+    }
+
+
+    if (id === curuserid || adminstatus) {
+        try {
+
+            const updateduser = await Usermodel.findByIdAndUpdate(curuserid, { profilePicture: imageurl1 }, { new: true, });
+
+            res.status(200).json(updateduser);
+        } catch (error) {
+            res.status(500).json({ success: false, error });
+        }
+
+
+    } else {
+        res.status(403).json({ success: false, msg: "Access Denied! you can only update your own profile" });
+    }
+};
+
+
+
+// update profile pic
 
 
 

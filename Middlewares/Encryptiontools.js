@@ -1,10 +1,6 @@
 const bcrypt = require('bcrypt');
-// const Usermodel = require('../Models/Usermodel');
 const jwt = require('jsonwebtoken');
-// require('dotenv').config();
-
-
-
+require('dotenv').config();
 
 
 
@@ -34,27 +30,31 @@ const valtokenchecker = async (req, res, next) => {
     try {
         var tokencheck = await jwt.verify(reqtoken, process.env.jwt_secret_key);
         if (!tokencheck) {
-            return res.status(400).json({ success: true, msg: "invalid email or password" })
+            return res.status(400).json({ success: true, msg: "invalid token. Please LogOut and Login again" })
         }
         next();
     } catch (error) {
         console.log(error);
-        return res.status(400).json({ success: false, msg: "error happened in tokenchecker" })
+        return res.status(400).json({ success: false, msg: "error happened in valtokenchecker" })
     }
 }
 
 const extractIdFromToken = async (req, res, next) => {
     try {
-        const decode = jwt.verify(
+        const decode = await jwt.verify(
             req.headers.token,
             process.env.jwt_secret_key
         );
-        req.curuserid = decode.id;
+        req.body.curuserid = decode.id;
+
         next();
     } catch (error) {
         console.log(error);
         return res.status(507).json({ success: false, msg: "error happened in extractIdFromToken" })
     }
 };
+
+
+
 
 module.exports = { encrytpassword, checkpassword, valtokenchecker, extractIdFromToken }
