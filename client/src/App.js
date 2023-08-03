@@ -11,8 +11,8 @@ function App() {
       <div className="backgroundblur" style={{ top: '-18%', right: '0%' }}    ></div>
       <div className="backgroundblur" style={{ top: '37%', left: '-10%' }}    ></div>
 
-      {/* <Home /> */}
-      <Profilepage />
+      <Home />
+      {/* <Profilepage /> */}
       {/* <Loginpage /> */}
       {/* <SignUpPage /> */}
     </div>

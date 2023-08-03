@@ -5,7 +5,7 @@ const cors = require('cors')
 require('dotenv').config()
 const UserRoute = require('./Routes/UserRoute')
 
-
+const PostRoute = require('./Routes/PostRoute')
 
 
 const port = 9000
@@ -21,6 +21,7 @@ app.use(cors())
 // routes
 
 app.use('/api/v1/user', UserRoute)
+app.use('/api/v1/post', PostRoute)
 
 //mongodb connection
 

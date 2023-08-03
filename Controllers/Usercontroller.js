@@ -1,7 +1,7 @@
 
 const Usermodel = require('../Models/Usermodel')
 const bcrypt = require('bcrypt')
-const { validationResult } = require('express-validator');
+
 const { encrytpassword, checkpassword } = require('../Middlewares/Encryptiontools')
 const createBase64AndUpload = require('../Tools/ImageToBase64')
 const { checkAdmin } = require('../Tools/checkingFunction')
