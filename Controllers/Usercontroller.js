@@ -51,11 +51,6 @@ const loginBackend = async (req, res) => {
     const { email, password } = req.body
     let success = false;
 
-    // const valerror = validationResult(req);
-    // if (!valerror.isEmpty()) {
-    //     return res.status(400).json({ success, msg: "please fill the form in instructed format", curerr: valerror.array() });
-    // }
-
     try {
         const user = await Usermodel.findOne({ email: email })
 
@@ -124,7 +119,6 @@ const updateUserDetails = async (req, res) => {
     }
 };
 
-
 // update profile pic
 
 const updateProfilepic = async (req, res) => {
@@ -156,8 +150,6 @@ const updateProfilepic = async (req, res) => {
         res.status(403).json({ success: false, msg: "Access Denied! you can only update your own profile" });
     }
 };
-
-
 
 // update cover pic
 
@@ -192,7 +184,84 @@ const updateCoverpic = async (req, res) => {
     }
 };
 
+// follow someone
+const followSomeOne = async (req, res) => {
+    const tobefollowedid = req.params.id;
+    const { curuserid } = req.body;
+
+    if (tobefollowedid === curuserid) {
+        res.status(403).json({ success: false, msg: "You cannot follow your own account" });
+    }
+
+    try {
+        const tobefollowed = await Usermodel.findById(tobefollowedid);
+        const ouruser = await Usermodel.findByIdAndUpdate(curuserid);
+
+        if (!tobefollowed.followers.includes(curuserid)) {
+            await tobefollowed.updateOne({ $push: { followers: ouruser._id } });
+
+            await ouruser.updateOne({ $push: { following: tobefollowed._id } });
+        }
+
+        res.status(200).json({ success: true, msg: 'user followed' });
+    } catch (error) {
+        res.status(500).json({ success: false, error });
+    }
+
+};
+
+// unfollow someone
+
+const unfollowSomeOne = async (req, res) => {
+    const tobeunfollowedid = req.params.id;
+    const { curuserid } = req.body;
+
+    if (tobeunfollowedid === curuserid) {
+        return res.status(403).json({ success: false, msg: "You cannot follow your own account" });
+    }
+
+    try {
+        const tobefollowed = await Usermodel.findById(tobeunfollowedid);
+        const ouruser = await Usermodel.findByIdAndUpdate(curuserid);
+
+        if (ouruser.following.includes(tobeunfollowedid)) {
+            await tobefollowed.updateOne({ $pull: { followers: ouruser._id } });
+
+            await ouruser.updateOne({ $pull: { following: tobefollowed._id } });
+        }
+
+        return res.status(200).json({ success: true, msg: 'user unfollowed' });
+    } catch (error) {
+        return res.status(500).json({ success: false, error });
+    }
+
+};
+
+
+const deleteAccount = async (req, res) => {
+    const id = req.params.id;
+
+    const { curuserid } = req.body;
+
+    let adminresult = await checkAdmin(curuserid);
+
+
+    if (id === curuserid || adminresult) {
+        try {
+
+            const deleted = await Usermodel.findByIdAndDelete(curuserid);
+
+            res.status(200).json({ success: true, msg: 'Account deleted successfully' });
+        } catch (error) {
+            res.status(500).json({ success: false, msg: error.message });
+        }
+
+
+    } else {
+        res.status(403).json({ success: false, msg: "Access Denied" });
+    }
+};
 
 
 
-module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic }
+module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount }
