@@ -77,12 +77,12 @@ const getSingleUser = async (req, res) => {
         const curuser = await Usermodel.findById(id).select('-password');
 
         if (curuser) {
-            res.status(200).json({ success: true, msg: 'user fetched successfully', curuser });
+            return res.status(200).json({ success: true, msg: 'user fetched successfully', curuser });
         } else {
-            res.status(404).json({ success: true, msg: "User does not exist" });
+            return res.status(404).json({ success: true, msg: "User does not exist" });
         }
     } catch (error) {
-        res.status(500).json({ success: false, msg: 'user fetching unsuccessful', error });
+        return res.status(500).json({ success: false, msg: 'user fetching unsuccessful', error });
     }
 };
 

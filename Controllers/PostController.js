@@ -9,17 +9,23 @@ require('dotenv').config();
 const createPost = async (req, res) => {
 
     try {
+        const { curuserid } = req.body
 
-        const { postdescription, curuserid } = req.body
-        const currentDate = new Date();
+        const { postdescription } = req.fields;
+        const currentDate = await new Date();
 
         let { postimage } = req.files;
-        let picturename = `Post Of ${curuserid} on `
-        let posturl = await createBase64AndUpload(postimage.path, picturename);
+        let posturl = null;
+        let picturename = await `Post Of ${curuserid} on ${currentDate}`;
+        if (postimage) {
 
-        const newpost = await Postmodel.create({ userId: curuserid, postdescription, postimage: posturl })
+            posturl = await createBase64AndUpload(postimage.path, picturename);
+        }
 
-        return res.status(200).json({ success: true, msg: 'Post created successfully' });
+
+        const newpost = await Postmodel.create({ userId: curuserid, postdescription: postdescription, postimage: posturl, postPublicID: picturename })
+
+        return res.status(200).json({ success: true, msg: 'Post created successfully', newpost });
 
     } catch (error) {
         return res.status(500).json({ success: false, msg: error.message });

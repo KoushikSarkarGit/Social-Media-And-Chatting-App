@@ -11,6 +11,7 @@ const postschema = new Schema({
     },
     postdescription: { type: String, required: true },
     postimage: String,
+    postPublicID: String,
     likes: [],
     reposts: [],
 
