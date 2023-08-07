@@ -15,4 +15,8 @@ router.put('/update-post/:id', valtokenchecker, extractIdFromToken, formidable()
 router.delete('/delete-post/:id', valtokenchecker, extractIdFromToken, formidable(), deletePost)
 
 
+
+
+
+
 module.exports = router

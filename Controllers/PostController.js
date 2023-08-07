@@ -1,4 +1,5 @@
 const Postmodel = require('../Models/PostModel')
+const Usermodel = require('../Models/Usermodel')
 const cloudinary = require('../Tools/CloudinarySetup')
 
 const { createBase64AndUpload, updateimageincloudinary } = require('../Tools/ImageToBase64')
@@ -12,7 +13,7 @@ const createPost = async (req, res) => {
     const { postdescription } = req.fields;
     const currentDate = await new Date();
     let picturename = await `Post Of ${curuserid} on ${currentDate}`;
-    let finalpublicid;
+    let finalpublicid = picturename;
 
     try {
 
@@ -35,7 +36,7 @@ const createPost = async (req, res) => {
 
     } catch (error) {
         // this one for failed cases where image is uploaded but post creation is failed. so we have to delete the image from cloud to save space
-        await cloudinary.uploader.destroy(picturename);
+        await cloudinary.uploader.destroy(finalpublicid);
         return res.status(500).json({ success: false, msg: error.message });
     }
 
@@ -96,7 +97,6 @@ const updatePost = async (req, res) => {
 }
 
 
-
 const deletePost = async (req, res) => {
     const postid = req.params.id;
     const { curuserid } = req.body
@@ -129,6 +129,9 @@ const deletePost = async (req, res) => {
 
 
 }
+
+
+
 
 
 

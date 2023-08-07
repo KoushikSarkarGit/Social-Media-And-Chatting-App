@@ -35,7 +35,7 @@ const updateimageincloudinary = async (imagepath, imgName) => {
 
         const data = await fs.readFileSync(imagepath);
         const base64Image = await Buffer.from(data).toString('base64');
-        let tobeuploadedimage = `data:image/jpeg;base64,${base64Image}`
+        let tobeuploadedimage = await `data:image/jpeg;base64,${base64Image}`
 
         //cloudinary upload
         const uploadedfile = await cloudinary.uploader.upload(tobeuploadedimage, {

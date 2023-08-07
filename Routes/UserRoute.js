@@ -1,5 +1,5 @@
 const express = require('express');
-const { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount } = require('../Controllers/Usercontroller');
+const { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost } = require('../Controllers/Usercontroller');
 const router = express.Router();
 const formidable = require('express-formidable')
 const { valtokenchecker, extractIdFromToken } = require('../Middlewares/Encryptiontools')
@@ -31,6 +31,15 @@ router.put('/unfollow-user/:id', valtokenchecker, extractIdFromToken, unfollowSo
 
 // delete user account
 router.delete('/delete-user-account/:id', valtokenchecker, extractIdFromToken, deleteAccount)
+
+// like a post
+router.put('/like-post/:id', valtokenchecker, extractIdFromToken, likePost)
+
+// like a post
+router.put('/unlike-post/:id', valtokenchecker, extractIdFromToken, unlikePost)
+
+
+
 
 
 module.exports = router

@@ -1,9 +1,9 @@
 
 const Usermodel = require('../Models/Usermodel')
 const bcrypt = require('bcrypt')
-
+const Postmodel = require('../Models/PostModel')
 const { encrytpassword, checkpassword } = require('../Middlewares/Encryptiontools')
-const createBase64AndUpload = require('../Tools/ImageToBase64')
+const { createBase64AndUpload } = require('../Tools/ImageToBase64')
 const { checkAdmin } = require('../Tools/checkingFunction')
 
 
@@ -129,8 +129,13 @@ const updateProfilepic = async (req, res) => {
     const { profilePicture } = req.files;
     let picturename = `$profilepic of ${curuserid}`
     let imageurl1 = '';
+
     if (profilePicture) {
-        imageurl1 = await createBase64AndUpload(profilePicture.path, picturename);
+
+        const cloudresponse = await createBase64AndUpload(profilePicture.path, picturename);
+
+        imageurl1 = cloudresponse.url;
+
     }
 
     let adminresult = await checkAdmin(curuserid);
@@ -171,7 +176,7 @@ const updateCoverpic = async (req, res) => {
     if (id === curuserid || adminresult) {
         try {
 
-            const updateduser = await Usermodel.findByIdAndUpdate(curuserid, { coverPicture: imageurl1 }, { new: true, });
+            const updateduser = await Usermodel.findByIdAndUpdate(curuserid, { coverPicture: imageurl1.url }, { new: true, });
 
             res.status(200).json(updateduser.coverPicture);
         } catch (error) {
@@ -264,4 +269,53 @@ const deleteAccount = async (req, res) => {
 
 
 
-module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount }
+// Like post
+const likePost = async (req, res) => {
+    const tobeLikedPostid = req.params.id;
+    const { curuserid } = req.body;
+
+    try {
+        const tobeLiked = await Postmodel.findById(tobeLikedPostid);
+        const ouruser = await Usermodel.findByIdAndUpdate(curuserid);
+
+        if (!ouruser.likedPost.includes(tobeLiked._id)) {
+            await tobeLiked.updateOne({ $push: { likes: ouruser._id } });
+
+            await ouruser.updateOne({ $push: { likedPost: tobeLiked._id } });
+        }
+
+        res.status(200).json({ success: true, msg: 'Post Liked' });
+    } catch (error) {
+        res.status(500).json({ success: false, error });
+    }
+
+};
+
+
+// unlike post
+
+const unlikePost = async (req, res) => {
+    const tobeLikedPostid = req.params.id;
+    const { curuserid } = req.body;
+
+    try {
+        const tobeLiked = await Postmodel.findById(tobeLikedPostid);
+        const ouruser = await Usermodel.findByIdAndUpdate(curuserid);
+
+        if (ouruser.likedPost.includes(tobeLiked._id)) {
+            await tobeLiked.updateOne({ $pull: { likes: ouruser._id } });
+
+            await ouruser.updateOne({ $pull: { likedPost: tobeLiked._id } });
+        }
+
+        res.status(200).json({ success: true, msg: 'post unliked' });
+    } catch (error) {
+        res.status(500).json({ success: false, error });
+    }
+
+};
+
+
+
+
+module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost }
