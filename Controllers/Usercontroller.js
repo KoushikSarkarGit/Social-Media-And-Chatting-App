@@ -276,7 +276,7 @@ const likePost = async (req, res) => {
 
     try {
         const tobeLiked = await Postmodel.findById(tobeLikedPostid);
-        const ouruser = await Usermodel.findByIdAndUpdate(curuserid);
+        const ouruser = await Usermodel.findById(curuserid);
 
         if (!ouruser.likedPost.includes(tobeLiked._id)) {
             await tobeLiked.updateOne({ $push: { likes: ouruser._id } });
@@ -300,7 +300,7 @@ const unlikePost = async (req, res) => {
 
     try {
         const tobeLiked = await Postmodel.findById(tobeLikedPostid);
-        const ouruser = await Usermodel.findByIdAndUpdate(curuserid);
+        const ouruser = await Usermodel.findById(curuserid);
 
         if (ouruser.likedPost.includes(tobeLiked._id)) {
             await tobeLiked.updateOne({ $pull: { likes: ouruser._id } });
@@ -315,7 +315,52 @@ const unlikePost = async (req, res) => {
 
 };
 
+// repost a  post
+const rePost = async (req, res) => {
+    const toberepostedid = req.params.id;
+    const { curuserid } = req.body;
+
+    try {
+        const tobereposted = await Postmodel.findById(toberepostedid);
+        const ouruser = await Usermodel.findById(curuserid);
+
+        if (!ouruser.reposted.includes(tobereposted._id)) {
+            await tobereposted.updateOne({ $push: { reposts: ouruser._id } });
+
+            await ouruser.updateOne({ $push: { reposted: tobereposted._id } });
+        }
+
+        res.status(200).json({ success: true, msg: 'Post Liked' });
+    } catch (error) {
+        res.status(500).json({ success: false, error });
+    }
+
+};
+
+
+// unrepost a  post
+const unrePost = async (req, res) => {
+    const toberepostedid = req.params.id;
+    const { curuserid } = req.body;
+
+    try {
+        const tobereposted = await Postmodel.findById(toberepostedid);
+        const ouruser = await Usermodel.findById(curuserid);
+
+        if (ouruser.reposted.includes(tobereposted._id)) {
+            await tobereposted.updateOne({ $pull: { reposts: ouruser._id } });
+
+            await ouruser.updateOne({ $pull: { reposted: tobereposted._id } });
+        }
+
+        res.status(200).json({ success: true, msg: 'Post Liked' });
+    } catch (error) {
+        res.status(500).json({ success: false, error });
+    }
+
+};
 
 
 
-module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost }
+
+module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost }

@@ -44,7 +44,8 @@ const SocialmediaUserschema = new Schema({
     relationship: String,
     followers: [],
     following: [],
-    likedPost: []
+    likedPost: [],
+    reposted: []
 
 }, { timestamps: true })
 
