@@ -330,7 +330,7 @@ const rePost = async (req, res) => {
             await ouruser.updateOne({ $push: { reposted: tobereposted._id } });
         }
 
-        res.status(200).json({ success: true, msg: 'Post Liked' });
+        res.status(200).json({ success: true, msg: 'Post reposted' });
     } catch (error) {
         res.status(500).json({ success: false, error });
     }
@@ -345,6 +345,12 @@ const unrePost = async (req, res) => {
 
     try {
         const tobereposted = await Postmodel.findById(toberepostedid);
+
+        if (!tobereposted) {
+            res.status(200).json({ success: false, msg: 'Post does not exist' });
+        }
+
+
         const ouruser = await Usermodel.findById(curuserid);
 
         if (ouruser.reposted.includes(tobereposted._id)) {
@@ -353,7 +359,7 @@ const unrePost = async (req, res) => {
             await ouruser.updateOne({ $pull: { reposted: tobereposted._id } });
         }
 
-        res.status(200).json({ success: true, msg: 'Post Liked' });
+        res.status(200).json({ success: true, msg: 'Post unreposted' });
     } catch (error) {
         res.status(500).json({ success: false, error });
     }
@@ -363,4 +369,4 @@ const unrePost = async (req, res) => {
 
 
 
-module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost }
+module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost }
