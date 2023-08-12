@@ -14,7 +14,6 @@ export default function SharePostModal({ opensharemodal, setopensharemodal }) {
             <Modal title="Sharepost"
 
 
-
                 overlayProps={{
                     color: theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[2],
                     opacity: 0.55,
@@ -25,7 +24,6 @@ export default function SharePostModal({ opensharemodal, setopensharemodal }) {
                 opened={opensharemodal}
                 onClose={() => setopensharemodal(false)}
 
-                ov
             >
 
 

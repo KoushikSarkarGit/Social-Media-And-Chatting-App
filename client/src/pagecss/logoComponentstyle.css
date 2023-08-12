@@ -1,6 +1,15 @@
 .logocomponentmain {
     display: flex;
     gap: 0.75rem;
+    align-items: center;
+    justify-content: left;
+
+    width: 90%;
+}
+
+.logocomponentimg {
+    display: flex;
+
 }
 
 .logosearchbar {

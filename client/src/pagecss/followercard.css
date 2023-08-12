@@ -2,10 +2,10 @@
     width: auto;
     display: flex;
     flex-direction: column;
-    border-radius: 1.5rem;
+    border-radius: 1.5rem 1.5rem 0rem 0rem;
     gap: 1rem;
     font-size: 15px;
-    max-height: 45vh;
+    max-height: 36vh;
     overflow: auto;
     background: var(--cardColor);
     padding-left: 10px;
@@ -45,4 +45,30 @@
     height: 2rem;
     padding-left: 20px;
     padding-right: 20px;
+}
+
+.morefollowers {
+    width: 100%;
+    height: 3.5rem;
+    color: #355ff9;
+    border-radius: 0px 0px 10px 10px;
+    background: var(--cardColor);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 8px;
+    cursor: pointer;
+    padding-top: 5px;
+    border: none;
+}
+
+
+
+.morefhr {
+    /* margin-top: 20px; */
+    width: 95%;
+    border: 1px solid var(--hrColor);
+    margin-bottom: 0px;
+    padding-bottom: 0px;
 }

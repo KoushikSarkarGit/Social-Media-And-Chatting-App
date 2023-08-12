@@ -24,20 +24,11 @@ export default function FollowerCard() {
         name: 'ABC Sarkar ',
         username: 'jeet',
         img: img2
-    },
-    {
-        name: 'Jeet kumar Sarkar ',
-        username: 'jeet',
-        img: img2
-    }, {
-        name: 'Jeet kumar Sarkar ',
-        username: 'jeet',
-        img: img2
     }
     ]
 
     return (
-        <div style={{ width: '100%' }}>
+        <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
             <div className='followercardbox'>
                 <h3>Your Followers </h3>
 
@@ -60,7 +51,10 @@ export default function FollowerCard() {
                     })
                 }
 
+
             </div>
+
+            <button className="morefollowers"><hr className='morefhr' /> <h3> See More Followers</h3> </button>
         </div>
 
     )

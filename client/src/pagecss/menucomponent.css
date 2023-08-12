@@ -1,0 +1,34 @@
+.menucomponentbox {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: var(--cardColor);
+    border-radius: 29px;
+}
+
+.menuoptions {
+    display: flex;
+    justify-content: flex-start;
+    /* margin-top: 1rem; */
+    padding: 17px 10px 17px 20px;
+    background: rgba(255, 255, 255, 0.797);
+
+    border-radius: 3.5rem;
+    cursor: pointer;
+
+}
+
+.optiontext {
+    padding-left: 20px;
+
+}
+
+.menuoptions :hover {
+    background: rgba(216, 216, 216, 0.797);
+
+}
+
+.menucomponentbox :hover {
+    background: rgba(216, 216, 216, 0.797);
+
+}

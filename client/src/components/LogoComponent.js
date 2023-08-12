@@ -8,7 +8,7 @@ export default function LogoComponent() {
     return (
         <div className='logocomponentmain' >
             <img src={logo} alt="logocomponentimg" />
-            <div className="logosearchbar">
+            {/* <div className="logosearchbar">
 
                 <input type="text" placeholder='#Explore' />
                 <div className="searchicon">
@@ -16,7 +16,8 @@ export default function LogoComponent() {
                 </div>
 
 
-            </div>
+            </div> */}
+
 
         </div>
     )
