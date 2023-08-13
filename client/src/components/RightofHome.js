@@ -1,19 +1,34 @@
 import React, { useState } from 'react'
-
+import { UilSearch } from '@iconscout/react-unicons'
 import '../pagecss/rightofhome.css'
 import Trendingcard from './Trendingcard';
-import SharePostModal from './SharePostModal';
+
 import FollowerCard from './FollowerCard';
 
 export default function RightofHome() {
-    const [opensharemodal, setopensharemodal] = useState(false)
+
     return (
         <div className='rightofhomebox'>
+
+            {/* <div className="logocomponent"> */}
+
+            <div className="logosearchbar">
+
+                <input type="text" placeholder='Search People or Post' />
+                <div className="searchicon">
+                    <UilSearch />
+                </div>
+
+            </div>
+            {/* </div> */}
+
+
+
             <FollowerCard />
             <Trendingcard />
-            <SharePostModal opensharemodal={opensharemodal} setopensharemodal={setopensharemodal} />
 
-            <button className="sharebutton basicbutton" onClick={() => setopensharemodal(true)} >  Share </button>
+
+
 
         </div>
     )

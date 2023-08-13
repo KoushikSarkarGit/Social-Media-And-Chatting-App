@@ -3,15 +3,16 @@
     flex-direction: column;
     width: 100%;
     background-color: var(--cardColor);
-    border-radius: 29px;
+    border-radius: 31px;
 }
 
 .menuoptions {
     display: flex;
     justify-content: flex-start;
     /* margin-top: 1rem; */
+    align-items: center;
     padding: 17px 10px 17px 20px;
-    background: rgba(255, 255, 255, 0.797);
+    background: rgb(255, 255, 255);
 
     border-radius: 3.5rem;
     cursor: pointer;
@@ -23,12 +24,23 @@
 
 }
 
-.menuoptions :hover {
-    background: rgba(216, 216, 216, 0.797);
+
+
+.menucomponentbox :hover {
+    background: rgba(223, 223, 223, 0.797);
 
 }
 
-.menucomponentbox :hover {
-    background: rgba(216, 216, 216, 0.797);
+.sharebutton {
+    width: 99%;
+    padding-top: 9px;
+    padding-bottom: 9px;
+    font-size: 22px;
+    align-self: center;
+    border-radius: 5rem;
+}
 
+.menuicons {
+    height: 28px;
+    width: 28px;
 }

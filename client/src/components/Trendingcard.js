@@ -11,6 +11,34 @@ export default function Trendingcard() {
         {
             name: "Avangers",
             shares: 80.5,
+        },
+        {
+            name: "Minions",
+            shares: 97,
+        },
+        {
+            name: "Minions",
+            shares: 97,
+        },
+        {
+            name: "Minions",
+            shares: 97,
+        },
+        {
+            name: "Minions",
+            shares: 97,
+        },
+        {
+            name: "Minions",
+            shares: 97,
+        },
+        {
+            name: "Avangers",
+            shares: 80.5,
+        },
+        {
+            name: "Avangers",
+            shares: 80.5,
         }
     ];
 

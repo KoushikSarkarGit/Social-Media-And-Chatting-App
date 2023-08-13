@@ -14,8 +14,8 @@
 }
 
 .miniprofileimg>img {
-    height: 4rem;
-    width: 4rem;
+    height: 4.5rem;
+    width: 4.5rem;
     border-radius: 50%;
 
     border: 5px double rgb(0, 102, 255);
