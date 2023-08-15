@@ -4,26 +4,14 @@ import '../pagecss/rightofhome.css'
 import Trendingcard from './Trendingcard';
 
 import FollowerCard from './FollowerCard';
+import Searchbar from './Searchbar';
 
 export default function RightofHome() {
 
     return (
         <div className='rightofhomebox'>
 
-            {/* <div className="logocomponent"> */}
-
-            <div className="logosearchbar">
-
-                <input type="text" placeholder='Search People or Post' />
-                <div className="searchicon">
-                    <UilSearch />
-                </div>
-
-            </div>
-            {/* </div> */}
-
-
-
+            <Searchbar />
             <FollowerCard />
             <Trendingcard />
 

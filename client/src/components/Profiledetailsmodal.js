@@ -23,7 +23,7 @@ export default function Profiledetailsmodal({ pmodal, setpmodal }) {
                 opened={pmodal}
                 onClose={() => setpmodal(false)}
 
-                ov
+
             >
 
 

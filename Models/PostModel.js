@@ -5,7 +5,7 @@ const { Schema } = mongoose;
 
 const postschema = new Schema({
     userId: {
-        type: mongoose.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'user',
         required: true
     },
@@ -20,7 +20,9 @@ const postschema = new Schema({
             commenter_id: String,
             commentText: String
         }
-    ]
+    ],
+
+    tags: []
 
 }, { timestamps: true })
 

@@ -3,6 +3,8 @@ import LogoComponent from "./LogoComponent";
 import ProfileDetails from './ProfileDetails';
 import FollowerCard from "./FollowerCard";
 import '../pagecss/profileleft.css'
+import MenuComponent from './MenuComponent';
+import MiniProfileCompund from './MiniProfileCompund';
 
 
 export default function ProfileLeft() {
@@ -10,8 +12,8 @@ export default function ProfileLeft() {
         <div className='profileleftbox'>
 
             <LogoComponent />
-            <ProfileDetails />
-            <FollowerCard />
+            <MiniProfileCompund />
+            <MenuComponent />
         </div>
     )
 }

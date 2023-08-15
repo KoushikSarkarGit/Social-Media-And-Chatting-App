@@ -11,8 +11,10 @@
     justify-content: flex-start;
     /* margin-top: 1rem; */
     align-items: center;
-    padding: 17px 10px 17px 20px;
+    padding: 16px 10px 16px 20px;
     background: rgb(255, 255, 255);
+    text-decoration: none;
+    color: black;
 
     border-radius: 3.5rem;
     cursor: pointer;

@@ -1,24 +1,19 @@
 import React from 'react'
 import Logo from "../img/logo.png";
 import '../pagecss/authorization.css'
+import { Link } from 'react-router-dom';
 
 
 export default function SignUpPage() {
     return (
         <div className="Signupbox">
-            <div className="a-left">
-                <img src={Logo} alt="" />
-                <div className="PlatformName">
-                    <h1>Kwetter</h1>
-                    <h6>Explore the ideas throughout the world</h6>
-                </div>
-            </div>
+
 
             <div className="a-right">
-                <form className="infoForm authForm">
+                <form className="infoForm ">
                     <h3>Sign up</h3>
 
-                    <div>
+                    <div className='formdata' >
                         <input
                             type="text"
                             placeholder="First Name"
@@ -33,7 +28,7 @@ export default function SignUpPage() {
                         />
                     </div>
 
-                    <div>
+                    <div className='formdata' >
                         <input
                             type="text"
                             className="infoInput"
@@ -42,7 +37,7 @@ export default function SignUpPage() {
                         />
                     </div>
 
-                    <div>
+                    <div className='formdata' >
                         <input
                             type="text"
                             className="infoInput"
@@ -58,9 +53,9 @@ export default function SignUpPage() {
                     </div>
 
                     <div>
-                        <span style={{ fontSize: '12px' }}>Already have an account. Login!</span>
+                        <span style={{ fontSize: '16px', color: 'black' }}>Already have an account? <Link style={{ textDecoration: 'none', color: 'blue' }} to='/login' > Login! </Link> </span>
                     </div>
-                    <button className="basicbutton infoButton" type="submit">Signup</button>
+                    <button style={{ height: '2.5rem', fontSize: 'medium' }} className="basicbutton infoButton" type="submit">Signup</button>
                 </form>
             </div>
 

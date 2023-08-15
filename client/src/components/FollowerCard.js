@@ -1,9 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import '../pagecss/followercard.css'
 import img1 from '../img/img1.png'
 import img2 from '../img/img2.png'
+import FollowerModal from './FollowerModal'
+
+
 
 export default function FollowerCard() {
+
+    const [openfollowermodal, setopenfollowermodal] = useState(false)
 
     const followerdata = [{
         name: 'Koushik Sarkar',
@@ -53,8 +58,8 @@ export default function FollowerCard() {
 
 
             </div>
-
-            <button className="morefollowers"><hr className='morefhr' /> <h3> See More Followers</h3> </button>
+            <FollowerModal openfollowermodal={openfollowermodal} setopenfollowermodal={setopenfollowermodal} />
+            <button className="morefollowers" onClick={() => setopenfollowermodal(true)}><hr className='morefhr' /> <h3> See More Followers</h3> </button>
         </div>
 
     )

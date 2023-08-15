@@ -366,7 +366,24 @@ const unrePost = async (req, res) => {
 
 };
 
+const getTimeline = async (req, res) => {
+    const usert = req.params.id;
 
+
+    try {
+        const user = await Usermodel.findById(usert);
+
+        if (!tobereposted) {
+            res.status(200).json({ success: false, msg: 'User does not exist' });
+        }
+
+
+        res.status(200).json({ success: true, msg: 'Post unreposted' });
+    } catch (error) {
+        res.status(500).json({ success: false, error });
+    }
+
+};
 
 
 module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost }

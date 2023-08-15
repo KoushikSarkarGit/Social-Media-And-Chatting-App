@@ -6,11 +6,11 @@ import { UilCommentDots } from '@iconscout/react-unicons'
 import { UilUser } from '@iconscout/react-unicons'
 import { UilTablet } from '@iconscout/react-unicons'
 import { UilSearch } from '@iconscout/react-unicons'
-
+import { Link, To } from 'react-router-dom';
 import '../pagecss/menucomponent.css'
 import SharePostModal from './SharePostModal';
-
-
+import { UilSignin } from '@iconscout/react-unicons'
+// import { UilRepeat } from '@iconscout/react-unicons'
 
 
 export default function MenuComponent() {
@@ -23,10 +23,10 @@ export default function MenuComponent() {
 
         <div className='menucomponentbox'>
 
-            <div className="menuoptions">
+            <Link to='/' className="menuoptions">
                 <UilEstate className='menuicons' />
                 <span className='optiontext'>Home</span>
-            </div>
+            </Link>
 
             <div className="menuoptions">
 
@@ -50,16 +50,21 @@ export default function MenuComponent() {
                 <span className='optiontext'>Your Timeline</span>
             </div>
 
-            <div className="menuoptions">
+            <Link to='/profile' className="menuoptions">
                 <UilUser className='menuicons' />
                 <span className='optiontext'>Profile</span>
-            </div>
+            </Link>
             <div className="menuoptions">
-
                 <UilSetting className='menuicons' />
                 <span className='optiontext'>Settings</span>
 
             </div>
+
+            <Link to='/login' className="menuoptions">
+                <UilSignin className='menuicons' />
+                <span className='optiontext'>Login</span>
+
+            </Link>
 
 
         </div>
