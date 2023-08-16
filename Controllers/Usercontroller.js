@@ -8,6 +8,7 @@ const { checkAdmin } = require('../Tools/checkingFunction')
 
 
 const jwt = require('jsonwebtoken')
+const { default: mongoose } = require('mongoose')
 require('dotenv').config();
 
 
@@ -366,19 +367,35 @@ const unrePost = async (req, res) => {
 
 };
 
-const getTimeline = async (req, res) => {
+const getTimelineForLoginUser = async (req, res) => {
     const usert = req.params.id;
 
-
+    const { curuserid } = req.body;
     try {
-        const user = await Usermodel.findById(usert);
+        const user = await Usermodel.findById(curuserid);
 
-        if (!tobereposted) {
+        if (!user) {
             res.status(200).json({ success: false, msg: 'User does not exist' });
         }
 
 
-        res.status(200).json({ success: true, msg: 'Post unreposted' });
+        let yourtimeline = await Usermodel.aggregate([
+            { $match: { $_id: new mongoose.Types.ObjectId(user._id) } },
+
+            {
+                $lookup: {
+                    from: 'post',
+                    localField: 'following',
+                    foreignField: 'userId',
+                    as: 'followingpost'
+                }
+            }
+
+
+        ])
+
+
+        res.status(200).json({ success: true, yourtimeline });
     } catch (error) {
         res.status(500).json({ success: false, error });
     }
@@ -386,4 +403,19 @@ const getTimeline = async (req, res) => {
 };
 
 
-module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost }
+const getGeneralTimeline = async (req, res) => {
+
+    try {
+
+        let yourtimeline = await Postmodel.find().sort({ "createdAt": -1 })
+
+
+        res.status(200).json({ success: true, yourtimeline });
+    } catch (error) {
+        res.status(500).json({ success: false, error });
+    }
+
+};
+
+
+module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getTimelineForLoginUser }

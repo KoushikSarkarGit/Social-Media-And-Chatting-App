@@ -1,5 +1,5 @@
 const express = require('express');
-const { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost } = require('../Controllers/Usercontroller');
+const { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getTimeline, getTimelineForLoginUser } = require('../Controllers/Usercontroller');
 const router = express.Router();
 const formidable = require('express-formidable')
 const { valtokenchecker, extractIdFromToken } = require('../Middlewares/Encryptiontools')
@@ -43,5 +43,9 @@ router.put('/repost/:id', valtokenchecker, extractIdFromToken, rePost)
 
 // unrepost a post
 router.put('/unrepost/:id', valtokenchecker, extractIdFromToken, unrePost)
+
+//get timeline for logged in user
+
+router.get('/get-feed/:id', valtokenchecker, extractIdFromToken, getTimelineForLoginUser)
 
 module.exports = router
