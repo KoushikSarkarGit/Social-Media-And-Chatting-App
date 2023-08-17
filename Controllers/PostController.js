@@ -1,5 +1,5 @@
 const Postmodel = require('../Models/PostModel')
-const Usermodel = require('../Models/Usermodel')
+const Tagmodel = require('../Models/TagsModel')
 const cloudinary = require('../Tools/CloudinarySetup')
 
 const { createBase64AndUpload, updateimageincloudinary } = require('../Tools/ImageToBase64')
@@ -10,27 +10,46 @@ require('dotenv').config();
 const createPost = async (req, res) => {
 
     const { curuserid } = req.body
-    const { postdescription } = req.fields;
+    const { postdescription, hashtags } = req.fields;
     const currentDate = await new Date();
     let picturename = await `Post Of ${curuserid} on ${currentDate}`;
     let finalpublicid = picturename;
 
     try {
-
-
         let { postimage } = await req.files;
         let posturl = null;
 
         if (postimage) {
-
             const uploadedfile = await createBase64AndUpload(postimage.path, picturename);
-
             posturl = uploadedfile.url
             finalpublicid = uploadedfile.public_id
         }
 
 
-        const newpost = await Postmodel.create({ userId: curuserid, postdescription: postdescription, postimage: posturl, postPublicID: finalpublicid })
+
+        const newpost = await Postmodel.create({ userId: curuserid, postdescription: postdescription, postimage: posturl, postPublicID: finalpublicid, tags: hashtags })
+
+
+        if (hashtags) {
+            hashtags.array.forEach(async (element) => {
+                let iftagexist = await Tagmodel.find({ tagname: element })
+
+                if (!iftagexist) {
+                    await Tagmodel.create({ tagname: element, relatedpost: newpost._id })
+                }
+                else {
+                    await Tagmodel.updateOne(
+                        { tagname: element },
+                        { $inc: { count: 1 }, $push: { relatedpost: newpost._id } }
+                    );
+                }
+
+            });
+
+        }
+
+
+
 
         return res.status(200).json({ success: true, msg: 'Post created successfully', newpost });
 

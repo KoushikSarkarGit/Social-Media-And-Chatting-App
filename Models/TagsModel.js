@@ -16,7 +16,10 @@ const tagschema = new Schema({
         required: true
     }],
 
-    count: Number
+    count: {
+        type: Number,
+        default: 1
+    }
 
 }, { timestamps: true })
 
