@@ -16,18 +16,18 @@ const createPost = async (req, res) => {
     let finalpublicid = picturename;
 
     try {
-        // let { postimage } = await req.files;
-        // let posturl = null;
+        let { postimage } = await req.files;
+        let posturl = null;
 
-        // if (postimage) {
-        //     const uploadedfile = await createBase64AndUpload(postimage.path, picturename);
-        //     posturl = uploadedfile.url
-        //     finalpublicid = uploadedfile.public_id
-        // }
+        if (postimage) {
+            const uploadedfile = await createBase64AndUpload(postimage.path, picturename);
+            posturl = uploadedfile.url
+            finalpublicid = uploadedfile.public_id
+        }
 
 
 
-        // const newpost = await Postmodel.create({ userId: curuserid, postdescription: postdescription, postimage: posturl, postPublicID: finalpublicid, tags: [...hashtags] })
+        const newpost = await Postmodel.create({ userId: curuserid, postdescription: postdescription, postimage: posturl, postPublicID: finalpublicid, tags: JSON.parse(req.fields.hashtags) })
 
 
         if (hashtags) {
@@ -40,13 +40,13 @@ const createPost = async (req, res) => {
 
                 const iftagexist = await Tagmodel.find({ tagname: element.tagname })
 
-                // console.log(element.tagname, iftagexist)
+
 
 
                 if (iftagexist.length < 1) {
                     console.log('entered here')
                     // await Tagmodel.create({ tagname: element, relatedpost: newpost._id })
-                    await Tagmodel.create({ tagname: element.tagname, $push: { relatedpost: 'newpost._id' } })
+                    await Tagmodel.create({ tagname: element.tagname, $push: { relatedpost: newpost._id } })
                 }
                 else {
                     // await Tagmodel.updateOne(
@@ -56,7 +56,8 @@ const createPost = async (req, res) => {
                     console.log('entered else')
                     await Tagmodel.updateOne(
                         { tagname: element.tagname },
-                        { $inc: { count: 1 }, }, { new: true }
+                        { $inc: { count: 1 }, $push: { relatedpost: newpost._id } },
+                        { new: true }
                     );
 
                 }
@@ -66,14 +67,14 @@ const createPost = async (req, res) => {
         }
 
 
-        return res.status(200).json({ field: req.fields })
+        // return res.status(200).json({ field: req.fields })
 
 
-        // return res.status(200).json({ success: true, msg: 'Post created successfully', newpost });
+        return res.status(200).json({ success: true, msg: 'Post created successfully', newpost });
 
     } catch (error) {
         // this one for failed cases where image is uploaded but post creation is failed. so we have to delete the image from cloud to save space
-        // await cloudinary.uploader.destroy(finalpublicid);
+        await cloudinary.uploader.destroy(finalpublicid);
         return res.status(500).json({ success: false, msg: error.message });
     }
 
