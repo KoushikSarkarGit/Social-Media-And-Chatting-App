@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const formidable = require('express-formidable')
-const { createPost, getPost, updatePost, deletePost } = require('../Controllers/PostController')
+const { createPost, getPost, updatePost, deletePost, getPostbytag, getTrendingTags } = require('../Controllers/PostController')
 const { valtokenchecker, extractIdFromToken } = require('../Middlewares/Encryptiontools');
 
 
@@ -18,9 +18,10 @@ router.delete('/delete-post/:id', valtokenchecker, extractIdFromToken, formidabl
 // trending sections
 
 //get all post by tag
+router.post('/get-post-by-tag', getPostbytag)
 
 //get trending by tags
-
+router.get('/get-trending', getTrendingTags)
 
 
 

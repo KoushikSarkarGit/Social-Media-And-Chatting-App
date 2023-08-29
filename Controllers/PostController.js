@@ -1,3 +1,4 @@
+const { default: mongoose } = require('mongoose');
 const Postmodel = require('../Models/PostModel')
 const Tagmodel = require('../Models/TagsModel')
 const cloudinary = require('../Tools/CloudinarySetup')
@@ -40,34 +41,23 @@ const createPost = async (req, res) => {
 
                 const iftagexist = await Tagmodel.find({ tagname: element.tagname })
 
-
-
-
                 if (iftagexist.length < 1) {
-                    console.log('entered here')
-                    // await Tagmodel.create({ tagname: element, relatedpost: newpost._id })
-                    await Tagmodel.create({ tagname: element.tagname, $push: { relatedpost: newpost._id } })
+                    let relatedpostdata = [];
+                    relatedpostdata.push(newpost._id)
+
+                    await Tagmodel.create({ tagname: element.tagname, relatedpost: relatedpostdata })
                 }
                 else {
-                    // await Tagmodel.updateOne(
-                    //     { tagname: element },
-                    //     { $inc: { count: 1 }, $push: { relatedpost: newpost._id } }
-                    // );
-                    console.log('entered else')
+
                     await Tagmodel.updateOne(
                         { tagname: element.tagname },
-                        { $inc: { count: 1 }, $push: { relatedpost: newpost._id } },
+                        { $inc: { count: 1 }, $push: { relatedpost: new mongoose.Types.ObjectId(newpost._id) } },
                         { new: true }
                     );
-
                 }
-
             }
-
         }
 
-
-        // return res.status(200).json({ field: req.fields })
 
 
         return res.status(200).json({ success: true, msg: 'Post created successfully', newpost });
@@ -168,10 +158,40 @@ const deletePost = async (req, res) => {
 
 }
 
+const getPostbytag = async (req, res) => {
+
+    const { tagintrending } = req.body;
+
+    try {
+
+        const fetchedpost = await Postmodel.find({ tags: { $elemMatch: { tagname: tagintrending } } });
+        return res.status(200).json({ success: true, tagintrending, msg: 'Post fetched based on tags successfully', fetchedpost });
+
+    } catch (error) {
+
+        return res.status(500).json({ success: false, msg: error.message });
+    }
+
+}
+
+const getTrendingTags = async (req, res) => {
+
+
+    try {
+
+        const currentTrending = await Tagmodel.find().select('-relatedpost').sort({ count: -1 });
+        return res.status(200).json({ success: true, msg: 'Trending tags fethced successfully', currentTrending });
+
+    } catch (error) {
+
+        return res.status(500).json({ success: false, msg: error.message });
+    }
+
+}
 
 
 
 
 
 
-module.exports = { createPost, getPost, updatePost, deletePost }
+module.exports = { createPost, getPost, updatePost, deletePost, getPostbytag, getTrendingTags }
