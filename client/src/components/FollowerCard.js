@@ -3,7 +3,7 @@ import '../pagecss/followercard.css'
 import img1 from '../img/img1.png'
 import img2 from '../img/img2.png'
 import FollowerModal from './FollowerModal'
-
+import Morefollowersmodal from './Morefollowersmodal'
 
 
 export default function FollowerCard() {
@@ -58,7 +58,11 @@ export default function FollowerCard() {
 
 
             </div>
-            <FollowerModal openfollowermodal={openfollowermodal} setopenfollowermodal={setopenfollowermodal} />
+
+            {/* <FollowerModal openfollowermodal={openfollowermodal} setopenfollowermodal={setopenfollowermodal} /> */}
+            <Morefollowersmodal openfollower={openfollowermodal} setopenfollower={setopenfollowermodal} />
+
+
             <button className="morefollowers" onClick={() => setopenfollowermodal(true)}><hr className='morefhr' /> <h3> See More Followers</h3> </button>
         </div>
 
