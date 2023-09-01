@@ -5,6 +5,8 @@ import { UilLocationPoint } from "@iconscout/react-unicons";
 import { UilSchedule } from "@iconscout/react-unicons";
 import { UilTimes } from "@iconscout/react-unicons";
 import myprofileimage from "../img/profileImg.jpg";
+
+import { UilLabelAlt } from '@iconscout/react-unicons'
 import '../pagecss/sharecomponent.css'
 
 export default function SharePostComponent() {
@@ -39,17 +41,22 @@ export default function SharePostComponent() {
                             <UilScenery />
                             Photo
                         </div>
-                        <div className="feature" style={{ color: "var(--video)" }}>
+                        <div className="feature" style={{ color: "red" }}>
                             <UilPlayCircle />
                             Video
                         </div>{" "}
-                        <div className="feature" style={{ color: "var(--location)" }}>
-                            <UilLocationPoint />
-                            Location
+                        <div className="feature" style={{ color: "orange" }}>
+
+                            < UilSchedule />
+
+
+                            Schedule
                         </div>{" "}
-                        <div className="feature" style={{ color: "var(--shedule)" }}>
-                            <UilSchedule />
-                            Shedule
+                        <div className="feature" style={{ color: "blue" }}>
+
+                            <UilLabelAlt className='sharefeaturecomp' />
+
+                            Add Tag
                         </div>
 
                         <button className="basicbutton postbutton">Share</button>

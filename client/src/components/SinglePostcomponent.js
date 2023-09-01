@@ -4,8 +4,10 @@ import Comment from '../img/comment.png'
 import Share from '../img/share.png'
 import Heart from '../img/like.png'
 import NotLike from '../img/notlike.png'
-
-
+import { UilThumbsUp } from '@iconscout/react-unicons'
+import { UilRedo } from '@iconscout/react-unicons'
+import { UilCommentAltNotes } from '@iconscout/react-unicons'
+import { UilShare } from '@iconscout/react-unicons'
 
 export default function SinglePostcomponent({ pdata }) {
     return (
@@ -13,9 +15,11 @@ export default function SinglePostcomponent({ pdata }) {
             <img src={pdata.img} alt="postimage" />
 
             <div className="spostfeatures">
-                <img src={pdata.liked ? Heart : NotLike} alt="" />
-                <img src={Comment} alt="" />
-                <img src={Share} alt="" />
+                <UilThumbsUp />
+                <UilRedo />
+                <UilCommentAltNotes />
+                <UilShare />
+
             </div>
 
 
