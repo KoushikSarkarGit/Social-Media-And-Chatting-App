@@ -13,6 +13,12 @@
 
 }
 
+.followercardbox>h3 {
+    margin-top: 12px;
+    margin-bottom: 0px;
+    align-self: center;
+}
+
 .indivFollower {
     display: flex;
     justify-content: space-between;

@@ -35,7 +35,7 @@ export default function FollowerCard() {
     return (
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
             <div className='followercardbox'>
-                <h3>Your Followers </h3>
+                <h3 >Your Followers </h3>
 
                 {
                     followerdata.map((person, index) => {

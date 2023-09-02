@@ -418,4 +418,25 @@ const getGeneralTimeline = async (req, res) => {
 };
 
 
-module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getTimelineForLoginUser, getGeneralTimeline }
+
+
+const getUserFollowersid = async (req, res) => {
+
+    const { curuserid } = req.body;
+
+    try {
+
+        let yourFollowers = await Usermodel.findById(curuserid).select('followers');
+
+
+        res.status(200).json({ success: true, yourFollowers });
+    } catch (error) {
+        res.status(500).json({ success: false, error });
+    }
+
+};
+
+
+
+
+module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getTimelineForLoginUser, getGeneralTimeline, getUserFollowersid }

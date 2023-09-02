@@ -19,5 +19,17 @@
 .spostfeatures {
     display: flex;
     align-items: flex-start;
-    gap: 1.5rem;
+    /* padding-bottom: 3px; */
+    gap: 3.9rem;
+}
+
+/* .postfeaturesicons {
+    width: 26px;
+    height: 26px;
+} */
+
+.featureicon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

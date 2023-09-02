@@ -1,7 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import '../pagecss/trendcard.css'
+import '../pagecss/followercard.css'
+import MoretrendingModal from './MoretrendingModal'
 
 export default function Trendingcard() {
+
+    const [opentrending, setopentrending] = useState(false)
 
     const trenddata = [
         {
@@ -43,22 +47,32 @@ export default function Trendingcard() {
     ];
 
     return (
-        <div className='trendingbox'>
-            <div className="h3box">
-                <h3>What's Trending Today</h3>
+        <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
+            <div className='trendingbox'>
+                <div className="h3box">
+                    <h3>What's Trending Today</h3>
+                </div>
+
+
+                {
+                    trenddata.map((item, index) => {
+                        return <div className="singletrend" key={index * 2}>
+                            <span>#{item.name}</span>
+
+                            <span>{item.shares} shares</span>
+                        </div>
+                    })
+                }
+
+
+                <MoretrendingModal opentrending={opentrending} setopentrending={setopentrending} />
+
+
+
+
+
             </div>
-
-
-            {
-                trenddata.map((item, index) => {
-                    return <div className="singletrend" key={index * 2}>
-                        <span>#{item.name}</span>
-
-                        <span>{item.shares} shares</span>
-                    </div>
-                })
-            }
-
+            <button className="morefollowers" onClick={() => setopentrending(true)}><hr className='morefhr' /> <h3> See All Trending</h3> </button>
         </div>
     )
 }

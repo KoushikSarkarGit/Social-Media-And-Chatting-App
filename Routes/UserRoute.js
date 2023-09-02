@@ -1,5 +1,5 @@
 const express = require('express');
-const { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getTimeline, getTimelineForLoginUser, getGeneralTimeline } = require('../Controllers/Usercontroller');
+const { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getTimeline, getTimelineForLoginUser, getGeneralTimeline, getUserFollowersid } = require('../Controllers/Usercontroller');
 const router = express.Router();
 const formidable = require('express-formidable')
 const { valtokenchecker, extractIdFromToken } = require('../Middlewares/Encryptiontools')
@@ -52,6 +52,11 @@ router.get('/get-feed/:id', valtokenchecker, extractIdFromToken, getTimelineForL
 //get timeline for non logged in user
 
 router.get('/get-general-feed/', getGeneralTimeline)
+
+
+// get followers id
+
+router.get('/get-followersOf-user', valtokenchecker, extractIdFromToken, getUserFollowersid)
 
 
 module.exports = router
