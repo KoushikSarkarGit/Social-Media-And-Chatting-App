@@ -11,7 +11,7 @@ export default function Timelinecomponent() {
             <div className=' tabbox' >
 
 
-                <ul className="nav nav-underline tabitems">
+                <ul className="nav nav-underline tabitems sticky-top ">
                     <li className="nav-item">
                         <a className="nav-link " aria-current="page" href="#">Your Posts</a>
                     </li>

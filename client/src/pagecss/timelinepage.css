@@ -8,7 +8,9 @@
 }
 
 .timelinecompbox {
-    overflow: scroll;
+    max-height: 95.7vh;
+    min-height: 95.7vh;
+    overflow: auto;
 }
 
 .tabbox {
@@ -16,7 +18,7 @@
     border-radius: 2rem;
     display: flex;
     flex-direction: column;
-    overflow: auto;
+    /* overflow: auto; */
 
 
 }
@@ -33,6 +35,8 @@
     padding: 10px;
     display: flex;
     justify-content: space-around;
+    background-color: rgb(255, 255, 255);
+    border-radius: 20px 20px 1px 1px;
 }
 
 .tabitems>li>a {

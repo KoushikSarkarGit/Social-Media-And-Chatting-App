@@ -1,9 +1,10 @@
 import React from 'react'
 import Profilecardleft from './Profilecardleft'
 import SharePostComponent from "./SharePostComponent";
-import AllPostsComponent from "./AllPostsComponent";
+
 
 import '../pagecss/profilecenter.css'
+import Timelinecomponent from './Timelinecomponent';
 
 
 export default function Profilecenter() {
@@ -11,7 +12,8 @@ export default function Profilecenter() {
         <div className='profilecenterbox'>
             <Profilecardleft />
             <SharePostComponent />
-            <AllPostsComponent />
+
+            <Timelinecomponent />
         </div>
     )
 }
