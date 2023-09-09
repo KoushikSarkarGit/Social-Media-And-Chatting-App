@@ -9,8 +9,6 @@ export default function LogoComponent() {
         <div className='logocomponentmain' >
             <img src={logo} alt="logocomponentimg" />
 
-
-
         </div>
     )
 }

@@ -6,7 +6,7 @@ import { UilCommentDots } from '@iconscout/react-unicons'
 import { UilUser } from '@iconscout/react-unicons'
 import { UilTablet } from '@iconscout/react-unicons'
 import { UilSearch } from '@iconscout/react-unicons'
-import { Link, To } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import '../pagecss/menucomponent.css'
 import SharePostModal from './SharePostModal';
 import { UilSignin } from '@iconscout/react-unicons'
@@ -28,11 +28,11 @@ export default function MenuComponent() {
                 <span className='optiontext'>Home</span>
             </Link>
 
-            <div className="menuoptions">
+            <Link to='/explore' className="menuoptions">
 
                 <UilSearch className='menuicons' />
                 <span className='optiontext'>Explore</span>
-            </div>
+            </Link>
 
             <div className="menuoptions">
                 <UilBell className='menuicons' />
@@ -45,10 +45,10 @@ export default function MenuComponent() {
                 <span className='optiontext'>Messages</span>
             </div>
 
-            <div className="menuoptions">
+            <Link to='/timeline' className="menuoptions">
                 <UilTablet className='menuicons' />
                 <span className='optiontext'>Your Timeline</span>
-            </div>
+            </Link>
 
             <Link to='/profile' className="menuoptions">
                 <UilUser className='menuicons' />

@@ -1,0 +1,48 @@
+.timelinepagebox {
+    position: relative;
+    display: grid;
+    grid-template-columns: 18rem auto 20rem;
+    gap: 1rem;
+    max-height: 95.7vh;
+
+}
+
+.timelinecompbox {
+    overflow: scroll;
+}
+
+.tabbox {
+    background-color: white;
+    border-radius: 2rem;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+
+
+}
+
+
+.tabbox>hr {
+    padding: 1.1px;
+    border-radius: 80px;
+    background-color: rgb(91, 91, 91);
+    margin-left: 1.2vw;
+}
+
+.tabitems {
+    padding: 10px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.tabitems>li>a {
+
+    font-size: large;
+    font-weight: 600;
+    color: rgb(255, 94, 0);
+
+}
+
+.displayelement {
+    overflow: auto;
+}

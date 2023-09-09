@@ -80,3 +80,11 @@
     height: 2rem;
     align-self: flex-end;
 }
+
+.btncase {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+
+}

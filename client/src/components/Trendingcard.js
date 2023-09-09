@@ -50,7 +50,7 @@ export default function Trendingcard() {
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
             <div className='trendingbox'>
                 <div className="h3box">
-                    <h3>What's Trending Today</h3>
+                    <h5>What's Trending Today</h5>
                 </div>
 
 
@@ -72,7 +72,7 @@ export default function Trendingcard() {
 
 
             </div>
-            <button className="morefollowers" onClick={() => setopentrending(true)}><hr className='morefhr' /> <h3> See All Trending</h3> </button>
+            <button className="morefollowers" onClick={() => setopentrending(true)}><hr className='morefhr' /> <h6> See All Trending</h6> </button>
         </div>
     )
 }

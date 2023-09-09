@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
-import '../pagecss/followercard.css'
 import img1 from '../img/img1.png'
 import img2 from '../img/img2.png'
-import FollowerModal from './FollowerModal'
-import Morefollowersmodal from './Morefollowersmodal'
+
+import '../pagecss/followercard.css'
+import Morewhotofollowmodal from './Morewhotofollowmodal'
 
 
-export default function FollowerCard() {
 
+
+export default function Whotofollow() {
     const [openfollowermodal, setopenfollowermodal] = useState(false)
 
     const followerdata = [{
@@ -59,11 +60,16 @@ export default function FollowerCard() {
 
             </div>
 
-            {/* <FollowerModal openfollowermodal={openfollowermodal} setopenfollowermodal={setopenfollowermodal} /> */}
-            <Morefollowersmodal openfollower={openfollowermodal} setopenfollower={setopenfollowermodal} />
+
+            {/* <Morefollowersmodal openfollower={openfollowermodal} setopenfollower={setopenfollowermodal} /> */}
 
 
-            <button className="morefollowers" onClick={() => setopenfollowermodal(true)}><hr className='morefhr' /> <h6> See More Followers</h6> </button>
+            {/* //did not change the props name as i do not have the energy lol!! */}
+
+            <Morewhotofollowmodal openfollower={openfollowermodal} setopenfollower={setopenfollowermodal} />
+
+
+            <button className="morefollowers" onClick={() => setopenfollowermodal(true)}><hr className='morefhr' /> <h6> See More People</h6> </button>
         </div>
 
     )
