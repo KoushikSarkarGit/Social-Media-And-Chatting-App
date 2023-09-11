@@ -54,11 +54,11 @@ export default function MenuComponent() {
                 <UilUser className='menuicons' />
                 <span className='optiontext'>Profile</span>
             </Link>
-            <div className="menuoptions">
+            {/* <div className="menuoptions">
                 <UilSetting className='menuicons' />
                 <span className='optiontext'>Settings</span>
 
-            </div>
+            </div> */}
 
             <Link to='/login' className="menuoptions">
                 <UilSignin className='menuicons' />

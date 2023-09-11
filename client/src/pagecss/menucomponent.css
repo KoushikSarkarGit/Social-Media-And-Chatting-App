@@ -11,7 +11,7 @@
     justify-content: flex-start;
     /* margin-top: 1rem; */
     align-items: center;
-    padding: 16px 10px 14px 20px;
+    padding: 16px 10px 18px 20px;
     background: rgb(255, 255, 255);
     text-decoration: none;
     color: black;
@@ -23,6 +23,7 @@
 
 .optiontext {
     padding-left: 20px;
+    font-size: large;
 
 }
 

@@ -3,6 +3,7 @@ import SharePostComponent from './SharePostComponent'
 
 
 import { Modal, useMantineTheme } from '@mantine/core';
+import SharePostWithTexarea from './SharePostWithTexarea';
 
 
 export default function SharePostModal({ opensharemodal, setopensharemodal }) {
@@ -27,7 +28,9 @@ export default function SharePostModal({ opensharemodal, setopensharemodal }) {
             >
 
 
-                <SharePostComponent />
+                {/* <SharePostComponent /> */}
+
+                <SharePostWithTexarea />
 
             </Modal>
 
