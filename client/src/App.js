@@ -8,6 +8,7 @@ import Profilepage from './pages/Profilepage';
 import SignUpPage from './pages/SignUpPage';
 import { Routes, Route } from 'react-router-dom'
 import TimelinePage from './pages/TimelinePage';
+import ViewPostpage from './pages/ViewPostpage';
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
           <Route path='/signup' element={<SignUpPage />} />
           <Route path='/explore' element={<ExplorePage />} />
           <Route path='/timeline' element={<TimelinePage />} />
+          <Route path='/viewpost' element={<ViewPostpage />} />
 
 
         </Routes>

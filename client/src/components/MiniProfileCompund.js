@@ -12,11 +12,13 @@ export default function MiniProfileCompund() {
             </div>
 
             <div className="ProfileDetails">
-                <span> <b> Zendaya MJ </b> </span>
+                <span> <b> Koushik Sarkar </b> </span>
                 <span >@Jeet</span>
             </div>
+            <div className="moreicon">
+                <UilEllipsisV />
+            </div>
 
-            <UilEllipsisV className='moreicon' />
 
         </div>
     )

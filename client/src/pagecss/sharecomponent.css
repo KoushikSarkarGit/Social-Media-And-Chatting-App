@@ -23,14 +23,15 @@
     gap: 1rem;
 }
 
-.postbox>div>input {
+.postbox>div>textarea {
     background-color: var(--inputColor);
     border-radius: 10px;
     padding: 10px;
     font-size: 17px;
-    border: none;
+    /* border: none; */
     outline: none;
-    /* width: 90%; */
+    min-height: auto;
+
 }
 
 .postingfeatures {
@@ -81,10 +82,22 @@
 }
 
 #postImageDismiss {
+    position: relative;
+    /* right: 1rem;
+    top: 0.5rem; */
+    cursor: pointer;
+
+
+}
+
+.imgdismiss {
     position: absolute;
     right: 1rem;
     top: 0.5rem;
     cursor: pointer;
+    background-color: rgb(174, 174, 179);
+    padding: 10px;
+    border-radius: 50%;
 
 }
 

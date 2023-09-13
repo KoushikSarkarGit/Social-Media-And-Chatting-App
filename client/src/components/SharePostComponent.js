@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { UilScenery } from "@iconscout/react-unicons";
 import { UilPlayCircle } from "@iconscout/react-unicons";
 import { UilLocationPoint } from "@iconscout/react-unicons";
@@ -13,6 +13,29 @@ export default function SharePostComponent() {
 
     const [postimage, setpostimage] = useState();
     const postimgref = useRef()
+
+
+    const textarearef = useRef(null)
+    const [textareaval, settextareaval] = useState('');
+
+    const onchangehandler = (event) => {
+
+        settextareaval(event.target.value)
+
+    }
+
+
+    useEffect(() => {
+        textarearef.current.style.height = 'auto';
+        textarearef.current.style.height = textarearef.current.scrollHeight + 'px';
+        if (textarearef.current.clientHeight < 90) { // Adjust the minimum height as needed
+            textarearef.current.style.height = '50px';
+        }
+
+    }, [textareaval])
+
+
+
 
     const insertimagehandler = (e) => {
         if (e.target.files && e.target.files[0]) {
@@ -32,7 +55,7 @@ export default function SharePostComponent() {
 
                 <div>
 
-                    <input type="text" placeholder="What's happening" />
+                    <textarea className='form-control' placeholder="What's happening" name='textareaval' value={textareaval} ref={textarearef} onChange={(event) => onchangehandler(event)} />
 
                     <div className="postingfeatures">
                         <div className="feature" style={{ color: "var(--photo)" }} onClick={() => {
@@ -65,7 +88,9 @@ export default function SharePostComponent() {
 
                     </div>
                     {postimage && <div className="tobeuloadedimg">
-                        <UilTimes onClick={() => { setpostimage(null) }} id='postImageDismiss' style={{ color: "rgb(255, 38, 0)" }} />
+                        <div className="imgdismiss" >
+                            <UilTimes onClick={() => { setpostimage(null) }} id='postImageDismiss' style={{ color: "rgb(255, 38, 0)" }} />
+                        </div>
                         <div className="imgbox">
                             <img src={postimage} alt="image" />
                         </div>
