@@ -5,3 +5,46 @@
     gap: 1rem;
     max-height: 95.7vh;
 }
+
+.mainpost {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-height: 97.5vh;
+    overflow: auto;
+}
+
+.singlepostviewbox {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    background-color: var(--cardColor);
+    border-radius: 1rem;
+    gap: 1rem;
+
+}
+
+.singlepostviewbox>img {
+    max-width: 100%;
+    max-height: 90vh;
+    object-fit: scale-down;
+    border-radius: 0.5rem;
+}
+
+.spostfeatures {
+    display: flex;
+    align-items: flex-start;
+    /* padding-bottom: 3px; */
+    gap: 3.9rem;
+}
+
+/* .postfeaturesicons {
+    width: 26px;
+    height: 26px;
+} */
+
+.featureicon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

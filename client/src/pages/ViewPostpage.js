@@ -3,8 +3,11 @@ import LeftsideOfHome from '../components/LeftsideOfHome'
 import RightofHome from '../components/RightofHome'
 
 import '../pagecss/viewpostpage.css'
-import SinglePostcomponent from '../components/SinglePostcomponent'
-import postPic1 from '../img/postpic1.jpg'
+// import SinglePostcomponent from '../components/SinglePostcomponent'
+// import postPic1 from '../img/postpic2.jpg'
+// import postPic1 from '../img/postpic1.jpg'
+import postPic1 from '../img/profileImg.jpg'
+import ViewSinglepost from '../components/ViewSinglepost'
 
 
 export default function ViewPostpage() {
@@ -22,7 +25,8 @@ export default function ViewPostpage() {
             <LeftsideOfHome />
             <div className="mainpost">
 
-                <SinglePostcomponent pdata={allpostdata} />
+
+                <ViewSinglepost pdata={allpostdata} />
             </div>
             <RightofHome />
         </div>
