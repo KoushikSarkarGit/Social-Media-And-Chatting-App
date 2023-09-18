@@ -1,6 +1,6 @@
 import './App.css';
 import MyContextPool from './ContextFolder/MyContextPool';
-import Timelinecomponent from './components/Timelinecomponent';
+
 import ExplorePage from './pages/ExplorePage';
 import Home from './pages/Home';
 import Loginpage from './pages/Loginpage';
@@ -18,6 +18,8 @@ function App() {
       <div className="mainapp">
         <div className="backgroundblur" style={{ top: '-18%', right: '0%' }}    ></div>
         <div className="backgroundblur" style={{ top: '37%', left: '-10%' }}    ></div>
+        <div className="backgroundblur2" style={{ top: '-30%', left: '-15%', backgroundColor: 'rgba(113, 198, 255, 0.664)' }}    ></div>
+        <div className="backgroundblur2" style={{ top: '42%', right: '-17%', backgroundColor: 'rgba(113, 198, 255, 0.664)' }}    ></div>
 
         <Routes>
 

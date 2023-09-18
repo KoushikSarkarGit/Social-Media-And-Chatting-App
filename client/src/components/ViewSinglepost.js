@@ -8,7 +8,7 @@ import { UilCommentAltNotes } from '@iconscout/react-unicons'
 import { UilShare } from '@iconscout/react-unicons'
 import { AiTwotoneLike } from 'react-icons/ai'
 import postPic2 from '../img/postpic2.jpg'
-
+import { UilArrowLeft } from '@iconscout/react-unicons'
 
 
 export default function ViewSinglepost({ pdata }) {
@@ -32,6 +32,7 @@ export default function ViewSinglepost({ pdata }) {
     const textarearef = useRef(null)
 
     const [textareaval, settextareaval] = useState('');
+    const [addingcomment, setaddingcomment] = useState(false);
 
     const onchangehandler = (event) => {
 
@@ -52,8 +53,34 @@ export default function ViewSinglepost({ pdata }) {
     return (
         <div className="superviewsinglepostbox">
 
+            <div className="backbtn">
+                <UilArrowLeft style={{ width: '40px', height: '40px', cursor: 'pointer' }} />
+                <b>Back</b>
+
+            </div>
+
 
             <div className='singlepostviewbox'>
+
+                <div className="posterdetails">
+                    <div className='d-flex'>
+                        <img src={pdata.img} alt="userimage" className='posterpic' />
+                        <div className="d-flex flex-column">
+                            <span className='mx-2'><b>From {pdata.name}</b></span>
+                            <span className='mx-2 text-muted' > @jeet</span>
+                        </div>
+
+                    </div>
+
+                    <button className='basicbutton px-3 py-1'>follow</button>
+
+                </div>
+
+                <div className="detail px-1 py-1 my-1">
+
+                    <span> {pdata.desc}</span>
+                </div>
+
                 <div className="imgcontainer">
                     <img src={pdata.img} alt="postimage" className='postimage' />
                 </div>
@@ -95,25 +122,23 @@ export default function ViewSinglepost({ pdata }) {
                 </div>
 
 
-                <div className="detail">
-                    <span><b>From {pdata.name}:</b></span>
-                    <span> {pdata.desc}</span>
-                </div>
-
-
             </div>
 
+            {/* comment section starts here */}
 
             <div className="commentsection">
 
 
                 <div className="commentbox">
                     <label><h2> Comment </h2></label>
-                    <textarea className="commentinput" name='textareaval' placeholder='Add a comment Here' value={textareaval} ref={textarearef} onChange={(event) => onchangehandler(event)} />
-                    <div className=" commentbtnsection ">
+                    <textarea className="commentinput" name='textareaval' onClick={() => setaddingcomment(true)} placeholder='Add a comment Here' value={textareaval} ref={textarearef} onChange={(event) => onchangehandler(event)} />
+                    {addingcomment && <div className=" commentbtnsection ">
                         <div className="commentbtn basicbutton">Post Comment</div>
-                        <div className="commentbtn basicbutton">Cancel</div>
-                    </div>
+                        <div className="commentbtn basicbutton" onClick={() => {
+                            setaddingcomment(false)
+                            settextareaval('')
+                        }} >Cancel</div>
+                    </div>}
 
                 </div>
 

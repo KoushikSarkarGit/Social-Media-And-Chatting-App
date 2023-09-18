@@ -33,6 +33,15 @@
   filter: blur(74px)
 }
 
+.backgroundblur2 {
+  position: absolute;
+  width: 24rem;
+  height: 15rem;
+  border-radius: 50%;
+
+  filter: blur(98px)
+}
+
 ::-webkit-scrollbar {
   display: none;
 }
