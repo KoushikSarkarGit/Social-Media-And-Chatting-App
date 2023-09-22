@@ -13,6 +13,7 @@ export default function ProfileLeft() {
 
             <LogoComponent />
             <MiniProfileCompund />
+
             <MenuComponent />
         </div>
     )

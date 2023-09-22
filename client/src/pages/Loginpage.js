@@ -11,7 +11,7 @@ export default function Loginpage() {
         <div className="Signupbox">
 
 
-            <div className="a-right" style={{ padding: '5px' }}  >
+            <div className="signupcontainer" style={{ padding: '5px' }}  >
                 <form className="infoForm authForm">
                     <h3>Log In</h3>
 

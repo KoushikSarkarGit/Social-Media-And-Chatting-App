@@ -132,12 +132,18 @@ export default function ViewSinglepost({ pdata }) {
                 <div className="commentbox">
                     <label><h2> Comment </h2></label>
                     <textarea className="commentinput" name='textareaval' onClick={() => setaddingcomment(true)} placeholder='Add a comment Here' value={textareaval} ref={textarearef} onChange={(event) => onchangehandler(event)} />
+
                     {addingcomment && <div className=" commentbtnsection ">
-                        <div className="commentbtn basicbutton">Post Comment</div>
+
+                        <div className="commentbtn basicbutton" onClick={() => {
+                            console.log(textareaval.toString())
+                        }}>Post Comment</div>
+
                         <div className="commentbtn basicbutton" onClick={() => {
                             setaddingcomment(false)
                             settextareaval('')
                         }} >Cancel</div>
+
                     </div>}
 
                 </div>
@@ -151,8 +157,6 @@ export default function ViewSinglepost({ pdata }) {
                                     <span className='commenterdetails'><b>{item.commenter_id}</b> </span>
                                     <span className='commentdesc'>{item.commentText} </span>
                                 </div>
-
-
 
                             </div>
                         })
