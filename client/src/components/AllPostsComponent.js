@@ -4,7 +4,7 @@ import postPic2 from '../img/postpic2.jpg'
 import postPic3 from '../img/postpic3.JPG'
 
 
-import allpostcomp from '../pagecss/allpostcomp.css'
+import '../pagecss/allpostcomp.css'
 import SinglePostcomponent from './SinglePostcomponent'
 
 

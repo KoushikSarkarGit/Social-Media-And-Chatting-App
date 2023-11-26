@@ -1,10 +1,18 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import Profile from '../img/profileImg.jpg'
 import '../pagecss/miniprofilecard.css'
 import { UilEllipsisV } from '@iconscout/react-unicons'
+import { Appcontext } from '../ContextFolder/ContextCreator'
 
 
 export default function MiniProfileCompund() {
+
+    const cur = useContext(Appcontext);
+    const { username, userdata } = cur;
+
+
+
+
     return (
         <div className='miniprofilecardbox'>
             <div className="miniprofileimg">
@@ -12,8 +20,8 @@ export default function MiniProfileCompund() {
             </div>
 
             <div className="ProfileDetails">
-                <span> <b> Koushik Sarkar </b> </span>
-                <span >@Jeet</span>
+                <span> <b> {userdata?.firstname + ' ' + userdata?.lastname}</b> </span>
+                <span >@{username}</span>
             </div>
             <div className="moreicon">
                 <UilEllipsisV />

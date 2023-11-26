@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { UilSearch } from '@iconscout/react-unicons'
+import React from 'react'
+
 import '../pagecss/rightofhome.css'
 import Trendingcard from './Trendingcard';
 

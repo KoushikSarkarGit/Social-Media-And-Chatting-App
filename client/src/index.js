@@ -12,9 +12,9 @@ root.render(
   <MyContextPool>
 
     <BrowserRouter>
-      <React.StrictMode>
-        <App />
-      </React.StrictMode>
+      {/* <React.StrictMode> */}
+      <App />
+      {/* </React.StrictMode> */}
     </BrowserRouter>
   </MyContextPool>
 );

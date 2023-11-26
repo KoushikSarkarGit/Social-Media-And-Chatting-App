@@ -19,10 +19,14 @@ const userRegistration = async (req, res) => {
 
     let success = false;
 
+    console.log(username, password, firstname, email, lastname);
+
+
     const user = await Usermodel.findOne({ email: email });
 
     if (user) {
-        res.status(200).json({ success: true, msg: 'User already exist. Please Login' })
+        return res.status(200).json({ success: true, msg: 'User already exist. Please Login' });
+
     }
 
     try {
@@ -39,10 +43,12 @@ const userRegistration = async (req, res) => {
 
         // const { password, ...sendingdata } = await CreatedUser;
         // delete CreatedUser.password;
+
+
         return res.status(200).json({ success: true, CreatedUser, msg: 'Registration successful' });
 
     } catch (error) {
-        res.status(501).json({ success, msg: error.message });
+        return res.status(501).json({ success, msg: error.message });
     }
 };
 
@@ -58,9 +64,11 @@ const loginBackend = async (req, res) => {
         if (user) {
             const validity = await checkpassword(password, user.password)
 
-            const token = jwt.sign({ id: user._id }, process.env.jwt_secret_key, { expiresIn: '14d' });
+            const token = await jwt.sign({ id: user._id }, process.env.jwt_secret_key, { expiresIn: '30d' });
 
-            validity ? res.status(200).json({ success, jwttoken: token, user, msg: 'Login Successful' }) : res.status(400).json({ success: false, msg: "Wrong Username or Password" })
+            const sentuser = await Usermodel.findOne({ email: email }).select('-password');
+
+            validity ? res.status(200).json({ success: true, jwttoken: token, sentuser, msg: 'Login Successful' }) : res.status(400).json({ success: false, msg: "Wrong Username or Password" })
         }
         else {
             res.status(404).json("User does not exists. Please Sign Up first")

@@ -1,5 +1,5 @@
 import React from 'react'
-import SharePostComponent from './SharePostComponent'
+
 
 
 import { Modal, useMantineTheme } from '@mantine/core';

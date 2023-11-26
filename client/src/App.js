@@ -19,7 +19,7 @@ function App() {
         <div className="backgroundblur" style={{ top: '-18%', right: '0%' }}    ></div>
         <div className="backgroundblur" style={{ top: '37%', left: '-10%' }}    ></div>
         <div className="backgroundblur2" style={{ top: '-30%', left: '-15%', backgroundColor: 'rgba(113, 198, 255, 0.664)' }}    ></div>
-        <div className="backgroundblur2" style={{ top: '42%', right: '-17%', backgroundColor: 'rgba(113, 198, 255, 0.664)' }}    ></div>
+        <div className="backgroundblur2" style={{ top: '42%', right: '0%', width: '17rem', filter: 'blur(98px)', backgroundColor: 'rgba(122, 202, 255, 0.511)' }}></div>
 
         <Routes>
 

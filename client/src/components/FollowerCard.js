@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import '../pagecss/followercard.css'
 import img1 from '../img/img1.png'
 import img2 from '../img/img2.png'
-import FollowerModal from './FollowerModal'
+// import FollowerModal from './FollowerModal'
 import Morefollowersmodal from './Morefollowersmodal'
 
 

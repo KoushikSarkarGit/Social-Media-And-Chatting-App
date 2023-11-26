@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { UilScenery } from "@iconscout/react-unicons";
 import { UilPlayCircle } from "@iconscout/react-unicons";
-import { UilLocationPoint } from "@iconscout/react-unicons";
+// import { UilLocationPoint } from "@iconscout/react-unicons";
 import { UilSchedule } from "@iconscout/react-unicons";
 import { UilTimes } from "@iconscout/react-unicons";
 import myprofileimage from "../img/profileImg.jpg";
@@ -92,7 +92,7 @@ export default function SharePostComponent() {
                             <UilTimes onClick={() => { setpostimage(null) }} id='postImageDismiss' style={{ color: "rgb(255, 38, 0)" }} />
                         </div>
                         <div className="imgbox">
-                            <img src={postimage} alt="image" />
+                            <img src={postimage} alt="postIMG" />
                         </div>
 
                     </div>}
