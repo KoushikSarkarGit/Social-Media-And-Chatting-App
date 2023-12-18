@@ -4,9 +4,66 @@ import img1 from '../img/img1.png'
 import img2 from '../img/img2.png'
 // import FollowerModal from './FollowerModal'
 import Morefollowersmodal from './Morefollowersmodal'
+import FollowerElement from './FollowerElement'
+import axios from 'axios'
+import toast from 'react-hot-toast'
+import { useNavigate } from 'react-router-dom'
 
 
 export default function FollowerCard() {
+
+    // let follweridlist = localStorage.getItem("authdata").sentuser.followers
+
+    const navigate = useNavigate();
+
+    const [followerlist, setFollowerlist] = useState([])
+
+
+    const followSomeone = async () => {
+        try {
+            await axios.put(`http://localhost:9000/api/v1/user/follow-user/64d104c56d7a4d72168abaa4`).then(async (res) => {
+
+                console.log(res.data)
+
+
+            }).catch((err) => {
+
+                console.log(err)
+                toast.error('some internal axios error occured')
+
+            })
+        } catch (error) {
+            console.log(error)
+            toast.error('some internal error occured')
+        }
+    }
+
+
+
+
+    const getFollowerList = async () => {
+        try {
+            await axios.put(`http://localhost:9000/api/v1/user/follow-user/64d104c56d7a4d72168abaa4`).then(async (res) => {
+
+                console.log(res.data)
+
+
+            }).catch((err) => {
+
+                console.log(err)
+                toast.error('some internal axios error occured')
+
+            })
+        } catch (error) {
+            console.log(error)
+            toast.error('some internal error occured')
+        }
+    }
+
+
+
+
+
 
     const [openfollowermodal, setopenfollowermodal] = useState(false)
 
@@ -38,20 +95,8 @@ export default function FollowerCard() {
                 <h5 >Your Followers </h5>
 
                 {
-                    followerdata.map((person, index) => {
-                        return <div className="indivFollower" key={index * 3}>
-                            <div>
-
-                                <img src={person.img} alt="userphoto" className='userphoto' />
-                                <div className="followerdetails">
-                                    <span> <b>{person.name}</b> </span>
-                                    <span>@{person.username}</span>
-                                </div>
-
-                            </div>
-
-                            <button className='basicbutton followerbtn' >Follow</button>
-                        </div>
+                    followerdata.map((personid, index) => {
+                        return <FollowerElement key={index} fdata={personid} />
 
                     })
                 }

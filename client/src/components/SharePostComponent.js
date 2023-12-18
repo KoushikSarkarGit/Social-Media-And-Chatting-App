@@ -57,6 +57,18 @@ export default function SharePostComponent() {
 
                     <textarea className='form-control' placeholder="What's happening" name='textareaval' value={textareaval} ref={textarearef} onChange={(event) => onchangehandler(event)} />
 
+
+                    {postimage && <div className="tobeuloadedimg">
+                        <div className="imgdismiss" >
+                            <UilTimes onClick={() => { setpostimage(null) }} id='postImageDismiss' style={{ color: "rgb(255, 38, 0)" }} />
+                        </div>
+                        <div className="imgbox">
+                            <img src={postimage} alt="postIMG" />
+                        </div>
+
+                    </div>}
+
+
                     <div className="postingfeatures">
                         <div className="feature" style={{ color: "var(--photo)" }} onClick={() => {
                             postimgref.current.click()
@@ -87,15 +99,6 @@ export default function SharePostComponent() {
                         <input type="file" name='imgupload' ref={postimgref} style={{ display: 'none' }} onChange={insertimagehandler} />
 
                     </div>
-                    {postimage && <div className="tobeuloadedimg">
-                        <div className="imgdismiss" >
-                            <UilTimes onClick={() => { setpostimage(null) }} id='postImageDismiss' style={{ color: "rgb(255, 38, 0)" }} />
-                        </div>
-                        <div className="imgbox">
-                            <img src={postimage} alt="postIMG" />
-                        </div>
-
-                    </div>}
 
                 </div>
 

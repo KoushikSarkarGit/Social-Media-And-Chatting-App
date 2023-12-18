@@ -96,6 +96,28 @@ const getSingleUser = async (req, res) => {
 };
 
 
+
+// get a User controller
+const getSingleUserLite = async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        const curuser = await Usermodel.findById(id).select('-password -followers -following -likedPost -reposted');
+
+        if (curuser) {
+            return res.status(200).json({ success: true, msg: 'user fetched successfully', curuser });
+        } else {
+            return res.status(404).json({ success: true, msg: "User does not exist" });
+        }
+    } catch (error) {
+        return res.status(500).json({ success: false, msg: 'user fetching unsuccessful', error });
+    }
+};
+
+
+
+
+
 // update user details
 const updateUserDetails = async (req, res) => {
     const id = req.params.id;
@@ -196,6 +218,41 @@ const updateCoverpic = async (req, res) => {
     } else {
         res.status(403).json({ success: false, msg: "Access Denied! you can only update your own profile" });
     }
+};
+
+// get followerlist
+
+const getFollowerListByPage = async (req, res) => {
+    const { curuserid } = req.body;
+
+    let page = req.params.pageno
+
+    try {
+        const user = await Usermodel.findById(curuserid);
+
+        if (!user) {
+            res.status(200).json({ success: false, msg: 'User does not exist' });
+        }
+
+        if (user._id) {
+            const myuser = await Usermodel.aggregate([
+                { $match: { _id: user._id } },
+                {
+                    $project: {
+                        followers: {
+                            $slice: ['$followers', (page - 1) * 10, 10]
+                        }
+                    }
+                }
+            ]);
+
+            return res.status(200).json({ success: true, msg: 'follwer list fetched successful', myuser });
+        }
+
+    } catch (error) {
+        res.status(500).json({ success: false, error });
+    }
+
 };
 
 // follow someone
@@ -447,4 +504,4 @@ const getUserFollowersid = async (req, res) => {
 
 
 
-module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getTimelineForLoginUser, getGeneralTimeline, getUserFollowersid }
+module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getTimelineForLoginUser, getGeneralTimeline, getUserFollowersid, getFollowerListByPage, getSingleUserLite }

@@ -1,5 +1,5 @@
 const express = require('express');
-const { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getTimeline, getTimelineForLoginUser, getGeneralTimeline, getUserFollowersid } = require('../Controllers/Usercontroller');
+const { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getTimelineForLoginUser, getGeneralTimeline, getUserFollowersid, getFollowerListByPage, getSingleUserLite } = require('../Controllers/Usercontroller');
 const router = express.Router();
 const formidable = require('express-formidable')
 const { valtokenchecker, extractIdFromToken } = require('../Middlewares/Encryptiontools')
@@ -13,6 +13,8 @@ router.post('/login', loginBackend)
 
 // user crud operation
 router.get('/getuser/:id', getSingleUser)
+// get less info of user
+router.get('/get-user-light/:id', getSingleUserLite)
 
 //update user details
 router.put('/update-userdetails/:id', valtokenchecker, extractIdFromToken, updateUserDetails)
@@ -22,6 +24,10 @@ router.put('/update-profilepic/:id', valtokenchecker, extractIdFromToken, formid
 
 // update cover picture
 router.put('/update-coverpic/:id', valtokenchecker, extractIdFromToken, formidable(), updateCoverpic)
+
+
+// get all followers of a user
+router.get('/get-follower-list/:pageno', valtokenchecker, extractIdFromToken, getFollowerListByPage)
 
 // follow a user
 router.put('/follow-user/:id', valtokenchecker, extractIdFromToken, followSomeOne)

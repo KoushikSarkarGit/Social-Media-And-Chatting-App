@@ -63,7 +63,7 @@ export default function SignUpPage() {
 
                 }).catch((err) => {
 
-                    console.log(err.response.data)
+                    console.log(err)
                     toast.error('some internal error occured')
 
                 })

@@ -36,7 +36,7 @@ export default function Whotofollow() {
     return (
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
             <div className='followercardbox'>
-                <h5 >Your Followers </h5>
+                <h5 >Find New People </h5>
 
                 {
                     followerdata.map((person, index) => {
