@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import '../pagecss/followercard.css'
 
 
@@ -6,10 +6,60 @@ import { Modal, useMantineTheme } from '@mantine/core';
 
 import img1 from '../img/img1.png'
 import img2 from '../img/img2.png'
+import { Appcontext } from '../ContextFolder/ContextCreator';
+import toast from 'react-hot-toast';
+import axios from 'axios';
 
 
 
 export default function SharePostModal({ openfollower, setopenfollower }) {
+
+
+    const [morefollowerlist, setMorefollowerlist] = useState([])
+    const [pageno, setPageno] = useState(1)
+    const cur = useContext(Appcontext);
+    const { jwtToken } = cur;
+
+
+    const getFollowerList = async () => {
+        try {
+
+            if (jwtToken) {
+
+                await axios.get(`http://localhost:9000/api/v1/user/get-follower-list/${pageno}`, {
+                    headers: {
+                        token: jwtToken
+                    }
+                }).then(async (res) => {
+
+                    console.log(res.data.myuser)
+                    // setFollowerlist(res.data.yourFollowers[0].followers)
+
+
+                }).catch((err) => {
+
+                    console.log(err)
+                    toast.error('some internal axios error occured')
+
+                })
+
+            }
+
+        } catch (error) {
+            console.log(error)
+            toast.error('some internal error occured')
+        }
+    }
+
+
+
+    useEffect(() => {
+        getFollowerList()
+    }, [openfollower]);
+
+
+
+
     const theme = useMantineTheme();
     const demofollowerdata = [{
         name: 'Koushik Sarkar',

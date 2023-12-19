@@ -485,21 +485,60 @@ const getGeneralTimeline = async (req, res) => {
 
 
 
+// const getUserFollowersid = async (req, res) => {
+
+//     const { curuserid } = req.body;
+
+//     try {
+
+//         let yourFollowers = await Usermodel.findById(curuserid).select('followers');
+
+
+//         res.status(200).json({ success: true, yourFollowers });
+//     } catch (error) {
+//         res.status(500).json({ success: false, error });
+//     }
+
+// };
+
+
+
+
+
+
 const getUserFollowersid = async (req, res) => {
 
     const { curuserid } = req.body;
 
+
+    const user = await Usermodel.findById(curuserid);
+
+    if (!user) {
+        return res.status(200).json({ success: false, msg: 'User does not exist' });
+    }
+
     try {
 
-        let yourFollowers = await Usermodel.findById(curuserid).select('followers');
+        let yourFollowers = await Usermodel.aggregate([
+            { $match: { _id: user._id } },
+            {
+                $project: {
+                    followers: {
+
+                        $slice: ['$followers', 0, 10]
+                    }
+                }
+            }
+        ]);
 
 
-        res.status(200).json({ success: true, yourFollowers });
+        return res.status(200).json({ success: true, yourFollowers, dddd: 'sdssdsd' });
     } catch (error) {
         res.status(500).json({ success: false, error });
     }
 
 };
+
 
 
 

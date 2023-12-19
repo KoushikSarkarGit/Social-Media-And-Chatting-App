@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Appcontext } from './ContextCreator'
 import toast from 'react-hot-toast';
 
+
 export default function MyContextPool(props) {
 
     const [jwtToken, setjwtToken] = useState('');
@@ -19,6 +20,9 @@ export default function MyContextPool(props) {
             await setisAdmin(jsonedcurdata.sentuser.isAdmin)
             await setUserdata(jsonedcurdata.sentuser)
 
+
+
+
         }
     }
 
@@ -26,7 +30,14 @@ export default function MyContextPool(props) {
     useEffect(() => {
         settingloginStatus();
 
+
     }, [])
+
+
+
+
+
+
 
 
 

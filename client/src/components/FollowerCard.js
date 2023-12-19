@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import '../pagecss/followercard.css'
 import img1 from '../img/img1.png'
 import img2 from '../img/img2.png'
@@ -8,6 +8,7 @@ import FollowerElement from './FollowerElement'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
+import { Appcontext } from '../ContextFolder/ContextCreator'
 
 
 export default function FollowerCard() {
@@ -16,7 +17,10 @@ export default function FollowerCard() {
 
     const navigate = useNavigate();
 
+
     const [followerlist, setFollowerlist] = useState([])
+    const cur = useContext(Appcontext);
+    const { jwtToken } = cur;
 
 
     const followSomeone = async () => {
@@ -43,17 +47,28 @@ export default function FollowerCard() {
 
     const getFollowerList = async () => {
         try {
-            await axios.put(`http://localhost:9000/api/v1/user/follow-user/64d104c56d7a4d72168abaa4`).then(async (res) => {
 
-                console.log(res.data)
+            if (jwtToken) {
+
+                await axios.get(`http://localhost:9000/api/v1/user/get-followersOf-user`, {
+                    headers: {
+                        token: jwtToken
+                    }
+                }).then(async (res) => {
+
+                    // console.log(res.data.yourFollowers[0].followers)
+                    setFollowerlist(res.data.yourFollowers[0].followers)
 
 
-            }).catch((err) => {
+                }).catch((err) => {
 
-                console.log(err)
-                toast.error('some internal axios error occured')
+                    console.log(err)
+                    toast.error('some internal axios error occured')
 
-            })
+                })
+
+            }
+
         } catch (error) {
             console.log(error)
             toast.error('some internal error occured')
@@ -62,6 +77,9 @@ export default function FollowerCard() {
 
 
 
+    useEffect(() => {
+        getFollowerList()
+    }, [jwtToken]);
 
 
 
@@ -95,7 +113,7 @@ export default function FollowerCard() {
                 <h5 >Your Followers </h5>
 
                 {
-                    followerdata.map((personid, index) => {
+                    followerlist.map((personid, index) => {
                         return <FollowerElement key={index} fdata={personid} />
 
                     })

@@ -35,8 +35,15 @@
     width: 3.2rem;
     height: 3.2rem;
     border-radius: 50%;
-
+    transition: transform 0.3s ease-in-out;
 }
+
+.userphoto:hover {
+    transform: scale(1.08);
+    /* Increase the size on hover, you can adjust the scale factor */
+    cursor: pointer;
+}
+
 
 .followerdetails {
 
