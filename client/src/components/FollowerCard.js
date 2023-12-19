@@ -47,7 +47,6 @@ export default function FollowerCard() {
 
     const getFollowerList = async () => {
         try {
-
             if (jwtToken) {
 
                 await axios.get(`http://localhost:9000/api/v1/user/get-followersOf-user`, {
@@ -55,18 +54,13 @@ export default function FollowerCard() {
                         token: jwtToken
                     }
                 }).then(async (res) => {
-
                     // console.log(res.data.yourFollowers[0].followers)
                     setFollowerlist(res.data.yourFollowers[0].followers)
 
-
                 }).catch((err) => {
-
                     console.log(err)
                     toast.error('some internal axios error occured')
-
                 })
-
             }
 
         } catch (error) {
@@ -82,30 +76,8 @@ export default function FollowerCard() {
     }, [jwtToken]);
 
 
-
     const [openfollowermodal, setopenfollowermodal] = useState(false)
 
-    const followerdata = [{
-        name: 'Koushik Sarkar',
-        username: 'karma',
-        img: img1
-    },
-    {
-        name: 'Jeet kumar Sarkar ',
-        username: 'jeet',
-        img: img2
-    },
-    {
-        name: 'just ',
-        username: 'karma',
-        img: img1
-    },
-    {
-        name: 'ABC Sarkar ',
-        username: 'jeet',
-        img: img2
-    }
-    ]
 
     return (
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -123,7 +95,7 @@ export default function FollowerCard() {
             </div>
 
             {/* <FollowerModal openfollowermodal={openfollowermodal} setopenfollowermodal={setopenfollowermodal} /> */}
-            <Morefollowersmodal openfollower={openfollowermodal} setopenfollower={setopenfollowermodal} />
+            <Morefollowersmodal openfollower={openfollowermodal} setopenfollower={setopenfollowermodal} initialList={followerlist} />
 
 
             <button className="morefollowers" onClick={() => setopenfollowermodal(true)}><hr className='morefhr' /> <h6> See More Followers</h6> </button>

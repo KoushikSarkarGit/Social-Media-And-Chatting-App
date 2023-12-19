@@ -50,7 +50,7 @@ export default function FollowerElement(props) {
 
     useEffect(() => {
         getFollowerData2()
-    }, [jwtToken]);
+    }, []);
 
 
 

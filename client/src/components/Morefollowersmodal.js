@@ -9,13 +9,14 @@ import img2 from '../img/img2.png'
 import { Appcontext } from '../ContextFolder/ContextCreator';
 import toast from 'react-hot-toast';
 import axios from 'axios';
+import FollowerElement from './FollowerElement';
 
 
 
-export default function SharePostModal({ openfollower, setopenfollower }) {
+export default function SharePostModal({ openfollower, setopenfollower, initialList }) {
 
 
-    const [morefollowerlist, setMorefollowerlist] = useState([])
+    const [morefollowerlist, setMorefollowerlist] = useState()
     const [pageno, setPageno] = useState(1)
     const cur = useContext(Appcontext);
     const { jwtToken } = cur;
@@ -32,8 +33,9 @@ export default function SharePostModal({ openfollower, setopenfollower }) {
                     }
                 }).then(async (res) => {
 
-                    console.log(res.data.myuser)
+                    console.log(res.data.myuser[0].followers)
                     // setFollowerlist(res.data.yourFollowers[0].followers)
+                    setMorefollowerlist([...morefollowerlist, ...res.data.myuser[0].followers])
 
 
                 }).catch((err) => {
@@ -53,75 +55,16 @@ export default function SharePostModal({ openfollower, setopenfollower }) {
 
 
 
+
     useEffect(() => {
-        getFollowerList()
+
+        setMorefollowerlist(initialList)
+        setPageno(1)
     }, [openfollower]);
 
 
 
-
     const theme = useMantineTheme();
-    const demofollowerdata = [{
-        name: 'Koushik Sarkar',
-        username: 'karma',
-        img: img1
-    },
-    {
-        name: 'Jeet kumar Sarkar ',
-        username: 'jeet',
-        img: img2
-    },
-    {
-        name: 'just ',
-        username: 'karma',
-        img: img1
-    },
-    {
-        name: 'ABC Sarkar ',
-        username: 'jeet',
-        img: img2
-    },
-    {
-        name: 'just ',
-        username: 'karma',
-        img: img1
-    },
-    {
-        name: 'ABC Sarkar ',
-        username: 'jeet',
-        img: img2
-    },
-    {
-        name: 'just ',
-        username: 'karma',
-        img: img1
-    },
-    {
-        name: 'ABC Sarkar ',
-        username: 'jeet',
-        img: img2
-    },
-    {
-        name: 'just ',
-        username: 'karma',
-        img: img1
-    },
-    {
-        name: 'ABC Sarkar ',
-        username: 'jeet',
-        img: img2
-    },
-    {
-        name: 'just ',
-        username: 'karma',
-        img: img1
-    },
-    {
-        name: 'ABC Sarkar ',
-        username: 'jeet',
-        img: img2
-    }
-    ]
 
     return (
         <>
@@ -144,25 +87,17 @@ export default function SharePostModal({ openfollower, setopenfollower }) {
                     <div className="morefollowerbox">
 
                         {
-                            demofollowerdata.map((person, index) => {
-                                return <div className="indivFollower" key={index * 3}>
-                                    <div>
-
-                                        <img src={person.img} alt="userphoto" className='userphoto' />
-                                        <div className="followerdetails">
-                                            <span> <b>{person.name}</b> </span>
-                                            <span>@{person.username}</span>
-                                        </div>
-
-                                    </div>
-
-                                    <button className='basicbutton followerbtn' >Follow</button>
-                                </div>
+                            morefollowerlist?.map((personid, index) => {
+                                return <FollowerElement key={index} fdata={personid} />
 
                             })
                         }
 
-                        <div className="seemorebtn"> See More</div>
+                        <div className="seemorebtn" onClick={async () => {
+                            await setPageno(pageno + 1)
+                            await getFollowerList();
+                            await console.log(pageno, morefollowerlist)
+                        }} > See More</div>
 
                     </div>
                 </>
