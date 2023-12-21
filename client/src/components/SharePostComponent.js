@@ -5,13 +5,15 @@ import { UilPlayCircle } from "@iconscout/react-unicons";
 import { UilSchedule } from "@iconscout/react-unicons";
 import { UilTimes } from "@iconscout/react-unicons";
 import myprofileimage from "../img/profileImg.jpg";
-
+import { RxCross1 } from "react-icons/rx";
 import { UilLabelAlt } from '@iconscout/react-unicons'
 import '../pagecss/sharecomponent.css'
 
 export default function SharePostComponent() {
 
     const [postimage, setpostimage] = useState();
+    const [taglist, setTaglist] = useState([{ "tagname": "tagdfdfdfdfdf1" }, { "tagname": "tag2" }, { "tagname": "tag3" }]);
+
     const postimgref = useRef()
 
 
@@ -28,8 +30,8 @@ export default function SharePostComponent() {
     useEffect(() => {
         textarearef.current.style.height = 'auto';
         textarearef.current.style.height = textarearef.current.scrollHeight + 'px';
-        if (textarearef.current.clientHeight < 90) { // Adjust the minimum height as needed
-            textarearef.current.style.height = '50px';
+        if (textarearef.current.clientHeight < 85) { // Adjust the minimum height as needed
+            textarearef.current.style.height = '53px';
         }
 
     }, [textareaval])
@@ -55,7 +57,7 @@ export default function SharePostComponent() {
 
                 <div>
 
-                    <textarea className='form-control' placeholder="What's happening" name='textareaval' value={textareaval} ref={textarearef} onChange={(event) => onchangehandler(event)} />
+                    <textarea className='form-control ' placeholder="What's happening" name='textareaval' value={textareaval} ref={textarearef} onChange={(event) => onchangehandler(event)} />
 
 
                     {postimage && <div className="tobeuloadedimg">
@@ -67,6 +69,32 @@ export default function SharePostComponent() {
                         </div>
 
                     </div>}
+
+                    <div className='tagbox '>
+                        <div className='d-flex flex-wrap px-2 py-2 my-1'>
+
+                            <span className='me-2'> <b>Tags:</b></span>
+
+                            {
+                                taglist.map((item, index) => {
+                                    return <div className="d-flex  align-items-center mx-1 py-1 badge text-bg-primary" key={index + 's'}>
+                                        #{item.tagname}
+                                        <RxCross1 className='ms-2 indivtagcross' type='button' />
+                                        {/* <button type="button" className="btn-close ms-2 " data-bs-dismiss="modal" aria-label="Close"></button> */}
+                                    </div>
+                                })
+                            }
+
+                        </div>
+
+                        <div className="input-group mb-3">
+
+                            <input type="text" class="form-control py-2" placeholder="Enter tag here" aria-label="Recipient's username" aria-describedby="button-addon2" />
+                            <button className="btn btn-outline-primary" type="button" id="button-addon2">Add tag</button>
+                        </div>
+                    </div>
+
+
 
 
                     <div className="postingfeatures">
