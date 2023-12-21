@@ -17,7 +17,7 @@ export default function SharePostModal({ openfollower, setopenfollower, initialL
 
 
     const [morefollowerlist, setMorefollowerlist] = useState()
-    const [pageno, setPageno] = useState(1)
+    const [pageno, setPageno] = useState(2)
     const cur = useContext(Appcontext);
     const { jwtToken } = cur;
 
@@ -33,7 +33,7 @@ export default function SharePostModal({ openfollower, setopenfollower, initialL
                     }
                 }).then(async (res) => {
 
-                    console.log(res.data.myuser[0].followers)
+                    console.log(pageno, res.data.myuser[0].followers)
                     // setFollowerlist(res.data.yourFollowers[0].followers)
                     setMorefollowerlist([...morefollowerlist, ...res.data.myuser[0].followers])
 
@@ -59,7 +59,7 @@ export default function SharePostModal({ openfollower, setopenfollower, initialL
     useEffect(() => {
 
         setMorefollowerlist(initialList)
-        setPageno(1)
+        setPageno(2)
     }, [openfollower]);
 
 
@@ -96,7 +96,7 @@ export default function SharePostModal({ openfollower, setopenfollower, initialL
                         <div className="seemorebtn" onClick={async () => {
                             await setPageno(pageno + 1)
                             await getFollowerList();
-                            await console.log(pageno, morefollowerlist)
+                            // await console.log(pageno, morefollowerlist)
                         }} > See More</div>
 
                     </div>
