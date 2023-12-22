@@ -119,11 +119,39 @@
 
 .indivtagcross {
     font-size: medium;
+
+}
+
+
+.indivtag {
+    animation: tilt-shaking 0.20s infinite;
+}
+
+@keyframes tilt-shaking {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(0.7deg);
+    }
+
+    50% {
+        transform: rotate(0eg);
+    }
+
+    75% {
+        transform: rotate(-0.7deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
 }
 
 
 .clickedfeature {
-    border: 1px solid rgb(115, 115, 115);
+    border: 1px solid rgb(163, 163, 163);
     border-radius: 0.5rem;
     background-color: rgba(216, 247, 255, 0.895);
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;

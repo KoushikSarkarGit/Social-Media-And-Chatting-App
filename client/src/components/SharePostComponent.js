@@ -12,10 +12,9 @@ import '../pagecss/sharecomponent.css'
 export default function SharePostComponent() {
 
     const [postimage, setpostimage] = useState();
-    const [taglist, setTaglist] = useState([{ "tagname": "tagdfdfdfdfdf1" }, { "tagname": "tag2" }, { "tagname": "tag3" }]);
+    const [taglist, setTaglist] = useState([]);
     const [tagmodal, setTagmodal] = useState(false);
-
-
+    const [newtag, setNewtag] = useState('');
     const postimgref = useRef()
 
 
@@ -23,9 +22,7 @@ export default function SharePostComponent() {
     const [textareaval, settextareaval] = useState('');
 
     const onchangehandler = (event) => {
-
         settextareaval(event.target.value)
-
     }
 
 
@@ -39,6 +36,13 @@ export default function SharePostComponent() {
     }, [textareaval])
 
 
+    const removetag = (index) => {
+
+        const updatedTagList = [...taglist];
+        updatedTagList.splice(index, 1);
+        setTaglist(updatedTagList);
+
+    }
 
 
     const insertimagehandler = (e) => {
@@ -80,10 +84,10 @@ export default function SharePostComponent() {
 
                                 {
                                     taglist.map((item, index) => {
-                                        return <div className="d-flex  align-items-center mx-1 py-1 badge text-bg-primary" key={index + 's'}>
+                                        return <div className="d-flex indivtag align-items-center mx-1 py-1 badge text-bg-primary" key={index + 's'}>
                                             #{item.tagname}
-                                            <RxCross1 className='ms-2 indivtagcross' type='button' />
-                                            {/* <button type="button" className="btn-close ms-2 " data-bs-dismiss="modal" aria-label="Close"></button> */}
+                                            <RxCross1 className='ms-2 indivtagcross' type='button' onClick={() => removetag(index)} />
+
                                         </div>
                                     })
                                 }
@@ -92,8 +96,12 @@ export default function SharePostComponent() {
 
                             <div className="input-group mb-3">
 
-                                <input type="text" class="form-control py-2" placeholder="Enter tag here" aria-label="Recipient's username" aria-describedby="button-addon2" />
-                                <button className="btn btn-outline-primary" type="button" id="button-addon2">Add tag</button>
+                                <input type="text" className="form-control py-2" placeholder="Enter tag here" aria-label="Recipient's username" aria-describedby="button-addon2" value={newtag} onChange={(e) => { setNewtag(e.target.value) }} />
+
+                                <button className="btn btn-outline-primary" disabled={newtag.length < 1} type="button" id="button-addon2" onClick={() => {
+                                    setTaglist([...taglist, { "tagname": newtag }]);
+                                    setNewtag('')
+                                }} >Add tag</button>
                             </div>
                         </div>
                     }
@@ -133,10 +141,10 @@ export default function SharePostComponent() {
 
                             <UilLabelAlt className='sharefeaturecomp ' />
 
-                            Add Tag
+                            Tags
                         </div>
 
-                        <button className="basicbutton postbutton">Share</button>
+                        <button className="basicbutton postbutton" onClick={() => console.log(taglist)} >Share</button>
 
                         <input type="file" name='imgupload' ref={postimgref} style={{ display: 'none' }} onChange={insertimagehandler} />
 
