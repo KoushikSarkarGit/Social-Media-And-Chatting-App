@@ -120,3 +120,13 @@
 .indivtagcross {
     font-size: medium;
 }
+
+
+.clickedfeature {
+    border: 1px solid rgb(115, 115, 115);
+    border-radius: 0.5rem;
+    background-color: rgba(216, 247, 255, 0.895);
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+
+
+}
