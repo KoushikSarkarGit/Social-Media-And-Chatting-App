@@ -16,7 +16,7 @@ export default function MiniProfileCompund() {
     return (
         <div className='miniprofilecardbox'>
             <div className="miniprofileimg">
-                <img src={Profile} alt="" />
+                <img src={userdata?.profilePicture} alt="" />
             </div>
 
             <div className="ProfileDetails">

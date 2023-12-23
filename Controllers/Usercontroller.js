@@ -66,7 +66,7 @@ const loginBackend = async (req, res) => {
 
             const token = await jwt.sign({ id: user._id }, process.env.jwt_secret_key, { expiresIn: '30d' });
 
-            const sentuser = await Usermodel.findOne({ email: email }).select('-password');
+            const sentuser = await Usermodel.findOne({ email: email }).select('-password -followers -following -likedPost -reposted');
 
             validity ? res.status(200).json({ success: true, jwttoken: token, sentuser, msg: 'Login Successful' }) : res.status(400).json({ success: false, msg: "Wrong Username or Password" })
         }

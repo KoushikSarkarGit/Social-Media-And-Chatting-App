@@ -17,9 +17,12 @@ export default function SharePostComponent() {
     const [newtag, setNewtag] = useState('');
     const postimgref = useRef()
 
-
     const textarearef = useRef(null)
     const [textareaval, settextareaval] = useState('');
+
+
+
+
 
     const onchangehandler = (event) => {
         settextareaval(event.target.value)
@@ -54,8 +57,33 @@ export default function SharePostComponent() {
     }
 
 
+
+    const finalsubmit = async (e) => {
+
+        e.preventDefault()
+
+        try {
+
+
+            const finalpostval = new FormData();
+
+            finalpostval.append('aaaaa', 'ddddd')
+            finalpostval.append('postdescription', textareaval)
+            // finalpostval.append('hashtags', JSON.stringify(taglist))
+            // await finalpostval.append('postimage', postimage)
+            console.log(finalpostval)
+
+        } catch (error) {
+            console.log('finalsubmit error')
+        }
+
+    }
+
+
+
+
     return (
-        <div className='sharecompbox' >
+        <form className='sharecompbox' onSubmit={(e) => { finalsubmit(e) }} >
 
             <img src={myprofileimage} alt="" className='postcompImg' />
 
@@ -144,7 +172,7 @@ export default function SharePostComponent() {
                             Tags
                         </div>
 
-                        <button className="basicbutton postbutton" onClick={() => console.log(taglist)} >Share</button>
+                        <button className="basicbutton postbutton" type='submit'  >Share</button>
 
                         <input type="file" name='imgupload' ref={postimgref} style={{ display: 'none' }} onChange={insertimagehandler} />
 
@@ -153,6 +181,6 @@ export default function SharePostComponent() {
                 </div>
 
             </div>
-        </div>
+        </form>
     )
 }
