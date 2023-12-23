@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { UilScenery } from "@iconscout/react-unicons";
 import { UilPlayCircle } from "@iconscout/react-unicons";
 // import { UilLocationPoint } from "@iconscout/react-unicons";
@@ -8,8 +8,17 @@ import myprofileimage from "../img/profileImg.jpg";
 import { RxCross1 } from "react-icons/rx";
 import { UilLabelAlt } from '@iconscout/react-unicons'
 import '../pagecss/sharecomponent.css'
+import { Appcontext } from '../ContextFolder/ContextCreator';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 export default function SharePostComponent() {
+
+
+    // const cur = useContext(Appcontext);
+    // const { jwtToken } = cur;
+
+
 
     const [postimage, setpostimage] = useState();
     const [taglist, setTaglist] = useState([]);
@@ -62,19 +71,47 @@ export default function SharePostComponent() {
 
         e.preventDefault()
 
+        let jwtToken;
+        let mydata = await localStorage.getItem('authdata')
+        let jsondata = await JSON.parse(mydata)
+
+        jwtToken = jsondata.jwttoken
+
+
         try {
 
-
             const finalpostval = new FormData();
-
-            finalpostval.append('aaaaa', 'ddddd')
             finalpostval.append('postdescription', textareaval)
-            // finalpostval.append('hashtags', JSON.stringify(taglist))
-            // await finalpostval.append('postimage', postimage)
-            console.log(finalpostval)
+            finalpostval.append('hashtags', JSON.stringify(taglist))
+            if (postimage) {
+                await finalpostval.append('postimage', postimage);
+            }
+
+            console.log(Object.fromEntries(finalpostval))
+
+            if (jwtToken) {
+                console.log(jwtToken)
+
+                await axios.post(`http://localhost:9000/api/v1/post/create-post`,
+                    finalpostval,
+                    {
+                        headers: {
+                            token: jwtToken,
+                            myhd: 'sdsdsds'
+                        },
+                    }).then(async (res) => {
+
+                        console.log(res.data)
+
+                    }).catch((err) => {
+                        console.log(err)
+                        toast.error('some internal axios error occured')
+                    })
+            }
+
 
         } catch (error) {
-            console.log('finalsubmit error')
+            console.log('Oops! Some error happened')
         }
 
     }
