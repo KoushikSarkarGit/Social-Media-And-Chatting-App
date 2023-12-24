@@ -24,7 +24,7 @@ export default function SharePostComponent() {
     const [taglist, setTaglist] = useState([]);
     const [tagmodal, setTagmodal] = useState(false);
     const [newtag, setNewtag] = useState('');
-    const postimgref = useRef()
+    const postimgref = useRef('')
 
     const textarearef = useRef(null)
     const [textareaval, settextareaval] = useState('');
@@ -82,15 +82,15 @@ export default function SharePostComponent() {
 
             const finalpostval = new FormData();
             finalpostval.append('postdescription', textareaval)
-            finalpostval.append('hashtags', JSON.stringify(taglist))
-            if (postimage) {
-                await finalpostval.append('postimage', postimage);
-            }
+            await finalpostval.append('hashtags', JSON.stringify(taglist))
+
+            await finalpostval.append('postimage', postimgref.current.files[0]);
+
 
             console.log(Object.fromEntries(finalpostval))
 
             if (jwtToken) {
-                console.log(jwtToken)
+
 
                 await axios.post(`http://localhost:9000/api/v1/post/create-post`,
                     finalpostval,
