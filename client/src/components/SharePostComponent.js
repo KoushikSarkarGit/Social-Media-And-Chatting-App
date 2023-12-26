@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { UilScenery } from "@iconscout/react-unicons";
 import { UilPlayCircle } from "@iconscout/react-unicons";
 // import { UilLocationPoint } from "@iconscout/react-unicons";
@@ -8,7 +8,7 @@ import myprofileimage from "../img/profileImg.jpg";
 import { RxCross1 } from "react-icons/rx";
 import { UilLabelAlt } from '@iconscout/react-unicons'
 import '../pagecss/sharecomponent.css'
-import { Appcontext } from '../ContextFolder/ContextCreator';
+// import { Appcontext } from '../ContextFolder/ContextCreator';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
@@ -70,11 +70,9 @@ export default function SharePostComponent() {
     const finalsubmit = async (e) => {
 
         e.preventDefault()
-
         let jwtToken;
         let mydata = await localStorage.getItem('authdata')
         let jsondata = await JSON.parse(mydata)
-
         jwtToken = jsondata.jwttoken
 
 
@@ -83,25 +81,29 @@ export default function SharePostComponent() {
             const finalpostval = new FormData();
             finalpostval.append('postdescription', textareaval)
             await finalpostval.append('hashtags', JSON.stringify(taglist))
-
             await finalpostval.append('postimage', postimgref.current.files[0]);
 
 
-            console.log(Object.fromEntries(finalpostval))
+            // console.log(Object.fromEntries(finalpostval))
 
             if (jwtToken) {
-
 
                 await axios.post(`http://localhost:9000/api/v1/post/create-post`,
                     finalpostval,
                     {
                         headers: {
-                            token: jwtToken,
-                            myhd: 'sdsdsds'
+                            token: jwtToken
                         },
                     }).then(async (res) => {
 
-                        console.log(res.data)
+                        if (res.data.success) {
+                            setTaglist([]);
+                            settextareaval('')
+                            setpostimage('')
+                            setTagmodal(false)
+                            // console.log(res.data)
+                            toast.success(res.data.msg)
+                        }
 
                     }).catch((err) => {
                         console.log(err)
@@ -111,7 +113,8 @@ export default function SharePostComponent() {
 
 
         } catch (error) {
-            console.log('Oops! Some error happened')
+            console.log(error)
+            toast.error('Oops! Some error happened')
         }
 
     }
@@ -161,12 +164,21 @@ export default function SharePostComponent() {
 
                             <div className="input-group mb-3">
 
-                                <input type="text" className="form-control py-2" placeholder="Enter tag here" aria-label="Recipient's username" aria-describedby="button-addon2" value={newtag} onChange={(e) => { setNewtag(e.target.value) }} />
+                                <input type="text" className="form-control py-2" placeholder="Enter tag here" aria-label="Recipient's username" aria-describedby="button-addon2" value={newtag}
+                                    onChange={(e) => {
+                                        const inputValue = e.target.value;
+                                        const isValidInput = /^[a-zA-Z]+$/.test(inputValue);
+                                        if (isValidInput || inputValue === '') {
+                                            setNewtag(e.target.value)
+                                        }
+                                    }} />
 
-                                <button className="btn btn-outline-primary" disabled={newtag.length < 1} type="button" id="button-addon2" onClick={() => {
-                                    setTaglist([...taglist, { "tagname": newtag }]);
-                                    setNewtag('')
-                                }} >Add tag</button>
+                                <button className="btn btn-outline-primary" disabled={newtag.length < 1} type="button" id="button-addon2"
+
+                                    onClick={() => {
+                                        setTaglist([...taglist, { "tagname": newtag }]);
+                                        setNewtag('')
+                                    }} >Add tag</button>
                             </div>
                         </div>
                     }
