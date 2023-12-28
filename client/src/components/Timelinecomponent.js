@@ -1,18 +1,19 @@
 import React from 'react'
-import AllPostsComponent from './AllPostsComponent'
+
 
 import '../pagecss/timelinepage.css'
 import '../pagecss/followercard.css'
 import { Link } from 'react-router-dom/dist/umd/react-router-dom.development'
+import AllPostForProfile from './AllPostForProfile'
 
 
 export default function Timelinecomponent() {
     return (
-        <div className='timelinecompbox'>
+        <div className='timelinecompbox '>
             <div className=' tabbox' >
 
 
-                <ul className="nav nav-underline tabitems sticky-top ">
+                <ul className="nav nav-underline tabitems customStickyTop ">
                     <li className="nav-item">
                         <Link className="nav-link " aria-current="page" to="#">Your Posts</Link>
                     </li>
@@ -29,11 +30,12 @@ export default function Timelinecomponent() {
                 </ul>
 
 
-                <hr className='morefhr' />
+                {/* <hr className='morefhr mb-2 ' /> */}
 
 
-                <div className="displayelement">
-                    <AllPostsComponent />
+                <div className="displayelement py-2">
+
+                    <AllPostForProfile />
                 </div>
 
             </div>

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const formidable = require('express-formidable')
-const { createPost, getPost, updatePost, deletePost, getPostbytag, getTrendingTags } = require('../Controllers/PostController')
+const { createPost, getPost, updatePost, deletePost, getPostbytag, getTrendingTags, getPostsOfLoggedUser } = require('../Controllers/PostController')
 const { valtokenchecker, extractIdFromToken } = require('../Middlewares/Encryptiontools');
 
 
@@ -14,6 +14,16 @@ router.get('/get-post/:id', getPost)
 router.put('/update-post/:id', valtokenchecker, extractIdFromToken, formidable(), updatePost)
 
 router.delete('/delete-post/:id', valtokenchecker, extractIdFromToken, formidable(), deletePost)
+
+// get all post of a user  by page (page*10)
+
+router.get('/get-posts-of-logged-user/:pageno', valtokenchecker, extractIdFromToken, getPostsOfLoggedUser)
+
+// get all liked post of a user  by page (page*10)
+
+// router.get('/get-liked-post-of-logged-user/:pageno', valtokenchecker, extractIdFromToken, getLikedPostsOfLoggedUser)
+
+
 
 // trending sections
 

@@ -342,6 +342,11 @@ const likePost = async (req, res) => {
 
     try {
         const tobeLiked = await Postmodel.findById(tobeLikedPostid);
+
+        if (!tobeLiked) {
+            return res.status(500).json({ success: false, msg: 'Post does not exist' });
+        }
+
         const ouruser = await Usermodel.findById(curuserid);
 
         if (!ouruser.likedPost.includes(tobeLiked._id)) {

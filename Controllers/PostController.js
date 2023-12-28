@@ -1,5 +1,6 @@
 const { default: mongoose } = require('mongoose');
 const Postmodel = require('../Models/PostModel')
+const Usermodel = require('../Models/Usermodel')
 const Tagmodel = require('../Models/TagsModel')
 const cloudinary = require('../Tools/CloudinarySetup')
 
@@ -193,5 +194,102 @@ const getTrendingTags = async (req, res) => {
 
 
 
+const getPostsOfLoggedUser = async (req, res) => {
 
-module.exports = { createPost, getPost, updatePost, deletePost, getPostbytag, getTrendingTags }
+    const { curuserid } = req.body
+    const page = req.params.pageno
+
+    try {
+        const userId = new mongoose.Types.ObjectId(curuserid);
+
+        const [totalPostsCount] = await Postmodel.aggregate([
+            { $match: { userId: userId } },
+            { $count: 'totalpostno' }
+        ]);
+
+        const fetchedpost = await Postmodel.aggregate([
+            { $match: { userId: userId } },
+            {
+                $addFields: {
+                    likesCurrentUser: { $in: [userId, '$likes'] },
+                    repostsCurrentUser: { $in: [userId, '$reposts'] }
+                }
+            },
+            {
+                $project: {
+                    postdescription: 1,
+                    postimage: 1,
+                    postPublicID: 1,
+                    likesCount: { $size: '$likes' },
+                    repostsCount: { $size: '$reposts' },
+                    tags: 1,
+                    createdAt: 1,
+                    updatedAt: 1
+                }
+            },
+            { $skip: (page - 1) * 10 },
+            { $limit: 10 }
+        ]);
+
+        return res.status(200).json({
+            success: true,
+            msg: 'Post fetched successfully',
+            totalPostsCount,
+            fetchedpost
+        });
+
+    } catch (error) {
+
+        return res.status(500).json({ success: false, msg: error.message });
+    }
+
+}
+
+
+
+
+
+
+
+
+
+const getLikedPostsOfLoggedUser = async (req, res) => {
+
+    const { curuserid } = req.body
+    const page = req.params.pageno
+
+    try {
+        const userId = new mongoose.Types.ObjectId(curuserid);
+
+        const fetchedLikedPost = await Usermodel.aggregate([
+            { $match: { _id: userId } },
+
+            {
+                $project: {
+
+                    likedPost: 1,
+                    likedpost: { $size: '$likedPost' },
+                }
+            },
+            { $skip: (page - 1) * 10 },
+            { $limit: 10 }
+        ]);
+
+        return res.status(200).json({
+            success: true,
+            msg: 'Liked Post fetched successfully',
+
+            fetchedLikedPost
+        });
+
+    } catch (error) {
+
+        return res.status(500).json({ success: false, msg: error.message });
+    }
+
+}
+
+
+
+
+module.exports = { createPost, getPost, updatePost, deletePost, getPostbytag, getTrendingTags, getPostsOfLoggedUser, getLikedPostsOfLoggedUser }

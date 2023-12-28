@@ -4,6 +4,11 @@
     background-color: var(--cardColor);
     padding: 1rem;
     border-radius: 1rem;
+
+}
+
+.highzindex {
+    z-index: 1022 important;
 }
 
 .sharecompbox>div {

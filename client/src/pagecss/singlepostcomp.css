@@ -5,9 +5,16 @@
     background-color: var(--cardColor);
     border-radius: 1rem;
     gap: 1rem;
-
+    transition: transform 0.2s ease-out;
 }
 
+.singlepostbox:hover {
+    border-radius: 1rem;
+    box-shadow: rgba(148, 251, 255, 0.559) 0px 0px 0.52em, rgba(148, 251, 255, 0.559) 0px 0px 0.52em;
+    transform: scale(1.002, 1.008);
+
+    background-color: rgba(252, 252, 251, 0.971);
+}
 
 .singlepostbox>img {
     max-width: 100%;

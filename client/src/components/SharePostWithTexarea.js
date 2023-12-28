@@ -43,7 +43,7 @@ export default function SharePostWithTexarea() {
 
 
     return (
-        <div className='sharecompbox' >
+        <div className='sharecompbox highzindex' >
 
             <img src={myprofileimage} alt="" className='postcompImg' />
 
@@ -53,7 +53,7 @@ export default function SharePostWithTexarea() {
 
                     {/* <input type="text" placeholder="What's happening" />
  */}
-                    <div class="form-floating">
+                    <div className="form-floating">
                         <textarea className="form-control" style={{ paddingTop: '0.6rem' }} id="floatingTextarea" name='textareaval' value={textareaval} ref={textarearef} onChange={(event) => onchangehandler(event)} ></textarea>
 
                     </div>

@@ -14,12 +14,12 @@
 }
 
 .tabbox {
-    background-color: white;
+
     border-radius: 2rem;
     display: flex;
     flex-direction: column;
     /* overflow: auto; */
-
+    background-color: rgb(238, 238, 238);
 
 }
 
@@ -49,4 +49,13 @@
 
 .displayelement {
     overflow: auto;
+}
+
+
+
+.customStickyTop {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 1;
 }
