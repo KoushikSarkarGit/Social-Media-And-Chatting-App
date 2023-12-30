@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 
 import '../pagecss/timelinepage.css'
@@ -8,26 +8,36 @@ import AllPostForProfile from './AllPostForProfile'
 
 
 export default function Timelinecomponent() {
+
+
+    const [selectedoption, setSelectedoption] = useState('YourPosts')
+
     return (
         <div className='timelinecompbox '>
             <div className=' tabbox' >
 
 
                 <ul className="nav nav-underline tabitems customStickyTop ">
-                    <li className="nav-item">
-                        <Link className="nav-link " aria-current="page" to="#">Your Posts</Link>
+                    <li className="nav-item" >
+                        <Link className={`nav-link ${selectedoption === 'YourPosts' ? 'active' : ''}`} onClick={() => setSelectedoption('YourPosts')} aria-current="page" to="#">Your Posts</Link>
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link" to="#">Liked</Link>
+                        <Link className={`nav-link ${selectedoption === 'Liked' ? 'active' : ''}`} onClick={() => setSelectedoption('Liked')} to="#">Liked</Link>
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link" to="#">Reposts</Link>
+                        <Link className={`nav-link ${selectedoption === 'Reposts' ? 'active' : ''}`} onClick={() => setSelectedoption('Reposts')} to="#">Reposts</Link>
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link" to="#">Comments</Link>
+                        <Link className={`nav-link ${selectedoption === 'Comments' ? 'active' : ''}`} onClick={() => setSelectedoption('Comments')} to="#">Comments</Link>
                     </li>
 
                 </ul>
+
+
+
+
+
+
 
 
                 {/* <hr className='morefhr mb-2 ' /> */}
@@ -35,7 +45,7 @@ export default function Timelinecomponent() {
 
                 <div className="displayelement py-2">
 
-                    <AllPostForProfile />
+                    <AllPostForProfile selectedtab={selectedoption} />
                 </div>
 
             </div>

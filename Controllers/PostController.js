@@ -209,17 +209,14 @@ const getPostsOfLoggedUser = async (req, res) => {
 
         const fetchedpost = await Postmodel.aggregate([
             { $match: { userId: userId } },
-            {
-                $addFields: {
-                    likesCurrentUser: { $in: [userId, '$likes'] },
-                    repostsCurrentUser: { $in: [userId, '$reposts'] }
-                }
-            },
+
             {
                 $project: {
                     postdescription: 1,
                     postimage: 1,
                     postPublicID: 1,
+                    likesCurrentUser: { $in: [userId, '$likes'] },
+                    repostsCurrentUser: { $in: [userId, '$reposts'] },
                     likesCount: { $size: '$likes' },
                     repostsCount: { $size: '$reposts' },
                     tags: 1,
@@ -249,10 +246,6 @@ const getPostsOfLoggedUser = async (req, res) => {
 
 
 
-
-
-
-
 const getLikedPostsOfLoggedUser = async (req, res) => {
 
     const { curuserid } = req.body
@@ -268,7 +261,7 @@ const getLikedPostsOfLoggedUser = async (req, res) => {
                 $project: {
 
                     likedPost: 1,
-                    likedpost: { $size: '$likedPost' },
+                    likedpostCount: { $size: '$likedPost' },
                 }
             },
             { $skip: (page - 1) * 10 },
@@ -291,5 +284,49 @@ const getLikedPostsOfLoggedUser = async (req, res) => {
 
 
 
+const getLoggedPostByIdLite = async (req, res) => {
 
-module.exports = { createPost, getPost, updatePost, deletePost, getPostbytag, getTrendingTags, getPostsOfLoggedUser, getLikedPostsOfLoggedUser }
+    const { curuserid } = req.body
+    const pid = req.params.pid
+
+    try {
+        const postId = new mongoose.Types.ObjectId(pid);
+        const userId = new mongoose.Types.ObjectId(curuserid);
+
+        const fetchedLitePost = await Postmodel.aggregate([
+            { $match: { _id: postId } },
+
+
+            {
+                $project: {
+                    userId: 1,
+                    postdescription: 1,
+                    postimage: 1,
+                    postPublicID: 1,
+                    tags: 1,
+                    likedByCurrentUser: { $in: [userId, '$likes'] },
+                    repostedByCurrentUser: { $in: [userId, '$reposts'] },
+                    likeCount: { $size: '$likes' },
+                    repostCount: { $size: '$reposts' },
+                    createdAt: 1
+                }
+            }
+        ]);
+
+        return res.status(200).json({
+            success: true,
+            msg: 'Liked Post fetched successfully',
+            fetchedLitePost
+        });
+
+    } catch (error) {
+
+        return res.status(500).json({ success: false, msg: error.message });
+    }
+
+}
+
+
+
+
+module.exports = { createPost, getPost, updatePost, deletePost, getPostbytag, getTrendingTags, getPostsOfLoggedUser, getLikedPostsOfLoggedUser, getLoggedPostByIdLite }
