@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import "../pagecss/singlepostcomp.css";
 
-import { UilThumbsUp } from '@iconscout/react-unicons'
+// import { UilThumbsUp } from '@iconscout/react-unicons'
 import { UilRedo } from '@iconscout/react-unicons'
 import { UilCommentAltNotes } from '@iconscout/react-unicons'
 import { UilShare } from '@iconscout/react-unicons'
-import { AiTwotoneLike } from 'react-icons/ai'
+// import { AiTwotoneLike } from 'react-icons/ai'
 import { UilEdit } from '@iconscout/react-unicons'
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { AiFillLike } from "react-icons/ai";
+import { AiOutlineLike } from "react-icons/ai";
 
 
 
@@ -60,9 +62,10 @@ export default function SinglePostIterable({ pid, jwtToken }) {
 
                 <div className="spostfeatures">
 
+
                     <div className='featureicon'>
-                        {postdetails?.likedByCurrentUser ? <UilThumbsUp style={{ width: '28px', height: '28px', marginTop: '-3px', paddingLeft: '2px', marginRight: '-3px' }} /> :
-                            <AiTwotoneLike style={{ color: 'orange', width: '28px', height: '28px', marginTop: '-3px', paddingLeft: '2px', marginRight: '-3px' }} />}
+                        {postdetails?.likedByCurrentUser ? <AiFillLike style={{ width: '29px', color: 'orange', height: '29px', marginTop: '-3px', paddingLeft: '2px', marginRight: '-3px' }} /> :
+                            <AiOutlineLike style={{ width: '29px', height: '29px', marginTop: '-3px', paddingLeft: '2px', marginRight: '-3px' }} />}
 
                         <span style={{ color: "var(--gray)", fontSize: '12px' }}>{postdetails?.likeCount}</span>
                     </div>
@@ -91,9 +94,13 @@ export default function SinglePostIterable({ pid, jwtToken }) {
 
 
 
-                <div className="detail my-1">
-                    <span><b>From ABCD:</b></span>
-                    <span> {postdetails?.postdescription}</span>
+                <div className="detail d-flex flex-column ">
+                    <div className="d-flex align-items-center spebox ">
+                        <img src={postdetails?.userDetails[0].profilePicture} alt="userphoto" className='singlepostuserphoto mx-1 ' />
+                        <span className='mx-1'><b>From  <i style={{ color: 'grey' }}>@{postdetails?.userDetails[0].username}</i></b></span>
+                    </div>
+
+                    <span className='mx-2 mt-3  mb-3'> {postdetails?.postdescription}</span>
                 </div>
 
 
@@ -102,15 +109,20 @@ export default function SinglePostIterable({ pid, jwtToken }) {
                 :
                 <div className='singlepostbox '>
 
-                    <div className="detail">
-                        <span><b>From ABCD:</b></span>
-                        <span> {postdetails?.postdescription}</span>
+                    <div className="detail d-flex flex-column ">
+                        <div className="d-flex align-items-center spebox ">
+                            <img src={postdetails?.userDetails[0].profilePicture} alt="userphoto" className='singlepostuserphoto mx-1 ' />
+                            <span className='mx-1'><b>From  <i style={{ color: 'grey' }}>@{postdetails?.userDetails[0].username}</i></b></span>
+                        </div>
+
+                        <span className='mx-2 mt-3  mb-3'> {postdetails?.postdescription}</span>
                     </div>
                     <div className="spostfeatures">
 
                         <div className='featureicon'>
-                            {postdetails?.likedByCurrentUser ? <UilThumbsUp style={{ width: '28px', height: '28px', marginTop: '-3px', paddingLeft: '2px', marginRight: '-3px' }} /> :
-                                <AiTwotoneLike style={{ color: 'orange', width: '28px', height: '28px', marginTop: '-3px', paddingLeft: '2px', marginRight: '-3px' }} />}
+                            {postdetails?.likedByCurrentUser ? <AiFillLike style={{ width: '29px', color: 'orange', height: '29px', marginTop: '-3px', paddingLeft: '2px', marginRight: '-3px' }} />
+                                :
+                                <AiOutlineLike style={{ width: '29px', height: '29px', marginTop: '-3px', paddingLeft: '2px', marginRight: '-3px' }} />}
 
                             <span style={{ color: "var(--gray)", fontSize: '12px' }}>{postdetails?.likeCount}</span>
                         </div>

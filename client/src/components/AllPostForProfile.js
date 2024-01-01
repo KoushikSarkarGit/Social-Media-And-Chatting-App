@@ -66,7 +66,7 @@ export default function AllPostForProfile({ selectedtab }) {
                 }).then(async (res) => {
                     if (res.data.success === true) {
                         setLikedpostlist([...likedpostlist, ...res.data.fetchedLikedPost[0].likedPost])
-                        // setTotalpostno(res.data.res.data.fetchedLikedPost[0].likedpostCount)
+                        setTotalpostno(res.data.res.data.fetchedLikedPost[0].likedpostCount)
                         console.log(res.data.fetchedLikedPost[0].likedPost)
                     }
 
@@ -84,10 +84,16 @@ export default function AllPostForProfile({ selectedtab }) {
 
 
     useEffect(() => {
+        setLikedpostlist([])
+        setPostlist([])
+        setTotalpostno()
+        setPage(1)
         if (selectedtab === 'YourPosts') {
             getUserPosts()
         }
-        if (selectedtab === 'Liked') {
+
+
+        else if (selectedtab === 'Liked') {
 
             getLikedPostsofLoggedUser()
 
@@ -105,18 +111,22 @@ export default function AllPostForProfile({ selectedtab }) {
     return (
         <div className='allpostbox'>
 
-            {/* {postlist.map((item, index) => {
-                return <SinglePostForProfile pdata={item} key={index} />
-            })
-
-            } */}
 
 
-            {
+            {selectedtab === 'YourPosts' &&
+                postlist.map((item, index) => {
+                    return <SinglePostForProfile pdata={item} key={index} />
+                })
+            }
+
+            {selectedtab === 'Liked' &&
                 likedpostlist.map((item, index) => {
                     return <SinglePostIterable pid={item} jwtToken={jwtToken} key={index} />
                 })
             }
+
+
+
 
 
             {!(page * 10 > totalpostno) && <button className="morefollowers"

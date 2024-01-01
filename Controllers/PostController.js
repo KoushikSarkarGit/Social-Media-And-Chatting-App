@@ -209,9 +209,31 @@ const getPostsOfLoggedUser = async (req, res) => {
 
         const fetchedpost = await Postmodel.aggregate([
             { $match: { userId: userId } },
+            {
+                $lookup: {
+                    from: 'users', // my user model is named 'user' so it becomes users
+                    let: { userId: '$userId' },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: { $eq: ['$_id', '$$userId'] }
+                            }
+                        },
+                        {
+                            $project: {
+                                username: 1,
+                                profilePicture: 1
+                                // Add other fields from the user model as needed
+                            }
+                        }
+                    ],
+                    as: 'userDetails'
 
+                }
+            },
             {
                 $project: {
+                    userId: 1,
                     postdescription: 1,
                     postimage: 1,
                     postPublicID: 1,
@@ -221,7 +243,9 @@ const getPostsOfLoggedUser = async (req, res) => {
                     repostsCount: { $size: '$reposts' },
                     tags: 1,
                     createdAt: 1,
-                    updatedAt: 1
+                    updatedAt: 1,
+                    'userDetails.username': 1,
+                    'userDetails.profilePicture': 1
                 }
             },
             { $skip: (page - 1) * 10 },
@@ -296,7 +320,28 @@ const getLoggedPostByIdLite = async (req, res) => {
         const fetchedLitePost = await Postmodel.aggregate([
             { $match: { _id: postId } },
 
+            {
+                $lookup: {
+                    from: 'users', // my user model is named 'user' so it becomes users
+                    let: { userId: '$userId' },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: { $eq: ['$_id', '$$userId'] }
+                            }
+                        },
+                        {
+                            $project: {
+                                username: 1,
+                                profilePicture: 1
+                                // Add other fields from the user model as needed
+                            }
+                        }
+                    ],
+                    as: 'userDetails'
 
+                }
+            },
             {
                 $project: {
                     userId: 1,
@@ -308,7 +353,9 @@ const getLoggedPostByIdLite = async (req, res) => {
                     repostedByCurrentUser: { $in: [userId, '$reposts'] },
                     likeCount: { $size: '$likes' },
                     repostCount: { $size: '$reposts' },
-                    createdAt: 1
+                    createdAt: 1,
+                    'userDetails.username': 1,
+                    'userDetails.profilePicture': 1
                 }
             }
         ]);
