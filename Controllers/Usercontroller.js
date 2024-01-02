@@ -102,7 +102,7 @@ const getSingleUserLite = async (req, res) => {
     const id = req.params.id;
 
     try {
-        const curuser = await Usermodel.findById(id).select('-password -followers -following -likedPost -reposted');
+        const curuser = await Usermodel.findById(id).select('-password -followers -following -likedPost -reposted -commented');
 
         if (curuser) {
             return res.status(200).json({ success: true, msg: 'user fetched successfully', curuser });
@@ -489,22 +489,6 @@ const getGeneralTimeline = async (req, res) => {
 
 
 
-
-// const getUserFollowersid = async (req, res) => {
-
-//     const { curuserid } = req.body;
-
-//     try {
-
-//         let yourFollowers = await Usermodel.findById(curuserid).select('followers');
-
-
-//         res.status(200).json({ success: true, yourFollowers });
-//     } catch (error) {
-//         res.status(500).json({ success: false, error });
-//     }
-
-// };
 
 
 

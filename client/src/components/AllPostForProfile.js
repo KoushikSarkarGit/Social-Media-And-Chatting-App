@@ -83,10 +83,41 @@ export default function AllPostForProfile({ selectedtab }) {
     }
 
 
+
+    const getRepostedPostsofLoggedUser = async () => {
+        try {
+            if (jwtToken) {
+
+                await axios.get(`http://localhost:9000/api/v1/post/get-liked-post-of-logged-user/${page}`, {
+                    headers: {
+                        token: jwtToken
+                    }
+                }).then(async (res) => {
+                    if (res.data.success === true) {
+                        // setLikedpostlist([...likedpostlist, ...res.data.fetchedLikedPost[0].likedPost])
+                        // setTotalpostno(res.data.res.data.fetchedLikedPost[0].likedpostCount)
+                        console.log(res.data)
+                    }
+
+                }).catch((err) => {
+                    console.log(err)
+                    toast.error('some internal axios error occured')
+                })
+            }
+
+        } catch (error) {
+            console.log(error)
+            toast.error('some internal error occured')
+        }
+    }
+
+
+
+
     useEffect(() => {
         setLikedpostlist([])
         setPostlist([])
-        setTotalpostno()
+        setTotalpostno(0)
         setPage(1)
         if (selectedtab === 'YourPosts') {
             getUserPosts()

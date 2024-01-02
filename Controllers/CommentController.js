@@ -9,7 +9,7 @@ const addComment = async (req, res) => {
 
     try {
         const thepost = await Postmodel.findById(postid);
-        // const ouruser = await Usermodel.findById(curuserid);
+        const ouruser = await Usermodel.findById(curuserid);
 
         if (!thepost) {
             res.status(401).json({ success: false, msg: 'Post Not Found' });
@@ -18,9 +18,20 @@ const addComment = async (req, res) => {
 
         let newcomment = {
             commenter_id: curuserid,
-
-            commentText: commentdata
+            commentText: commentdata,
+            createdAt: Date.now()
         }
+
+
+        let newcommentforuser = {
+            commenter_id: curuserid,
+            commentText: commentdata,
+            post_id: postid,
+            createdAt: Date.now()
+        }
+
+
+        await ouruser.updateOne({ $push: { commented: newcommentforuser } })
 
         await thepost.updateOne({ $push: { comments: newcomment } })
 

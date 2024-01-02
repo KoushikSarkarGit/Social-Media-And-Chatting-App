@@ -23,12 +23,12 @@ export default function SinglePostForProfile({ pdata }) {
                         {pdata?.likesCurrentUser ? <AiFillLike style={{ width: '28px', color: 'orange', height: '28px', marginTop: '-3px', paddingLeft: '2px', marginRight: '-3px' }} /> :
                             <AiOutlineLike style={{ width: '28px', height: '28px', marginTop: '-3px', paddingLeft: '2px', marginRight: '-3px' }} />}
 
-                        <span style={{ color: "var(--gray)", fontSize: '12px' }}>{pdata.likes}</span>
+                        <span style={{ color: "var(--gray)", fontSize: '12px' }}>{pdata.likesCount}</span>
                     </div>
 
                     <div className='featureicon' style={{ color: "gray", cursor: 'text' }} >
                         <UilRedo style={{ color: "gray" }} />
-                        <span style={{ fontSize: '12px' }}>3333</span>
+                        <span style={{ fontSize: '12px' }}>{pdata.repostsCount}</span>
                     </div>
 
                     <div className='featureicon'>
@@ -84,12 +84,12 @@ export default function SinglePostForProfile({ pdata }) {
                             {pdata?.likesCurrentUser ? <AiFillLike style={{ width: '28px', color: 'orange', height: '28px', marginTop: '-3px', paddingLeft: '2px', marginRight: '-3px' }} /> :
                                 <AiOutlineLike style={{ width: '28px', height: '28px', marginTop: '-3px', paddingLeft: '2px', marginRight: '-3px' }} />}
 
-                            <span style={{ color: "var(--gray)", fontSize: '12px' }}>{pdata.likes}</span>
+                            <span style={{ color: "var(--gray)", fontSize: '12px' }}>{pdata.likesCount}</span>
                         </div>
 
                         <div className='featureicon' style={{ color: "gray", cursor: 'text' }} >
                             <UilRedo style={{ color: "gray" }} />
-                            <span style={{ fontSize: '12px' }}>3333</span>
+                            <span style={{ fontSize: '12px' }}>{pdata.repostsCount}</span>
                         </div>
 
                         <div className='featureicon'>

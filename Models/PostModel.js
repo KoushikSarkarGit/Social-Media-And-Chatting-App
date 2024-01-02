@@ -18,7 +18,11 @@ const postschema = new Schema({
     comments: [
         {
             commenter_id: String,
-            commentText: String
+            commentText: String,
+            createdAt: {
+                type: Date,
+                default: Date.now,
+            },
         }
     ],
 
