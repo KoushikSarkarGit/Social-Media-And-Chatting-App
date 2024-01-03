@@ -1,7 +1,8 @@
 const Usermodel = require('../Models/Usermodel')
 const Postmodel = require('../Models/PostModel')
 const { checkAdmin } = require('../Tools/checkingFunction')
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const Commentmodel = require('../Models/CommentModel');
 
 const addComment = async (req, res) => {
     const postid = req.params.id;
@@ -15,25 +16,23 @@ const addComment = async (req, res) => {
             res.status(401).json({ success: false, msg: 'Post Not Found' });
         }
 
-
-        let newcomment = {
-            commenter_id: curuserid,
-            commentText: commentdata,
-            createdAt: Date.now()
+        if (!ouruser) {
+            res.status(401).json({ success: false, msg: 'User Not Found' });
         }
 
 
-        let newcommentforuser = {
-            commenter_id: curuserid,
-            commentText: commentdata,
-            post_id: postid,
-            createdAt: Date.now()
-        }
+        const commentcreated = await Commentmodel.create({
+            userId: curuserid,
+            postId: postid,
+            commentText: commentdata
+        })
 
-
-        await ouruser.updateOne({ $push: { commented: newcommentforuser } })
-
-        await thepost.updateOne({ $push: { comments: newcomment } })
+        // await ouruser.updateOne({ $push: { commented: newcommentforuser } })
+        await Postmodel.findOneAndUpdate(
+            { _id: postid },
+            { $inc: { commentNo: 1 } },
+            { new: true }
+        );
 
 
 
@@ -48,43 +47,77 @@ const addComment = async (req, res) => {
 const getcommentforthepost = async (req, res) => {
     const postid = req.params.id;
     const { curuserid, page } = await req.body;
-    let skipno = 0;
-    if (page) {
-        skipno = page * 2
-    }
 
+    // const postcheck = await Postmodel.findById(postid)
+
+    // if (!postcheck) {
+    //     return res.status(401).json({ success: false, msg: 'Post Does not exist' });
+    // }
 
 
     try {
-        const thepostcomment = await Postmodel.aggregate([
-            { $match: { _id: new mongoose.Types.ObjectId(postid) } },
-            {
-                $project: {
 
-                    comments: {
-                        $slice: ['$comments', skipno, 2] // Skip 1 item and limit to 3 items
+        let convertedPostId = new mongoose.Types.ObjectId(postid)
 
-                    }
-                }
-            }
+        const thepostcomment = await Commentmodel.aggregate([
+            { $match: { postId: convertedPostId } },
+            { $skip: (page - 1) * 10 },
+            { $limit: 10 }
         ])
 
 
         if (!thepostcomment) {
-            res.status(401).json({ success: false, msg: 'Comments/Post Not Found' });
+            return res.status(401).json({ success: false, msg: 'Comments/Post Not Found' });
         }
 
+        return res.status(200).json({ success: true, msg: 'comment fetched', thepostcomment, page });
 
 
-        res.status(200).json({ success: true, msg: 'comment fetched', thepostcomment, page });
+
     } catch (error) {
-        res.status(500).json({ success: false, err: error.message });
+        return res.status(500).json({ success: false, err: error.message });
     }
 
 };
 
 
 
+const deleteComment = async (req, res) => {
+    const commentId = req.params.commentId;
+
+    try {
+        // Find the comment to be deleted
+        const commentToDelete = await Commentmodel.findById(commentId);
+
+        if (!commentToDelete) {
+            return res.status(404).json({ success: false, msg: 'Comment not found' });
+        }
+
+        // Find the corresponding post
+        const thepost = await Postmodel.findById(commentToDelete.postId);
+
+        if (!thepost) {
+            return res.status(404).json({ success: false, msg: 'Post not found' });
+        }
+
+        // Delete the comment
+        await Commentmodel.findByIdAndDelete(commentId);
+
+        // Update commentNo in the post, ensuring it doesn't go below 0
+        await Postmodel.findByIdAndUpdate(
+            thepost._id,
+            { $inc: { commentNo: thepost.commentNo > 0 ? -1 : 0 } },
+            { new: true }
+        );
+
+        res.status(200).json({ success: true, msg: 'Comment deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ success: false, err: error.message });
+    }
+};
 
 
-module.exports = { addComment, getcommentforthepost };
+
+
+
+module.exports = { addComment, getcommentforthepost, deleteComment };

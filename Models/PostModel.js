@@ -14,17 +14,21 @@ const postschema = new Schema({
     postPublicID: String,
     likes: [],
     reposts: [],
-
-    comments: [
-        {
-            commenter_id: String,
-            commentText: String,
-            createdAt: {
-                type: Date,
-                default: Date.now,
-            },
-        }
-    ],
+    //no need for this as i have created comment schema seperately
+    // comments: [
+    //     {
+    //         commenter_id: String,
+    //         commentText: String,
+    //         createdAt: {
+    //             type: Date,
+    //             default: Date.now,
+    //         },
+    //     }
+    // ],
+    commentNo: {
+        type: Number,
+        default: 0
+    },
 
     tags: []
 

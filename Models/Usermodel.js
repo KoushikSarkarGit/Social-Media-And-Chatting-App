@@ -50,18 +50,21 @@ const SocialmediaUserschema = new Schema({
     followers: [],
     following: [],
     likedPost: [],
-    reposted: [],
-    commented: [
-        {
-            commenter_id: String,
-            post_id: String,
-            commentText: String,
-            createdAt: {
-                type: Date,
-                default: Date.now,
-            }
-        }
-    ],
+    reposted: []
+
+
+    //seperate comment schema created so no need for it
+    // commented: [
+    //     {
+    //         commenter_id: String,
+    //         post_id: String,
+    //         commentText: String,
+    //         createdAt: {
+    //             type: Date,
+    //             default: Date.now,
+    //         }
+    //     }
+    // ],
 
 }, { timestamps: true })
 
