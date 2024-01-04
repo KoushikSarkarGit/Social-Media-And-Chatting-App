@@ -84,6 +84,9 @@ const getcommentforthepost = async (req, res) => {
 
 const deleteComment = async (req, res) => {
     const commentId = req.params.commentId;
+    const { curuserid } = await req.body;
+
+
 
     try {
         // Find the comment to be deleted
@@ -93,26 +96,29 @@ const deleteComment = async (req, res) => {
             return res.status(404).json({ success: false, msg: 'Comment not found' });
         }
 
+        if (!commentToDelete.userId == curuserid) {
+            return res.status(404).json({ success: false, msg: 'Unauthorized User' });
+        }
+
         // Find the corresponding post
         const thepost = await Postmodel.findById(commentToDelete.postId);
 
-        if (!thepost) {
-            return res.status(404).json({ success: false, msg: 'Post not found' });
+        if (thepost) {
+            // Update commentNo in the post, ensuring it doesn't go below 0
+            await Postmodel.findByIdAndUpdate(
+                thepost._id,
+                { $inc: { commentNo: thepost.commentNo > 0 ? -1 : 0 } },
+                { new: true }
+            );
         }
 
         // Delete the comment
         await Commentmodel.findByIdAndDelete(commentId);
 
-        // Update commentNo in the post, ensuring it doesn't go below 0
-        await Postmodel.findByIdAndUpdate(
-            thepost._id,
-            { $inc: { commentNo: thepost.commentNo > 0 ? -1 : 0 } },
-            { new: true }
-        );
+        return res.status(200).json({ success: true, msg: 'Comment deleted successfully' });
 
-        res.status(200).json({ success: true, msg: 'Comment deleted successfully' });
     } catch (error) {
-        res.status(500).json({ success: false, err: error.message });
+        return res.status(500).json({ success: false, err: error.message });
     }
 };
 

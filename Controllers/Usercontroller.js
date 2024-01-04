@@ -96,7 +96,6 @@ const getSingleUser = async (req, res) => {
 };
 
 
-
 // get a User controller
 const getSingleUserLite = async (req, res) => {
     const id = req.params.id;
@@ -113,8 +112,6 @@ const getSingleUserLite = async (req, res) => {
         return res.status(500).json({ success: false, msg: 'user fetching unsuccessful', error });
     }
 };
-
-
 
 
 
@@ -219,6 +216,7 @@ const updateCoverpic = async (req, res) => {
         res.status(403).json({ success: false, msg: "Access Denied! you can only update your own profile" });
     }
 };
+
 
 // get followerlist
 

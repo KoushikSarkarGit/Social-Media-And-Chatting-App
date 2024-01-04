@@ -25,8 +25,14 @@ router.put('/update-profilepic/:id', valtokenchecker, extractIdFromToken, formid
 // update cover picture
 router.put('/update-coverpic/:id', valtokenchecker, extractIdFromToken, formidable(), updateCoverpic)
 
+// delete user account
+router.delete('/delete-user-account/:id', valtokenchecker, extractIdFromToken, deleteAccount)
 
-// get all followers of a user
+
+
+
+
+// get followers of a user by page
 router.get('/get-follower-list/:pageno', valtokenchecker, extractIdFromToken, getFollowerListByPage)
 
 // follow a user
@@ -35,8 +41,10 @@ router.put('/follow-user/:id', valtokenchecker, extractIdFromToken, followSomeOn
 // unfollow a user
 router.put('/unfollow-user/:id', valtokenchecker, extractIdFromToken, unfollowSomeOne)
 
-// delete user account
-router.delete('/delete-user-account/:id', valtokenchecker, extractIdFromToken, deleteAccount)
+
+
+
+
 
 // like a post
 router.put('/like-post/:id', valtokenchecker, extractIdFromToken, likePost)
@@ -50,10 +58,12 @@ router.put('/repost/:id', valtokenchecker, extractIdFromToken, rePost)
 // unrepost a post
 router.put('/unrepost/:id', valtokenchecker, extractIdFromToken, unrePost)
 
+
+
+
 //get timeline for logged in user
 
 router.get('/get-feed/:id', valtokenchecker, extractIdFromToken, getTimelineForLoginUser)
-
 
 //get timeline for non logged in user
 

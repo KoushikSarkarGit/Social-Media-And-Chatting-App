@@ -280,17 +280,35 @@ const getLikedPostsOfLoggedUser = async (req, res) => {
 
         const fetchedLikedPost = await Usermodel.aggregate([
             { $match: { _id: userId } },
-
             {
                 $project: {
+                    likedposts: {
+                        $slice: ['$likedPost', (page - 1) * 10, 10]
+                    },
+                    totalLikecount: { $size: '$likedPost' }
 
-                    likedPost: 1,
-                    likedpostCount: { $size: '$likedPost' },
                 }
-            },
-            { $skip: (page - 1) * 10 },
-            { $limit: 10 }
+            }
         ]);
+
+
+
+
+
+
+        // aggregate([
+        //     { $match: { _id: userId } },
+
+        //     {
+        //         $project: {
+
+        //             likedPost: 1,
+        //             likedpostCount: { $size: '$likedPost' },
+        //         }
+        //     },
+        //     { $skip: (page - 1) * 10 },
+        //     { $limit: 10 }
+        // ]);
 
         return res.status(200).json({
             success: true,
@@ -334,7 +352,7 @@ const getLoggedPostByIdLite = async (req, res) => {
                             $project: {
                                 username: 1,
                                 profilePicture: 1
-                                // Add other fields from the user model as needed
+                                // Added other fields from the user model as needed
                             }
                         }
                     ],
@@ -376,4 +394,43 @@ const getLoggedPostByIdLite = async (req, res) => {
 
 
 
-module.exports = { createPost, getPost, updatePost, deletePost, getPostbytag, getTrendingTags, getPostsOfLoggedUser, getLikedPostsOfLoggedUser, getLoggedPostByIdLite }
+const getRepostedPostsOfLoggedUser = async (req, res) => {
+
+    const { curuserid } = req.body
+    const page = req.params.pageno
+
+    try {
+        const userId = new mongoose.Types.ObjectId(curuserid);
+
+        const fetchedRepostedPosts = await Usermodel.aggregate([
+            { $match: { _id: userId } },
+            {
+                $project: {
+                    repostedposts: {
+                        $slice: ['$reposted', (page - 1) * 10, 10]
+                    },
+                    totalrepostcount: { $size: '$reposted' }
+
+                }
+            }
+        ]);
+
+        return res.status(200).json({
+            success: true,
+            msg: 'reposted Post ids fetched successfully',
+            fetchedRepostedPosts
+        });
+
+    } catch (error) {
+
+        return res.status(500).json({ success: false, msg: error.message });
+    }
+
+}
+
+
+
+
+
+
+module.exports = { createPost, getPost, updatePost, deletePost, getPostbytag, getTrendingTags, getPostsOfLoggedUser, getLikedPostsOfLoggedUser, getLoggedPostByIdLite, getRepostedPostsOfLoggedUser }
