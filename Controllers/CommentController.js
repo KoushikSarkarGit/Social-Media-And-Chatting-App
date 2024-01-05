@@ -46,8 +46,8 @@ const addComment = async (req, res) => {
 
 const getcommentforthepost = async (req, res) => {
     const postid = req.params.id;
-    const { curuserid, page } = await req.body;
-
+    const { curuserid } = await req.body;
+    const page = req.params.page;
     // const postcheck = await Postmodel.findById(postid)
 
     // if (!postcheck) {
@@ -80,6 +80,26 @@ const getcommentforthepost = async (req, res) => {
 
 };
 
+
+const getCommentOfLoggedUser = async (req, res) => {
+
+    const { curuserid } = await req.body;
+    const page = req.params.page;
+    try {
+        let LoggeduserId = new mongoose.Types.ObjectId(curuserid)
+        const totalCommentCount = await Commentmodel.countDocuments({ userId: LoggeduserId });
+        const LoggedUserComments = await Commentmodel.aggregate([
+            { $match: { userId: LoggeduserId } },
+            { $skip: (page - 1) * 10 },
+            { $limit: 10 }
+        ])
+
+        return res.status(200).json({ success: true, msg: 'comments of user fetched', LoggedUserComments, totalCommentCount });
+
+    } catch (error) {
+        return res.status(500).json({ success: false, err: error.message });
+    }
+};
 
 
 const deleteComment = async (req, res) => {
@@ -126,4 +146,4 @@ const deleteComment = async (req, res) => {
 
 
 
-module.exports = { addComment, getcommentforthepost, deleteComment };
+module.exports = { addComment, getcommentforthepost, getCommentOfLoggedUser, deleteComment };

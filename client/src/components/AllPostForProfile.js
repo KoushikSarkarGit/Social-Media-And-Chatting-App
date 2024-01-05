@@ -11,12 +11,14 @@ import toast from 'react-hot-toast'
 import { Appcontext } from '../ContextFolder/ContextCreator'
 import SinglePostForProfile from './SinglePostForProfile'
 import SinglePostIterable from './SinglePostIterable'
-
+import CommentLiteComp from './CommentLiteComp'
 
 export default function AllPostForProfile({ selectedtab }) {
 
     const [postlist, setPostlist] = useState([])
     const [likedpostlist, setLikedpostlist] = useState([])
+    const [repostedlist, setRepostedlist] = useState([])
+    const [commentlist, setCommentlist] = useState([])
     const [page, setPage] = useState(1)
     const [totalpostno, setTotalpostno] = useState()
 
@@ -36,7 +38,7 @@ export default function AllPostForProfile({ selectedtab }) {
                     if (res.data.success === true) {
                         setPostlist([...postlist, ...res.data.fetchedpost])
                         setTotalpostno(res.data.totalPostsCount.totalpostno)
-                        console.log(res.data)
+                        // console.log(res.data)
                     }
 
 
@@ -88,15 +90,45 @@ export default function AllPostForProfile({ selectedtab }) {
         try {
             if (jwtToken) {
 
-                await axios.get(`http://localhost:9000/api/v1/post/get-liked-post-of-logged-user/${page}`, {
+                await axios.get(`http://localhost:9000/api/v1/post/get-reposted-post-of-logged-user/${page}`, {
                     headers: {
                         token: jwtToken
                     }
                 }).then(async (res) => {
                     if (res.data.success === true) {
-                        // setLikedpostlist([...likedpostlist, ...res.data.fetchedLikedPost[0].likedPost])
-                        // setTotalpostno(res.data.res.data.fetchedLikedPost[0].likedpostCount)
-                        console.log(res.data)
+
+                        setRepostedlist([...repostedlist, ...res.data.fetchedRepostedPosts[0].repostedposts])
+                        setTotalpostno(res.data.fetchedRepostedPosts[0].totalrepostcount)
+                        // console.log(res.data.fetchedRepostedPosts[0].repostedposts)
+                    }
+
+                }).catch((err) => {
+                    console.log(err)
+                    toast.error('some internal axios error occured')
+                })
+            }
+
+        } catch (error) {
+            console.log(error)
+            toast.error('some internal error occured')
+        }
+    }
+
+
+    const getCommentsofLoggedUser = async () => {
+        try {
+            if (jwtToken) {
+
+                await axios.get(`http://localhost:9000/api/v1/comments/get-comments-of-logged-user/${page}`, {
+                    headers: {
+                        token: jwtToken
+                    }
+                }).then(async (res) => {
+                    if (res.data.success === true) {
+
+                        setCommentlist([...commentlist, ...res.data.LoggedUserComments])
+                        setTotalpostno(res.data.totalCommentCount)
+                        console.log(res.data.LoggedUserComments)
                     }
 
                 }).catch((err) => {
@@ -113,10 +145,10 @@ export default function AllPostForProfile({ selectedtab }) {
 
 
 
-
     useEffect(() => {
         setLikedpostlist([])
         setPostlist([])
+        setRepostedlist([])
         setTotalpostno(0)
         setPage(1)
         if (selectedtab === 'YourPosts') {
@@ -127,6 +159,16 @@ export default function AllPostForProfile({ selectedtab }) {
         else if (selectedtab === 'Liked') {
 
             getLikedPostsofLoggedUser()
+
+        }
+        else if (selectedtab === 'Reposts') {
+
+            getRepostedPostsofLoggedUser()
+
+        }
+        else if (selectedtab === 'Comments') {
+
+            getCommentsofLoggedUser()
 
         } else {
             console.log('others are not implimented yet')
@@ -153,6 +195,20 @@ export default function AllPostForProfile({ selectedtab }) {
             {selectedtab === 'Liked' &&
                 likedpostlist.map((item, index) => {
                     return <SinglePostIterable pid={item} jwtToken={jwtToken} key={index} />
+                })
+            }
+
+
+            {selectedtab === 'Reposts' &&
+                repostedlist.map((item, index) => {
+                    return <SinglePostIterable pid={item} jwtToken={jwtToken} key={index} />
+                })
+            }
+
+
+            {selectedtab === 'Comments' &&
+                commentlist.map((item, index) => {
+                    return <CommentLiteComp commentdata={item} jwtToken={jwtToken} key={index} />
                 })
             }
 

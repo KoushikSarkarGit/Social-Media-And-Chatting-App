@@ -5,3 +5,29 @@
     margin-bottom: 25px;
 
 }
+
+
+
+.litecommentbox {
+    width: 100%;
+    background-color: var(--cardColor);
+    border-radius: 1rem;
+    padding: 1rem;
+
+}
+
+
+.cbox {
+    background-color: rgb(243, 243, 243);
+    border-radius: 1rem;
+    padding: 10px;
+}
+
+.spebox2 {
+    background-color: rgba(250, 222, 253, 0.896);
+    border: 2px solid rgba(250, 206, 255, 0.896);
+    border-radius: 0.8rem;
+    padding-top: 6px;
+    padding-bottom: 5px;
+    margin-top: 7px;
+}
