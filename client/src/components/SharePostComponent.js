@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { UilScenery } from "@iconscout/react-unicons";
 import { UilPlayCircle } from "@iconscout/react-unicons";
 // import { UilLocationPoint } from "@iconscout/react-unicons";
@@ -8,15 +8,15 @@ import myprofileimage from "../img/profileImg.jpg";
 import { RxCross1 } from "react-icons/rx";
 import { UilLabelAlt } from '@iconscout/react-unicons'
 import '../pagecss/sharecomponent.css'
-// import { Appcontext } from '../ContextFolder/ContextCreator';
+import { Appcontext } from '../ContextFolder/ContextCreator';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
 export default function SharePostComponent() {
 
 
-    // const cur = useContext(Appcontext);
-    // const { jwtToken } = cur;
+    const cur = useContext(Appcontext);
+    const { userdata } = cur;
 
 
 
@@ -125,7 +125,7 @@ export default function SharePostComponent() {
     return (
         <form className='sharecompbox' onSubmit={(e) => { finalsubmit(e) }} >
 
-            <img src={myprofileimage} alt="" className='postcompImg' />
+            <img src={userdata?.profilePicture ? userdata?.profilePicture : myprofileimage} alt="" className='postcompImg' />
 
             <div className="postbox">
 

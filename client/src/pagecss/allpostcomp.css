@@ -8,6 +8,25 @@
 
 
 
+.emptybox {
+    width: 100%;
+    background-color: var(--cardColor);
+    border-radius: 1rem;
+    padding-top: 16rem;
+    padding-bottom: 16rem;
+
+}
+
+.emptyboxtxt {
+    font-size: 45px;
+    font-weight: bolder;
+    color: rgba(161, 161, 161, 0.821);
+}
+
+
+
+
+
 .litecommentbox {
     width: 100%;
     background-color: var(--cardColor);
@@ -30,4 +49,21 @@
     padding-top: 6px;
     padding-bottom: 5px;
     margin-top: 7px;
+}
+
+
+.commentcreationdate {
+    border: 1px solid rgba(255, 213, 75, 0.96);
+    border-radius: 0.5rem;
+    background-color: rgb(255, 233, 111);
+    padding: 5px 8px 5px 8px;
+}
+
+.crtext {
+    color: rgb(79, 79, 79);
+
+}
+
+.mutedtext {
+    color: gray;
 }

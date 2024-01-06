@@ -12,7 +12,7 @@ import toast from 'react-hot-toast';
 import { AiFillLike } from "react-icons/ai";
 import { AiOutlineLike } from "react-icons/ai";
 
-
+import defaultprofileimg2 from '../img/defaultprofimg2.jpg'
 
 export default function SinglePostIterable({ pid, jwtToken }) {
 
@@ -31,7 +31,7 @@ export default function SinglePostIterable({ pid, jwtToken }) {
                     if (res.data.success === true) {
                         setPostdetails(res.data.fetchedLitePost[0])
 
-                        console.log(res.data.fetchedLitePost[0])
+                        // console.log(res.data.fetchedLitePost[0])
                     }
 
                 }).catch((err) => {
@@ -51,7 +51,7 @@ export default function SinglePostIterable({ pid, jwtToken }) {
 
         getLikedPostsofLoggedUserLiteversion();
 
-    }, [pid, jwtToken]);
+    }, [jwtToken, pid]);
 
 
 
@@ -96,7 +96,7 @@ export default function SinglePostIterable({ pid, jwtToken }) {
 
                 <div className="detail d-flex flex-column ">
                     <div className="d-flex align-items-center spebox ">
-                        <img src={postdetails?.userDetails[0].profilePicture} alt="userphoto" className='singlepostuserphoto mx-1 ' />
+                        <img src={postdetails?.userDetails[0].profilePicture ? postdetails?.userDetails[0].profilePicture : defaultprofileimg2} alt="userphoto" className='singlepostuserphoto mx-1 ' />
                         <span className='mx-1'><b>From  <i style={{ color: 'grey' }}>@{postdetails?.userDetails[0].username}</i></b></span>
                     </div>
 
@@ -111,7 +111,7 @@ export default function SinglePostIterable({ pid, jwtToken }) {
 
                     <div className="detail d-flex flex-column ">
                         <div className="d-flex align-items-center spebox ">
-                            <img src={postdetails?.userDetails[0].profilePicture} alt="userphoto" className='singlepostuserphoto mx-1 ' />
+                            <img src={postdetails?.userDetails[0].profilePicture ? postdetails?.userDetails[0].profilePicture : defaultprofileimg2} alt="userphoto" className='singlepostuserphoto mx-1 ' />
                             <span className='mx-1'><b>From  <i style={{ color: 'grey' }}>@{postdetails?.userDetails[0].username}</i></b></span>
                         </div>
 

@@ -1,15 +1,17 @@
 import React from 'react'
 import "../pagecss/singlepostcomp.css";
 
-import { UilThumbsUp } from '@iconscout/react-unicons'
+// import { UilThumbsUp } from '@iconscout/react-unicons'
 import { UilRedo } from '@iconscout/react-unicons'
 import { UilCommentAltNotes } from '@iconscout/react-unicons'
 import { UilShare } from '@iconscout/react-unicons'
-import { AiTwotoneLike } from 'react-icons/ai'
+// import { AiTwotoneLike } from 'react-icons/ai'
 import { UilEdit } from '@iconscout/react-unicons'
-
 import { AiFillLike } from "react-icons/ai";
 import { AiOutlineLike } from "react-icons/ai";
+
+import defaultprofileimg2 from '../img/defaultprofimg2.jpg'
+
 
 export default function SinglePostForProfile({ pdata }) {
     return (
@@ -57,7 +59,7 @@ export default function SinglePostForProfile({ pdata }) {
 
                 <div className="detail d-flex flex-column">
                     <div className="d-flex align-items-center spebox ">
-                        <img src={pdata.userDetails[0].profilePicture} alt="userphoto" className='singlepostuserphoto mx-1 ' />
+                        <img src={pdata.userDetails[0].profilePicture ? pdata.userDetails[0].profilePicture : defaultprofileimg2} alt="userphoto" className='singlepostuserphoto mx-1 ' />
                         <span className='mx-1'><b>From  <i style={{ color: 'grey' }}>@{pdata.userDetails[0].username}</i></b></span>
                     </div>
 
@@ -72,7 +74,7 @@ export default function SinglePostForProfile({ pdata }) {
 
                     <div className="detail d-flex flex-column">
                         <div className="d-flex align-items-center spebox ">
-                            <img src={pdata.userDetails[0].profilePicture} alt="userphoto" className='singlepostuserphoto mx-1 ' />
+                            <img src={pdata.userDetails[0].profilePicture ? pdata.userDetails[0].profilePicture : defaultprofileimg2} alt="userphoto" className='singlepostuserphoto mx-1 ' />
                             <span className='mx-1'><b>From  <i style={{ color: 'grey' }}>@{pdata.userDetails[0].username}</i></b></span>
                         </div>
 

@@ -12,6 +12,7 @@ import { Appcontext } from '../ContextFolder/ContextCreator'
 import SinglePostForProfile from './SinglePostForProfile'
 import SinglePostIterable from './SinglePostIterable'
 import CommentLiteComp from './CommentLiteComp'
+import EmptyBox from './EmptyBox'
 
 export default function AllPostForProfile({ selectedtab }) {
 
@@ -128,7 +129,7 @@ export default function AllPostForProfile({ selectedtab }) {
 
                         setCommentlist([...commentlist, ...res.data.LoggedUserComments])
                         setTotalpostno(res.data.totalCommentCount)
-                        console.log(res.data.LoggedUserComments)
+                        // console.log(res.data.LoggedUserComments)
                     }
 
                 }).catch((err) => {
@@ -149,6 +150,7 @@ export default function AllPostForProfile({ selectedtab }) {
         setLikedpostlist([])
         setPostlist([])
         setRepostedlist([])
+        setCommentlist([])
         setTotalpostno(0)
         setPage(1)
         if (selectedtab === 'YourPosts') {
@@ -187,29 +189,60 @@ export default function AllPostForProfile({ selectedtab }) {
 
 
             {selectedtab === 'YourPosts' &&
-                postlist.map((item, index) => {
-                    return <SinglePostForProfile pdata={item} key={index} />
-                })
+                <>
+                    {
+                        postlist.length > 0 ?
+                            postlist.map((item, index) => {
+                                return <SinglePostForProfile pdata={item} key={index} />
+                            })
+                            :
+                            <EmptyBox />
+                    }
+                </>
             }
 
             {selectedtab === 'Liked' &&
-                likedpostlist.map((item, index) => {
-                    return <SinglePostIterable pid={item} jwtToken={jwtToken} key={index} />
-                })
+                <>
+                    {likedpostlist.length > 0 ?
+                        likedpostlist.map((item, index) => {
+                            return <SinglePostIterable pid={item} jwtToken={jwtToken} key={index} />
+                        })
+                        :
+
+
+                        <EmptyBox />
+
+                    }
+                </>
+
             }
 
 
             {selectedtab === 'Reposts' &&
-                repostedlist.map((item, index) => {
-                    return <SinglePostIterable pid={item} jwtToken={jwtToken} key={index} />
-                })
+                <>
+                    {repostedlist.length > 0 ?
+                        repostedlist.map((item, index) => {
+                            return <SinglePostIterable pid={item} jwtToken={jwtToken} key={index} />
+                        })
+                        :
+                        <EmptyBox />
+                    }
+                </>
             }
 
 
             {selectedtab === 'Comments' &&
-                commentlist.map((item, index) => {
-                    return <CommentLiteComp commentdata={item} jwtToken={jwtToken} key={index} />
-                })
+                <>
+                    {commentlist.length > 0 ?
+                        commentlist.map((item, index) => {
+                            return <CommentLiteComp commentdata={item} jwtToken={jwtToken} key={index} />
+                        })
+                        :
+                        <EmptyBox />
+
+                    }
+                </>
+
             }
 
 
