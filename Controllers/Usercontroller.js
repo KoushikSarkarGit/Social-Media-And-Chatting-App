@@ -490,9 +490,6 @@ const getGeneralTimeline = async (req, res) => {
 
 
 
-
-
-
 const getUserFollowersid = async (req, res) => {
 
     const { curuserid } = req.body;
@@ -529,5 +526,36 @@ const getUserFollowersid = async (req, res) => {
 
 
 
+const checkfrontendtoken = async (req, res) => {
 
-module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getTimelineForLoginUser, getGeneralTimeline, getUserFollowersid, getFollowerListByPage, getSingleUserLite }
+    const reqtoken = await req.headers.token;
+    try {
+        let tokencheck = await jwt.verify(reqtoken, process.env.jwt_secret_key);
+        if (!tokencheck) {
+            return res.status(400).json({ success: false, msg: "invalid token. Please LogOut and Login again" })
+        }
+
+
+
+        const decode = await jwt.verify(
+            req.headers.token,
+            process.env.jwt_secret_key
+        );
+        const curuserid = decode.id;
+        const user = await Usermodel.findById(curuserid);
+        if (!user) {
+            return res.status(400).json({ success: false, msg: 'User does not exist' });
+        }
+
+
+
+
+        return res.status(200).json({ success: true, msg: 'valid token' });
+    } catch (error) {
+        return res.status(200).json({ success: false, error });
+    }
+
+};
+
+
+module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getTimelineForLoginUser, getGeneralTimeline, getUserFollowersid, getFollowerListByPage, getSingleUserLite, checkfrontendtoken }

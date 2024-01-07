@@ -2,7 +2,7 @@
     width: auto;
     display: flex;
     flex-direction: column;
-    border-radius: 1.5rem 1.5rem 0rem 0rem;
+    border-radius: 1.5rem 1.5rem 0.5rem 0.5rem;
     gap: 1rem;
     font-size: 15px;
     max-height: 35vh;

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import '../pagecss/followercard.css'
-import img1 from '../img/img1.png'
-import img2 from '../img/img2.png'
+// import img1 from '../img/img1.png'
+// import img2 from '../img/img2.png'
 // import FollowerModal from './FollowerModal'
 import Morefollowersmodal from './Morefollowersmodal'
 import FollowerElement from './FollowerElement'
@@ -9,7 +9,7 @@ import axios from 'axios'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { Appcontext } from '../ContextFolder/ContextCreator'
-
+import EmptyBox from './EmptyBox'
 
 export default function FollowerCard() {
 
@@ -84,11 +84,16 @@ export default function FollowerCard() {
             <div className='followercardbox'>
                 <h5 >Your Followers </h5>
 
-                {
-                    followerlist.map((personid, index) => {
-                        return <FollowerElement key={index} fdata={personid} />
+                {followerlist.length > 0 ?
+                    <>
+                        {followerlist.map((personid, index) => {
+                            return <FollowerElement key={index} fdata={personid} />
 
-                    })
+                        })}
+                    </>
+                    :
+                    <EmptyBox />
+
                 }
 
 
@@ -98,7 +103,7 @@ export default function FollowerCard() {
             <Morefollowersmodal openfollower={openfollowermodal} setopenfollower={setopenfollowermodal} initialList={followerlist} />
 
 
-            <button className="morefollowers" onClick={() => setopenfollowermodal(true)}><hr className='morefhr' /> <h6> See More Followers</h6> </button>
+            {followerlist.length > 0 && <button className="morefollowers" onClick={() => setopenfollowermodal(true)}><hr className='morefhr' /> <h6> See More Followers</h6> </button>}
         </div>
 
     )

@@ -12,13 +12,19 @@
     width: 100%;
     background-color: var(--cardColor);
     border-radius: 1rem;
-    padding-top: 16rem;
-    padding-bottom: 16rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 15%;
+    padding-bottom: 25%;
+
 
 }
 
 .emptyboxtxt {
-    font-size: 45px;
+    font-size: 42px;
     font-weight: bolder;
     color: rgba(161, 161, 161, 0.821);
 }

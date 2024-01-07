@@ -30,12 +30,12 @@ const valtokenchecker = async (req, res, next) => {
     try {
         var tokencheck = await jwt.verify(reqtoken, process.env.jwt_secret_key);
         if (!tokencheck) {
-            return res.status(400).json({ success: true, msg: "invalid token. Please LogOut and Login again" })
+            return res.status(400).json({ success: false, msg: "invalid token. Please LogOut and Login again" })
         }
         next();
     } catch (error) {
         console.log(error);
-        return res.status(400).json({ success: false, msg: "error happened in valtokenchecker" })
+        return res.status(400).json({ success: false, msg: "error happened in valtokenchecker", err: error.message })
     }
 }
 
