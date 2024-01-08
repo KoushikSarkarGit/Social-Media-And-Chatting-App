@@ -1,5 +1,5 @@
 const express = require('express');
-const { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getTimelineForLoginUser, getGeneralTimeline, getUserFollowersid, getFollowerListByPage, getSingleUserLite, checkfrontendtoken } = require('../Controllers/Usercontroller');
+const { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getTimelineForLoginUser, getGeneralTimeline, getUserFollowersid, getFollowerListByPage, getSingleUserLite, checkfrontendtoken, getSingleUserMedium } = require('../Controllers/Usercontroller');
 const router = express.Router();
 const formidable = require('express-formidable')
 const { valtokenchecker, extractIdFromToken } = require('../Middlewares/Encryptiontools')
@@ -15,6 +15,11 @@ router.post('/login', loginBackend)
 router.get('/getuser/:id', getSingleUser)
 // get less info of user
 router.get('/get-user-light/:id', getSingleUserLite)
+
+// get medium info of user
+router.get('/get-user-medium/:id', getSingleUserMedium)
+
+
 
 //update user details
 router.put('/update-userdetails/:id', valtokenchecker, extractIdFromToken, updateUserDetails)

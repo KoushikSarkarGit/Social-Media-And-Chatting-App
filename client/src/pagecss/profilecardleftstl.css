@@ -18,6 +18,8 @@
 
 .ProfileImages>img:nth-of-type(1) {
     width: 100%;
+    max-height: 20rem;
+    object-fit: cover;
 }
 
 .ProfileImages>img:nth-of-type(2) {
@@ -91,4 +93,13 @@
     align-self: center;
     margin-bottom: 1rem;
     cursor: pointer;
+}
+
+.showdetailsdiv {
+    border: 1px solid rgb(154, 205, 251);
+    border-radius: 1rem;
+    padding: 2px 4px 2px 4px;
+    cursor: pointer;
+    font-size: 12px;
+
 }

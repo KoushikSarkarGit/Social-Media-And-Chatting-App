@@ -96,7 +96,7 @@ const getSingleUser = async (req, res) => {
 };
 
 
-// get a User controller
+// get a User with less info
 const getSingleUserLite = async (req, res) => {
     const id = req.params.id;
 
@@ -110,6 +110,60 @@ const getSingleUserLite = async (req, res) => {
         }
     } catch (error) {
         return res.status(500).json({ success: false, msg: 'user fetching unsuccessful', error });
+    }
+};
+
+
+
+// get a User detals with mideum details
+const getSingleUserMedium = async (req, res) => {
+    const id = req.params.id;
+
+    try {
+
+        let userid = await new mongoose.Types.ObjectId(id)
+        const userdetails = await Usermodel.aggregate([
+            { $match: { _id: userid } },
+            {
+                $project: {
+                    firstname: 1,
+                    lastname: 1,
+                    sex: 1,
+                    username: 1,
+                    profilePicture: 1,
+                    coverPicture: 1,
+                    bio: 1,
+                    livesin: 1,
+                    worksAt: 1,
+                    relationship: 1,
+                    followersCount: { $size: "$followers" },
+                    followingCount: { $size: "$following" },
+                    likedPostCount: { $size: "$likedPost" },
+                    repostedCount: { $size: "$reposted" }
+                }
+            }
+        ]);
+
+        const [totalPostsCount] = await Postmodel.aggregate([
+            { $match: { userId: userid } },
+            { $count: 'totalpostno' }
+        ]);
+
+
+        const finaldata = {
+
+            ...userdetails[0],
+            totalPostsCount
+        };
+
+
+        if (userdetails) {
+            return res.status(200).json({ success: true, msg: 'user fetched successfully', finaldata });
+        } else {
+            return res.status(404).json({ success: true, msg: "User does not exist" });
+        }
+    } catch (error) {
+        return res.status(500).json({ success: false, msg: 'user fetching unsuccessful', err: error.message });
     }
 };
 
@@ -558,4 +612,4 @@ const checkfrontendtoken = async (req, res) => {
 };
 
 
-module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getTimelineForLoginUser, getGeneralTimeline, getUserFollowersid, getFollowerListByPage, getSingleUserLite, checkfrontendtoken }
+module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getTimelineForLoginUser, getGeneralTimeline, getUserFollowersid, getFollowerListByPage, getSingleUserLite, checkfrontendtoken, getSingleUserMedium }

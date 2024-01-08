@@ -11,9 +11,11 @@ export default function MyContextPool(props) {
     const [isAdmin, setisAdmin] = useState(false)
     const [userdata, setUserdata] = useState(null);
 
+
     const [userprofileimg, setUserprofileimg] = useState(null)
     const [userfristname, setUserfristname] = useState(null)
     const [userlastname, setUserlastname] = useState(null)
+    const [userId, setUserId] = useState(null);
 
     const [loading, setLoading] = useState(true)
 
@@ -28,6 +30,7 @@ export default function MyContextPool(props) {
             await setUserprofileimg(jsonedcurdata.sentuser.profilePicture)
             await setUserfristname(jsonedcurdata.sentuser.firstname)
             await setUserlastname(jsonedcurdata.sentuser.lastname)
+            await setUserId(jsonedcurdata.sentuser._id)
 
 
             try {
@@ -112,13 +115,9 @@ export default function MyContextPool(props) {
 
 
     return (
-        <Appcontext.Provider value={{ jwtToken, username, isAdmin, userlastname, userfristname, userprofileimg, setisAdmin, setjwtToken, setUserdata, setusername, userdata, logoutfunction }}>
-            {loading ? (
-                <div>Loading...</div>
-            ) : (
-
-                props.children
-            )}
+        <Appcontext.Provider value={{ jwtToken, username, isAdmin, userlastname, userfristname, userprofileimg, setisAdmin, setjwtToken, setUserdata, setusername, userdata, logoutfunction, userId, setUserId }}>
+            {!loading && props.children
+            }
         </Appcontext.Provider>
     )
 }

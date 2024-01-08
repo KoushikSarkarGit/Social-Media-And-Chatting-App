@@ -20,8 +20,8 @@ export default function MiniProfileCompund() {
             </div>
 
             <div className="ProfileDetails">
-                <span> <b> {(userfristname && userlastname) ? (userfristname + ' ' + userlastname) : 'Please Sign In'}</b> </span>
-                <span >@{username}</span>
+                <span> <b> {(userfristname && userlastname) ? (userfristname + ' ' + userlastname) : <div style={{ color: 'grey' }}>Please Sign In</div>}</b> </span>
+                <span >{username ? '@' + username : ''}</span>
             </div>
             <div className="moreicon">
                 <UilEllipsisV />
