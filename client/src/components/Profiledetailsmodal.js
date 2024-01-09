@@ -2,24 +2,24 @@ import React from 'react'
 import { Modal, useMantineTheme } from '@mantine/core';
 import '../pagecss/profiledetails.css'
 
-export default function Profiledetailsmodal({ pmodal, setpmodal }) {
+export default function Profiledetailsmodal({ pmodal, setpmodal, jwtToken, userlastname, userfristname, username, userdata }) {
 
     const theme = useMantineTheme();
 
 
     return (
         <>
-            <Modal title="Sharepost"
+            <Modal title={<><h2 className='mx-4' >Your details</h2> </>}
 
 
 
                 overlayProps={{
-                    color: theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[2],
+                    color: theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[3],
                     opacity: 0.55,
                     blur: 3,
                 }}
 
-                size="50%"
+                size="70%"
                 opened={pmodal}
                 onClose={() => setpmodal(false)}
 
@@ -29,33 +29,59 @@ export default function Profiledetailsmodal({ pmodal, setpmodal }) {
 
 
                 <hr style={{ width: '99%', color: 'var(--hrColor)', marginTop: '-1rem', border: '2px solid', borderRadius: '15rem' }} />
-                <div className="info">
-                    <span>
-                        <b>Status </b>
-                    </span>
-                    <span>Single</span>
+
+
+
+
+
+                <div className='py-2 px-4'>
+
+                    <div className="info2">
+                        {userfristname ? <div><b>Name:</b>  {userfristname} {userlastname}  </div> : <div><b>Name:</b>  ...  </div>}
+                    </div>
+
+
+                    <div className="info2">
+                        {username ? <div><b>Username:</b>  @{username}   </div> : <div><b>Username:</b>  ...  </div>}
+                    </div>
+
+                    <div className="info2">
+                        {userdata?.email ? <div><b>Email:</b>  {userdata?.email}   </div> : <div><b>Email:</b>  ...  </div>}
+                    </div>
+
+                    <div className="info2">
+                        {userdata?.sex ? <div><b>Gender:</b>  {userdata.sex}  </div> : <div><b>Gender:</b>  ...  </div>}
+                    </div>
+
+                    <div className="info2">
+                        {userdata?.phone ? <div><b>Phone No:</b>  {userdata.sex}  </div> : <div><b>Phone No:</b>  ...  </div>}
+                    </div>
+
+
+                    <div className="info2">
+                        {userdata?.livesin ? <div> <b>Lives in:</b>  {userdata.livesin}  </div> : <div><b>Lives in:</b>  ...  </div>}
+                    </div>
+
+
+                    <div className="info2">
+                        {userdata?.worksAt ? <div> <b>Works At:</b>  {userdata.worksAt}  </div> : <div><b>Works At:</b>  ...  </div>}
+                    </div>
+
+
+                    <div className="info2">
+                        {userdata?.relationship ? <div> <b>Relationship Status:</b>   {userdata.relationship}  </div> : <div><b>Relationship Status:</b>  ...  </div>}
+                    </div>
+
+
+                    <div className="info2">
+                        {userdata?.bio ? <div> <b>Bio:</b>   {userdata?.bio}  </div> : <div><b>Bio:</b>  ...  </div>}
+                    </div>
+
+
                 </div>
 
-                <div className="info">
-                    <span>
-                        <b>Lives in </b>
-                    </span>
-                    <span>Mumbai</span>
-                </div>
 
-                <div className="info">
-                    <span>
-                        <b>Works at </b>
-                    </span>
-                    <span>PWC India </span>
-                </div>
 
-                <div className="info">
-                    <span>
-                        <b>Bio </b>
-                    </span>
-                    <span> Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea temporibus sunt nostrum consequuntur esse deleniti aperiam sit at...</span>
-                </div>
 
             </Modal>
 

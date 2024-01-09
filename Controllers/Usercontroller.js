@@ -66,9 +66,32 @@ const loginBackend = async (req, res) => {
 
             const token = await jwt.sign({ id: user._id }, process.env.jwt_secret_key, { expiresIn: '30d' });
 
-            const sentuser = await Usermodel.findOne({ email: email }).select('-password -followers -following -likedPost -reposted');
+            const sentuser = await Usermodel.aggregate([
+                { $match: { email: email } },
+                {
+                    $project: {
+                        firstname: 1,
+                        lastname: 1,
+                        sex: 1,
+                        email: 1,
+                        isAdmin: 1,
+                        phone: 1,
+                        username: 1,
+                        profilePicture: 1,
+                        coverPicture: 1,
+                        bio: 1,
+                        livesin: 1,
+                        worksAt: 1,
+                        relationship: 1,
+                        followersCount: { $size: "$followers" },
+                        followingCount: { $size: "$following" },
+                        likedPostCount: { $size: "$likedPost" },
+                        repostedCount: { $size: "$reposted" }
+                    }
+                }
+            ]);
 
-            validity ? res.status(200).json({ success: true, jwttoken: token, sentuser, msg: 'Login Successful' }) : res.status(400).json({ success: false, msg: "Wrong Username or Password" })
+            validity ? res.status(200).json({ success: true, jwttoken: token, sentuser: sentuser[0], msg: 'Login Successful' }) : res.status(400).json({ success: false, msg: "Wrong Username or Password" })
         }
         else {
             res.status(404).json("User does not exists. Please Sign Up first")

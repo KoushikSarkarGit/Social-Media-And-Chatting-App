@@ -26,7 +26,7 @@ const SocialmediaUserschema = new Schema({
     },
     sex: {
         type: String,
-        enum: ['male', 'female'],
+        enum: ['male', 'female', 'others'],
 
     },
     firstname: {

@@ -98,7 +98,7 @@ export default function Loginpage() {
     useEffect(() => {
         checkIfAlreadyLoggedIn();
 
-    }, [checkIfAlreadyLoggedIn])
+    }, [])
 
 
     return (

@@ -25,7 +25,7 @@ export default function Profilecardleft({ uId }) {
 
                     if (res.data.success === true) {
                         setUserprofile(res.data.finaldata)
-                        console.log(res.data)
+                        // console.log(res.data)
                     }
 
                 }).catch((err) => {
