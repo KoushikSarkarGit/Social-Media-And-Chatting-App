@@ -54,9 +54,9 @@ export default function Loginpage() {
                     const mydata = await JSON.parse(gotres);
                     await console.log(mydata)
 
-                    await setUserdata(mydata);
-                    await setusername(mydata.sentuser.username)
-                    await setjwtToken(mydata.jwttoken)
+                    await setUserdata(mydata?.sentuser);
+                    await setusername(mydata?.sentuser.username)
+                    await setjwtToken(mydata?.jwttoken)
 
                     await setisAdmin(mydata.sentuser.isAdmin)
 

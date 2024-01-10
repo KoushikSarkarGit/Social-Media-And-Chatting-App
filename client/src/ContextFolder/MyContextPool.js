@@ -23,44 +23,44 @@ export default function MyContextPool(props) {
         let curauth = await localStorage.getItem('authdata');
         if (curauth) {
             let jsonedcurdata = await JSON.parse(curauth)
+
+            await setUserdata(jsonedcurdata?.sentuser);
             await setjwtToken(jsonedcurdata.jwttoken);
             await setusername(jsonedcurdata.sentuser.username)
             await setisAdmin(jsonedcurdata.sentuser.isAdmin)
-            await setUserdata(jsonedcurdata.sentuser)
             await setUserprofileimg(jsonedcurdata.sentuser.profilePicture)
             await setUserfristname(jsonedcurdata.sentuser.firstname)
             await setUserlastname(jsonedcurdata.sentuser.lastname)
             await setUserId(jsonedcurdata.sentuser._id)
 
 
+
             try {
 
-                await axios.post(`http://localhost:9000/api/v1/user/check-validity-of-jwttoken-from-client`, {},
+                await axios.post(`http://localhost:9000/api/v1/user/check-validity-of-jwttoken-from-client`,
+                    {},
                     {
-                        headers: {
-                            // Authorization header with the JWT token
-                            token: jsonedcurdata.jwttoken
-                        }
-                    }).then(async (res) => {
-                        // console.log(res.data)
-                        setLoading(false);
-                        if (res.data.success === false) {
-                            await localStorage.removeItem('authdata');
+                        headers: { token: jsonedcurdata.jwttoken }
+                    }
+                ).then(async (res) => {
+                    // console.log(res.data)
+                    setLoading(false);
+                    if (res.data.success === false) {
+                        await localStorage.removeItem('authdata');
 
-                            await setusername(null);
-                            await setjwtToken(null);
-                            await setUserdata(null)
-                            await setisAdmin(false)
+                        await setusername(null);
+                        await setjwtToken(null);
+                        await setUserdata(null)
+                        await setisAdmin(false)
 
-                            window.location.reload()
+                        window.location.reload()
 
-                        }
+                    }
 
-                    }).catch((err) => {
-                        console.log(err)
-                        toast.error('some internal axios error occured')
-                    })
-
+                }).catch((err) => {
+                    console.log(err)
+                    toast.error('some internal axios error occured')
+                })
 
             } catch (error) {
                 console.log(error)
@@ -68,15 +68,13 @@ export default function MyContextPool(props) {
                 setLoading(false);
             }
 
-
-
         }
 
-
         setLoading(false);
-
-
     }
+
+
+
 
 
     useEffect(() => {

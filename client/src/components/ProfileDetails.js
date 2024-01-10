@@ -6,6 +6,7 @@ import Profiledetailsmodal from './Profiledetailsmodal';
 import { Appcontext } from '../ContextFolder/ContextCreator';
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom';
+import { Formik, useFormik } from 'formik';
 
 export default function ProfileDetails() {
 
@@ -38,6 +39,83 @@ export default function ProfileDetails() {
             console.log(error)
         }
     }
+
+
+
+
+
+    let myinitialvalues = {
+
+        usernamef: username,
+        fristnamef: userfristname,
+        lastnamef: userlastname,
+        sexf: userdata.sex,
+        phonef: userdata.phone,
+        biof: userdata.bio,
+        livesinf: userdata.livesin,
+        worksAtf: userdata.worksAt,
+        relationshipf: userdata.relationship
+
+    }
+
+
+
+
+    const {
+        usernamef,
+        fristnamef,
+        lastnamef,
+        sexf,
+        phonef,
+        biof,
+        livesinf,
+        worksAtf,
+        relationshipf,
+
+        handleBlur,
+        handleChange,
+        handleSubmit,
+        errors,
+        touched
+
+    } = useFormik({
+        initialValues: myinitialvalues,
+        // validationSchema: loginschema,
+        onSubmit: async (values, action) => {
+
+            console.log(values);
+
+            // try {
+            //     await axios.post(`http://localhost:9000/api/v1/user/login`, {
+
+            //         email: values.email,
+            //         password: values.password,
+            //     }).then(async (res) => {
+
+
+
+
+            //     }).catch((err) => {
+
+            //         console.log(err)
+            //         toast.error('some internal axios error occured')
+
+            //     })
+            // } catch (error) {
+            //     console.log(error)
+            //     toast.error('some internal error occured')
+            // }
+
+
+        }
+    })
+
+
+
+
+
+
+
 
 
 
@@ -122,13 +200,13 @@ export default function ProfileDetails() {
 
             <div className="modal fade  " id="exampleModal2" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog">
-                    <div className="modal-content">
+                    <div className="modal-content" >
                         <div className="modal-header">
                             <h1 className="modal-title fs-5" id="exampleModalLabel">Edit Your Profile Details</h1>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
                         </div>
                         <div className="modal-body">
-                            <form>
+                            <form >
                                 <div className="mb-3">
                                     <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
                                     <input type="email" className="form-control" id="exampleInputEmail1" defaultValue={userdata?.email} aria-describedby="emailHelp" disabled />
@@ -138,26 +216,29 @@ export default function ProfileDetails() {
                                 <div className="row mb-3">
                                     <div className="col">
                                         <label htmlFor="exampleInputEmail1" className="form-label">First Name</label>
-                                        <input type="text" className="form-control" placeholder="First name" aria-label="First name" />
+                                        <input type="text" className="form-control" name='fristnamef' value={fristnamef} defaultValue={userdata?.firstname} aria-label="First name" onChange={handleChange} onBlur={handleBlur} />
                                     </div>
                                     <div className="col">
                                         <label htmlFor="exampleInputEmail1" className="form-label">Last Name</label>
-                                        <input type="text" className="form-control" placeholder="Last name" aria-label="Last name" />
+                                        <input type="text" className="form-control" aria-label="Last name" name='lastnamef' value={lastnamef} defaultValue={userlastname} onChange={handleChange} onBlur={handleBlur} />
                                     </div>
                                 </div>
 
                                 <div className="row mb-3">
                                     <div className="col">
                                         <label htmlFor="exampleInputEmail1" className="form-label">Username</label>
-                                        <input type="text" className="form-control" placeholder="First name" aria-label="First name" />
+                                        <input type="text" className="form-control" aria-label="First name" name='usernamef' value={usernamef} defaultValue={username} onChange={handleChange} onBlur={handleBlur} />
                                     </div>
                                     <div className="col">
                                         <label htmlFor="exampleInputEmail1" className="form-label">Gender</label>
-                                        <select className="form-select" id="sexinput" aria-label="Default select example">
-                                            <option defaultValue>Select Your Gender</option>
+                                        <select className="form-select" id="sexinput" aria-label="Default select example" name='sexf'
+                                            value={sexf} onChange={handleChange} onBlur={handleBlur} >
+
+                                            <option defaultValue value={null} >Select Your Gender</option>
                                             <option value={'male'}>Male</option>
                                             <option value={'female'}>Female</option>
                                             <option value={'others'}>Others</option>
+                                            <option value={null}>Don't Want to Reveal</option>
                                         </select>
                                     </div>
                                 </div>
@@ -165,36 +246,38 @@ export default function ProfileDetails() {
                                 <div className="row mb-3">
                                     <div className="col">
                                         <label htmlFor="exampleInputEmail1" className="form-label">Lives In</label>
-                                        <input type="text" className="form-control" placeholder="First name" aria-label="First name" />
+                                        <input type="text" className="form-control" aria-label="First name" name='livesinf' value={livesinf} defaultValue={userdata.livesin} onChange={handleChange} onBlur={handleBlur} />
                                     </div>
                                     <div className="col">
                                         <label htmlFor="exampleInputEmail1" className="form-label">Working At</label>
-                                        <input type="text" className="form-control" placeholder="Last name" aria-label="Last name" />
+                                        <input type="text" className="form-control" aria-label="Last name" name='worksAtf' value={worksAtf} defaultValue={userdata.worksAt} onChange={handleChange} onBlur={handleBlur} />
                                     </div>
                                 </div>
 
                                 <div className="row mb-3">
                                     <div className="col">
                                         <label htmlFor="exampleInputEmail1" className="form-label">Phone Number</label>
-                                        <input type="text" className="form-control" placeholder="First name" aria-label="First name" />
+                                        <input type="text" className="form-control" aria-label="First name" name='phonef' value={phonef} defaultValue={userdata.phone} onChange={handleChange} onBlur={handleBlur} />
                                     </div>
                                     <div className="col">
                                         <label htmlFor="exampleInputEmail1" className="form-label">Relationship Status</label>
-                                        <input type="text" className="form-control" placeholder="Last name" aria-label="Last name" />
+                                        <input type="text" className="form-control" aria-label="Last name" name='relationshipf' value={relationshipf} defaultValue={userdata.relationship} onChange={handleChange} onBlur={handleBlur} />
                                     </div>
                                 </div>
 
 
                                 <div className="mb-3">
                                     <label htmlFor="exampleFormControlTextarea1" className="form-label">Bio</label>
-                                    <textarea className="form-control" id="exampleFormControlTextarea1" rows={2} defaultValue={""} />
+                                    <textarea className="form-control" id="exampleFormControlTextarea1" rows={2} defaultValue={userdata.bio} name='biof' value={biof} onChange={handleChange} onBlur={handleBlur} />
                                 </div>
 
                             </form>
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" className="btn btn-primary">Save changes</button>
+                            <button type="button" className="btn btn-primary" onClick={() => {
+                                handleSubmit()
+                            }} >Save changes</button>
                         </div>
                     </div>
                 </div>
