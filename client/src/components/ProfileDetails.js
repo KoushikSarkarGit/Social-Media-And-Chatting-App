@@ -1,12 +1,17 @@
 import React, { useContext, useState } from 'react'
 import '../pagecss/profiledetails.css'
+import '../pagecss/authorization.css'
 
 import { UilPen } from "@iconscout/react-unicons";
 import Profiledetailsmodal from './Profiledetailsmodal';
 import { Appcontext } from '../ContextFolder/ContextCreator';
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom';
-import { Formik, useFormik } from 'formik';
+import { useFormik } from 'formik';
+import { editmodalschema } from '../YupSchemas/yupschemafile'
+
+
+
 
 export default function ProfileDetails() {
 
@@ -80,7 +85,7 @@ export default function ProfileDetails() {
 
     } = useFormik({
         initialValues: myinitialvalues,
-        // validationSchema: loginschema,
+        validationSchema: editmodalschema,
         onSubmit: async (values, action) => {
 
             console.log(values);
@@ -217,10 +222,12 @@ export default function ProfileDetails() {
                                     <div className="col">
                                         <label htmlFor="exampleInputEmail1" className="form-label">First Name</label>
                                         <input type="text" className="form-control" name='fristnamef' value={fristnamef} defaultValue={userdata?.firstname} aria-label="First name" onChange={handleChange} onBlur={handleBlur} />
+                                        {(errors.fristnamef && touched.fristnamef) ? <p className="formerrortext2 text-center"> {errors.fristnamef} </p> : null}
                                     </div>
                                     <div className="col">
                                         <label htmlFor="exampleInputEmail1" className="form-label">Last Name</label>
                                         <input type="text" className="form-control" aria-label="Last name" name='lastnamef' value={lastnamef} defaultValue={userlastname} onChange={handleChange} onBlur={handleBlur} />
+                                        {(errors.lastnamef && touched.lastnamef) ? <p className="formerrortext2 text-center"> {errors.lastnamef} </p> : null}
                                     </div>
                                 </div>
 
@@ -228,18 +235,22 @@ export default function ProfileDetails() {
                                     <div className="col">
                                         <label htmlFor="exampleInputEmail1" className="form-label">Username</label>
                                         <input type="text" className="form-control" aria-label="First name" name='usernamef' value={usernamef} defaultValue={username} onChange={handleChange} onBlur={handleBlur} />
+
+                                        {(errors.usernamef && touched.usernamef) ? <p className="formerrortext2 text-center"> {errors.usernamef} </p> : null}
                                     </div>
                                     <div className="col">
                                         <label htmlFor="exampleInputEmail1" className="form-label">Gender</label>
                                         <select className="form-select" id="sexinput" aria-label="Default select example" name='sexf'
                                             value={sexf} onChange={handleChange} onBlur={handleBlur} >
 
-                                            <option defaultValue value={null} >Select Your Gender</option>
+                                            <option defaultValue  >Select Your Gender</option>
                                             <option value={'male'}>Male</option>
                                             <option value={'female'}>Female</option>
                                             <option value={'others'}>Others</option>
-                                            <option value={null}>Don't Want to Reveal</option>
+
                                         </select>
+
+                                        {(errors.sexf && touched.sexf) ? <p className="formerrortext2 text-center"> {errors.sexf} </p> : null}
                                     </div>
                                 </div>
 
@@ -247,21 +258,29 @@ export default function ProfileDetails() {
                                     <div className="col">
                                         <label htmlFor="exampleInputEmail1" className="form-label">Lives In</label>
                                         <input type="text" className="form-control" aria-label="First name" name='livesinf' value={livesinf} defaultValue={userdata.livesin} onChange={handleChange} onBlur={handleBlur} />
+
+                                        {(errors.livesinf && touched.livesinf) ? <p className="formerrortext2 text-center"> {errors.livesinf} </p> : null}
                                     </div>
                                     <div className="col">
                                         <label htmlFor="exampleInputEmail1" className="form-label">Working At</label>
                                         <input type="text" className="form-control" aria-label="Last name" name='worksAtf' value={worksAtf} defaultValue={userdata.worksAt} onChange={handleChange} onBlur={handleBlur} />
+
+                                        {(errors.worksAtf && touched.worksAtf) ? <p className="formerrortext2 text-center"> {errors.worksAtf} </p> : null}
                                     </div>
                                 </div>
 
                                 <div className="row mb-3">
                                     <div className="col">
                                         <label htmlFor="exampleInputEmail1" className="form-label">Phone Number</label>
-                                        <input type="text" className="form-control" aria-label="First name" name='phonef' value={phonef} defaultValue={userdata.phone} onChange={handleChange} onBlur={handleBlur} />
+                                        <input type="number" className="form-control" aria-label="First name" name='phonef' value={phonef} defaultValue={userdata.phone} onChange={handleChange} onBlur={handleBlur} />
+
+                                        {(errors.phonef && touched.phonef) ? <p className="formerrortext2 text-center"> {errors.phonef} </p> : null}
                                     </div>
                                     <div className="col">
                                         <label htmlFor="exampleInputEmail1" className="form-label">Relationship Status</label>
                                         <input type="text" className="form-control" aria-label="Last name" name='relationshipf' value={relationshipf} defaultValue={userdata.relationship} onChange={handleChange} onBlur={handleBlur} />
+
+                                        {(errors.relationshipf && touched.relationshipf) ? <p className="formerrortext2 text-center"> {errors.relationshipf} </p> : null}
                                     </div>
                                 </div>
 
@@ -269,6 +288,8 @@ export default function ProfileDetails() {
                                 <div className="mb-3">
                                     <label htmlFor="exampleFormControlTextarea1" className="form-label">Bio</label>
                                     <textarea className="form-control" id="exampleFormControlTextarea1" rows={2} defaultValue={userdata.bio} name='biof' value={biof} onChange={handleChange} onBlur={handleBlur} />
+
+                                    {(errors.biof && touched.biof) ? <p className="formerrortext2 text-center"> {errors.biof} </p> : null}
                                 </div>
 
                             </form>
