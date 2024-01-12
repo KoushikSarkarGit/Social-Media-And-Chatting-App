@@ -6,7 +6,7 @@ import '../pagecss/profilecardleftstl.css'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 
-
+import Swal from 'sweetalert2'
 
 
 
@@ -54,7 +54,13 @@ export default function Profilecardleft({ uId }) {
         <div className="ProfileCard">
             <div className="ProfileImages">
                 <img src={userprofile?.coverPicture ? userprofile?.coverPicture : Cover} alt="" />
-                <img src={userprofile?.profilePicture ? userprofile?.profilePicture : Profile} alt="" />
+                <img src={userprofile?.profilePicture ? userprofile?.profilePicture : Profile} alt="" style={{ cursor: 'pointer' }} onClick={() => {
+                    Swal.fire({
+                        imageUrl: userprofile?.profilePicture,
+
+                        imageAlt: "profile image"
+                    });
+                }} />
             </div>
 
             <div className="ProfileName">

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import '../pagecss/profiledetails.css'
 import '../pagecss/authorization.css'
 
@@ -16,6 +16,7 @@ import { editmodalschema } from '../YupSchemas/yupschemafile'
 export default function ProfileDetails() {
 
     const cur = useContext(Appcontext);
+    const modalRef = useRef(null);
     const { jwtToken, userlastname, userfristname, username, userdata, logoutfunction } = cur;
     const [pmodal, setpmodal] = useState(false);
     const navigate = useNavigate()
@@ -81,35 +82,73 @@ export default function ProfileDetails() {
         handleChange,
         handleSubmit,
         errors,
-        touched
+        touched,
+        resetForm
 
     } = useFormik({
         initialValues: myinitialvalues,
         validationSchema: editmodalschema,
         onSubmit: async (values, action) => {
 
-            console.log(values);
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'The changes will be made',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                confirmButtonText: 'Save Changes',
+                cancelButtonText: `Go back`
+            }).then((result) => {
 
-            // try {
-            //     await axios.post(`http://localhost:9000/api/v1/user/login`, {
-
-            //         email: values.email,
-            //         password: values.password,
-            //     }).then(async (res) => {
+                if (result.isConfirmed) {
+                    resetForm()
+                    modalRef.current.click();
+                    console.log(values);
 
 
 
+                    // try {
+                    //      axios.put(`http://localhost:9000/api/v1/user/update-userdetails/${userdata._id}`, {
 
-            //     }).catch((err) => {
+                    //         email: values.email,
+                    //         password: values.password,
+                    //     },
+                    //     {
+                    //         headers: {
+                    //             token: jwtToken,
 
-            //         console.log(err)
-            //         toast.error('some internal axios error occured')
+                    //         }
+                    //     }
+                    //     ).then(async (res) => {
 
-            //     })
-            // } catch (error) {
-            //     console.log(error)
-            //     toast.error('some internal error occured')
-            // }
+
+                    //     }).catch((err) => {
+
+                    //         console.log(err)
+                    //         toast.error('some internal axios error occured')
+
+                    //     })
+                    // } catch (error) {
+                    //     console.log(error)
+                    //     toast.error('some internal error occured')
+                    // }
+
+
+
+
+
+
+
+
+
+
+
+                }
+
+            })
+
+
+
 
 
         }
@@ -199,8 +238,6 @@ export default function ProfileDetails() {
 
 
 
-
-
             {/* modal for edit details start here */}
 
             <div className="modal fade  " id="exampleModal2" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -211,7 +248,7 @@ export default function ProfileDetails() {
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
                         </div>
                         <div className="modal-body">
-                            <form >
+                            <form onSubmit={handleSubmit}>
                                 <div className="mb-3">
                                     <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
                                     <input type="email" className="form-control" id="exampleInputEmail1" defaultValue={userdata?.email} aria-describedby="emailHelp" disabled />
@@ -243,10 +280,10 @@ export default function ProfileDetails() {
                                         <select className="form-select" id="sexinput" aria-label="Default select example" name='sexf'
                                             value={sexf} onChange={handleChange} onBlur={handleBlur} >
 
-                                            <option defaultValue  >Select Your Gender</option>
-                                            <option value={'male'}>Male</option>
-                                            <option value={'female'}>Female</option>
-                                            <option value={'others'}>Others</option>
+                                            <option defaultValue={userdata.sex === null || userdata.sex === undefined}  >Select Your Gender</option>
+                                            <option defaultValue={userdata.sex === 'male'} value={'male'}>Male</option>
+                                            <option defaultValue={userdata.sex === 'female'} value={'female'}>Female</option>
+                                            <option defaultValue={userdata.sex === 'others'} value={'others'}>Others</option>
 
                                         </select>
 
@@ -291,15 +328,13 @@ export default function ProfileDetails() {
 
                                     {(errors.biof && touched.biof) ? <p className="formerrortext2 text-center"> {errors.biof} </p> : null}
                                 </div>
-
+                                <div className="modal-footer">
+                                    <button type="button" className="btn btn-secondary" ref={modalRef} data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" className="btn btn-primary"   >Save changes</button>
+                                </div>
                             </form>
                         </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" className="btn btn-primary" onClick={() => {
-                                handleSubmit()
-                            }} >Save changes</button>
-                        </div>
+
                     </div>
                 </div>
             </div>
