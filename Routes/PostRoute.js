@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const formidable = require('express-formidable')
-const { createPost, getPost, updatePost, deletePost, getPostbytag, getTrendingTags, getPostsOfLoggedUser, getLikedPostsOfLoggedUser, getLoggedPostByIdLite, getRepostedPostsOfLoggedUser } = require('../Controllers/PostController')
+const { createPost, getPost, updatePost, deletePost, getPostbytag, getTrendingTags, getPostsOfLoggedUser, getLikedPostsOfLoggedUser, getLoggedPostByIdLite, getRepostedPostsOfLoggedUser, getPostsByKeyword, getPostsByTagKeyword } = require('../Controllers/PostController')
 const { valtokenchecker, extractIdFromToken } = require('../Middlewares/Encryptiontools');
 
 
@@ -43,6 +43,20 @@ router.get('/get-reposted-post-of-logged-user/:pageno', valtokenchecker, extract
 // get reposted posts list of user (logged in) it gives lighter version of reposted post based on the post id. used in singlepostiterable
 
 router.get('/get-reposted-post-of-logged-user-by-id/:pid', valtokenchecker, extractIdFromToken, getLoggedPostByIdLite)
+
+
+// apis for searching
+
+//get Post by keyword 
+
+router.get('/get-post-by-keyword/:keyword/:page', getPostsByKeyword)
+
+
+//get Post based on tags via searching keyword 
+
+router.get('/get-post-by-tags-keyword/:keyword/:page', getPostsByTagKeyword)
+
+
 
 
 

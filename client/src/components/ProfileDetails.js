@@ -7,10 +7,10 @@ import Profiledetailsmodal from './Profiledetailsmodal';
 import { Appcontext } from '../ContextFolder/ContextCreator';
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom';
-import { useFormik } from 'formik';
+import { Formik, useFormik } from 'formik';
 import { editmodalschema } from '../YupSchemas/yupschemafile'
-
-
+import axios from 'axios'
+import toast from 'react-hot-toast'
 
 
 export default function ProfileDetails() {
@@ -83,7 +83,8 @@ export default function ProfileDetails() {
         handleSubmit,
         errors,
         touched,
-        resetForm
+        resetForm,
+        isValid
 
     } = useFormik({
         initialValues: myinitialvalues,
@@ -98,7 +99,7 @@ export default function ProfileDetails() {
                 confirmButtonColor: "#d33",
                 confirmButtonText: 'Save Changes',
                 cancelButtonText: `Go back`
-            }).then((result) => {
+            }).then(async (result) => {
 
                 if (result.isConfirmed) {
                     resetForm()
@@ -106,32 +107,76 @@ export default function ProfileDetails() {
                     console.log(values);
 
 
+                    try {
+                        await axios.put(`http://localhost:9000/api/v1/user/update-userdetails/${userdata._id}`, {
+                            username: values.usernamef,
+                            fristname: values.fristnamef,
+                            lastname: values.lastnamef,
+                            sex: values.sexf,
+                            phone: values.phonef,
+                            bio: values.biof,
+                            livesin: values.livesinf,
+                            worksAt: values.worksAtf,
+                            relationship: values.relationshipf
+                        },
+                            {
+                                headers: { token: jwtToken }
+                            }
+                        ).then(async (res) => {
 
-                    // try {
-                    //      axios.put(`http://localhost:9000/api/v1/user/update-userdetails/${userdata._id}`, {
+                            if (res.data.success == true) {
 
-                    //         email: values.email,
-                    //         password: values.password,
-                    //     },
-                    //     {
-                    //         headers: {
-                    //             token: jwtToken,
+                                const authData = await JSON.parse(localStorage.getItem('authdata'));
 
-                    //         }
-                    //     }
-                    //     ).then(async (res) => {
+                                authData.sentuser.username = await res.data.updateduser.username;
+                                authData.sentuser.fristname = await res.data.updateduser.fristname;
+                                authData.sentuser.lastname = await res.data.updateduser.lastname;
+                                authData.sentuser.sex = await res.data.updateduser.sex;
+                                authData.sentuser.phone = await res.data.updateduser.phone;
+                                authData.sentuser.bio = await res.data.updateduser.bio;
+                                authData.sentuser.livesin = await res.data.updateduser.livesin;
+                                authData.sentuser.worksAt = await res.data.updateduser.worksAt;
+                                authData.sentuser.relationship = await res.data.updateduser.relationship;
+
+                                await localStorage.setItem('authdata', JSON.stringify(authData));
+
+                                Swal.fire({
+                                    title: "Your Profile Details Are Updated Successfully",
+                                    icon: 'success',
+                                    confirmButtonText: "Ok"
+
+                                }).then((result) => {
+
+                                    if (result.isConfirmed) {
+                                        setTimeout(() => {
+                                            window.location.reload()
+                                        }, 500);
+
+                                    }
+                                });
+
+                            }
+                            else {
+                                Swal.fire({
+                                    title: "Oops...?",
+                                    text: "Something went wrong!",
+                                    icon: "error"
+                                });
+                            }
 
 
-                    //     }).catch((err) => {
 
-                    //         console.log(err)
-                    //         toast.error('some internal axios error occured')
 
-                    //     })
-                    // } catch (error) {
-                    //     console.log(error)
-                    //     toast.error('some internal error occured')
-                    // }
+                        }).catch((err) => {
+
+                            console.log(err)
+                            toast.error('some internal axios error occured')
+
+                        })
+                    } catch (error) {
+                        console.log(error)
+                        toast.error('some internal error occured')
+                    }
 
 
 
@@ -170,7 +215,7 @@ export default function ProfileDetails() {
 
 
             <div className="userinfo">
-                <h4 className='text-center flex-fill'>Your Info</h4>
+                <h4 className='text-center flex-fill' style={{ color: 'rgb(255, 94, 0)' }}> Your Info </h4>
 
                 <div className='px-1 py-1 editbtn' type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2">
                     <UilPen
@@ -213,7 +258,7 @@ export default function ProfileDetails() {
 
 
             <div className="info">
-                {userdata?.bio ? <div> <b>Bio:</b>   {userdata?.bio.length > 20 ? <>{userdata?.bio.splice(0, 20)} ...</> : userdata?.bio}  </div> : <div><b>Bio:</b>  ...  </div>}
+                {userdata?.bio ? <div> <b>Bio:</b>   {userdata?.bio.length > 20 ? <>{userdata?.bio.slice(0, 20)} ...</> : userdata?.bio}  </div> : <div><b>Bio:</b>  ...  </div>}
             </div>
 
 
@@ -241,7 +286,7 @@ export default function ProfileDetails() {
             {/* modal for edit details start here */}
 
             <div className="modal fade  " id="exampleModal2" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div className="modal-dialog">
+                <div className="modal-dialog modal-lg">
                     <div className="modal-content" >
                         <div className="modal-header">
                             <h1 className="modal-title fs-5" id="exampleModalLabel">Edit Your Profile Details</h1>
@@ -278,12 +323,13 @@ export default function ProfileDetails() {
                                     <div className="col">
                                         <label htmlFor="exampleInputEmail1" className="form-label">Gender</label>
                                         <select className="form-select" id="sexinput" aria-label="Default select example" name='sexf'
+                                            defaultValue={userdata.sex}
                                             value={sexf} onChange={handleChange} onBlur={handleBlur} >
 
-                                            <option defaultValue={userdata.sex === null || userdata.sex === undefined}  >Select Your Gender</option>
-                                            <option defaultValue={userdata.sex === 'male'} value={'male'}>Male</option>
-                                            <option defaultValue={userdata.sex === 'female'} value={'female'}>Female</option>
-                                            <option defaultValue={userdata.sex === 'others'} value={'others'}>Others</option>
+                                            <option value={undefined}  >Select Your Gender</option>
+                                            <option value={'male'}>Male</option>
+                                            <option value={'female'}>Female</option>
+                                            <option value={'others'}>Others</option>
 
                                         </select>
 
@@ -330,7 +376,7 @@ export default function ProfileDetails() {
                                 </div>
                                 <div className="modal-footer">
                                     <button type="button" className="btn btn-secondary" ref={modalRef} data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" className="btn btn-primary"   >Save changes</button>
+                                    <button type="submit" className="btn btn-primary" disabled={!isValid}   >Save changes</button>
                                 </div>
                             </form>
                         </div>

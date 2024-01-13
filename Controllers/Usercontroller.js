@@ -195,9 +195,9 @@ const getSingleUserMedium = async (req, res) => {
 // update user details
 const updateUserDetails = async (req, res) => {
     const id = req.params.id;
-    let hashednewpassword = '';
+    // let hashednewpassword = '';
     let adminresult = null;
-    const { curuserid, adminstatus, newpassword } = req.body;
+    const { curuserid, adminstatus } = req.body;
 
     if (adminstatus) {
         adminresult = await checkAdmin(curuserid);
@@ -205,22 +205,23 @@ const updateUserDetails = async (req, res) => {
 
     if (id === curuserid || adminresult) {
         try {
-            if (newpassword) {
-                hashednewpassword = await encrytpassword(newpassword);
-            }
+            // if (newpassword) {
+            //     hashednewpassword = await encrytpassword(newpassword);
+            // }
 
-            const updateduser = await Usermodel.findByIdAndUpdate(id, { ...req.body, password: hashednewpassword }, {
+            const updateduser = await Usermodel.findByIdAndUpdate(id, { ...req.body }, {
                 new: true,
+                select: '-password -reposted -likedPost -following -followers'
             });
 
-            res.status(200).json({ success: true, updateduser });
+            return res.status(200).json({ success: true, msg: 'Update successful', updateduser });
         } catch (error) {
-            res.status(500).json({ success: false, msg: error.message });
+            return res.status(500).json({ success: false, msg: error.message });
         }
 
 
     } else {
-        res.status(403).json({ success: false, msg: "Access Denied! you can only update your own profile" });
+        return res.status(403).json({ success: false, msg: "Access Denied! you can only update your own profile" });
     }
 };
 
@@ -512,6 +513,8 @@ const unrePost = async (req, res) => {
 
 };
 
+
+// feed for logged in user
 const getTimelineForLoginUser = async (req, res) => {
     const usert = req.params.id;
 
@@ -524,7 +527,7 @@ const getTimelineForLoginUser = async (req, res) => {
         }
 
 
-        let yourtimeline = await Usermodel.aggregate([
+        let yourFeed = await Usermodel.aggregate([
             { $match: { $_id: new mongoose.Types.ObjectId(user._id) } },
 
             {
@@ -540,7 +543,7 @@ const getTimelineForLoginUser = async (req, res) => {
         ])
 
 
-        res.status(200).json({ success: true, yourtimeline });
+        res.status(200).json({ success: true, yourFeed });
     } catch (error) {
         res.status(500).json({ success: false, error });
     }
@@ -561,6 +564,36 @@ const getGeneralTimeline = async (req, res) => {
     }
 
 };
+
+
+
+//get people by keyword
+
+const getPeopleByKeyword = async (req, res) => {
+    try {
+        const keyword = req.params.keyword;
+
+        // Using regex to perform a case-insensitive search on firstname, lastname, and username
+        const regex = new RegExp(keyword, 'i');
+
+        const matchingUsers = await Usermodel.find({
+            $or: [
+                { firstname: { $regex: regex } },
+                { lastname: { $regex: regex } },
+                { username: { $regex: regex } },
+            ]
+        }).select("-password -followers -following -likedPost -reposted -commented").limit(20);
+
+        return res.status(200).json({ success: true, matchingUsers });
+    } catch (error) {
+        return res.status(500).json({ success: false, error });
+    }
+};
+
+
+
+
+
 
 
 
@@ -593,7 +626,7 @@ const getUserFollowersid = async (req, res) => {
         ]);
 
 
-        return res.status(200).json({ success: true, yourFollowers, dddd: 'sdssdsd' });
+        return res.status(200).json({ success: true, yourFollowers });
     } catch (error) {
         res.status(500).json({ success: false, error });
     }
@@ -635,4 +668,4 @@ const checkfrontendtoken = async (req, res) => {
 };
 
 
-module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getTimelineForLoginUser, getGeneralTimeline, getUserFollowersid, getFollowerListByPage, getSingleUserLite, checkfrontendtoken, getSingleUserMedium }
+module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getTimelineForLoginUser, getGeneralTimeline, getUserFollowersid, getFollowerListByPage, getSingleUserLite, checkfrontendtoken, getSingleUserMedium, getPeopleByKeyword }

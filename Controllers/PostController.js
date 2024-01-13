@@ -432,5 +432,92 @@ const getRepostedPostsOfLoggedUser = async (req, res) => {
 
 
 
+//get posts by keyword
 
-module.exports = { createPost, getPost, updatePost, deletePost, getPostbytag, getTrendingTags, getPostsOfLoggedUser, getLikedPostsOfLoggedUser, getLoggedPostByIdLite, getRepostedPostsOfLoggedUser }
+const getPostsByKeyword = async (req, res) => {
+    try {
+        const keyword = req.params.keyword;
+
+        const page = req.params.page || 1;
+        const pageSize = 10; // Adjust as needed
+
+
+
+
+        // Using regex to perform a case-insensitive search on postdescription
+        const regex = new RegExp(keyword, 'i');
+
+        const matchingPosts = await Postmodel.aggregate([
+            {
+                $match: {
+                    postdescription: { $regex: regex }
+                }
+            },
+            {
+                $project: {
+                    postdescription: 1,
+                    postimage: 1,
+                    postPublicID: 1,
+                    likescount: { $size: { $ifNull: ["$likes", []] } },
+                    repostscount: { $size: { $ifNull: ["$reposts", []] } },
+                    commentscount: { $size: { $ifNull: ["$comments", []] } },
+                    tags: 1
+                }
+            },
+            { $skip: (page - 1) * pageSize },
+            { $limit: 10 }
+        ]);
+
+        return res.status(200).json({ success: true, matchingPosts });
+    } catch (error) {
+        return res.status(500).json({ success: false, error });
+    }
+};
+
+
+//get tagwise posts by keyword
+
+
+const getPostsByTagKeyword = async (req, res) => {
+    try {
+        const keyword = req.params.keyword;
+
+        // Using regex to perform a case-insensitive search on tags
+        const regex = new RegExp(keyword, 'i');
+
+        const matchingPosts = await Postmodel.aggregate([
+            {
+                $match: {
+                    tags: { $regex: regex }
+                }
+            },
+            {
+                $project: {
+                    postdescription: 1,
+                    postimage: 1,
+                    postPublicID: 1,
+                    likescount: { $size: "$likes" },
+                    repostscount: { $size: "$reposts" },
+                    commentscount: { $size: "$comments" },
+                    tags: 1
+                }
+            },
+            { $limit: 20 }
+        ]);
+
+
+
+
+        return res.status(200).json({ success: true, matchingPosts: matchingPosts[0] });
+    } catch (error) {
+        return res.status(500).json({ success: false, error });
+    }
+};
+
+
+
+
+
+
+
+module.exports = { createPost, getPost, updatePost, deletePost, getPostbytag, getTrendingTags, getPostsOfLoggedUser, getLikedPostsOfLoggedUser, getLoggedPostByIdLite, getRepostedPostsOfLoggedUser, getPostsByKeyword, getPostsByTagKeyword }
