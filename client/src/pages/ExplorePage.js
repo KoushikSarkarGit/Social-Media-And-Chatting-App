@@ -1,8 +1,9 @@
 import React from 'react'
 import LeftsideOfHome from '../components/LeftsideOfHome';
 import '../pagecss/explorepage.css'
+
 import ExploreRight from '../components/ExploreRight'
-import Searchbar from '../components/Searchbar';
+import ExploreMiddle from '../components/ExploreMiddle';
 
 export default function ExplorePage() {
     return (
@@ -10,7 +11,8 @@ export default function ExplorePage() {
 
             <LeftsideOfHome />
             <div className="mainexplorepagecontent">
-                <Searchbar />
+
+                <ExploreMiddle />
             </div>
 
             <ExploreRight />

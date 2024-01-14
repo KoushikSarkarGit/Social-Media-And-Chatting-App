@@ -573,18 +573,51 @@ const getPeopleByKeyword = async (req, res) => {
     try {
         const keyword = req.params.keyword;
 
+        const page = req.params.page || 1;
+        const pageSize = 10; // Adjust as needed
         // Using regex to perform a case-insensitive search on firstname, lastname, and username
         const regex = new RegExp(keyword, 'i');
 
-        const matchingUsers = await Usermodel.find({
+        const totalResults = await Usermodel.countDocuments({
             $or: [
                 { firstname: { $regex: regex } },
                 { lastname: { $regex: regex } },
                 { username: { $regex: regex } },
             ]
-        }).select("-password -followers -following -likedPost -reposted -commented").limit(20);
+        });
 
-        return res.status(200).json({ success: true, matchingUsers });
+
+
+
+        const matchingUsers = await Usermodel.aggregate([
+            {
+                $match: {
+                    $or: [
+                        { firstname: { $regex: regex } },
+                        { lastname: { $regex: regex } },
+                        { username: { $regex: regex } },
+                    ]
+                }
+            },
+            {
+                $project: {
+                    _id: 1,
+                    firstname: 1,
+                    lastname: 1,
+                    username: 1,
+                    profilePicture: 1,
+                    bio: 1,
+                    likescount: { $size: { $ifNull: ["$likedPost", []] } },
+                    repostscount: { $size: { $ifNull: ["$reposted", []] } },
+                    followerscount: { $size: "$followers" },
+                    followingcount: { $size: "$following" },
+                }
+            },
+            { $skip: (page - 1) * pageSize },
+            { $limit: 10 }
+        ]);
+
+        return res.status(200).json({ success: true, matchingUsers, totalResults, pageSize });
     } catch (error) {
         return res.status(500).json({ success: false, error });
     }

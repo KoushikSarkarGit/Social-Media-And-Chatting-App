@@ -77,7 +77,7 @@ router.get('/get-general-feed/', getGeneralTimeline)
 
 //get people by keyword 
 
-router.get('/get-people-by-keyword/:keyword', getPeopleByKeyword)
+router.get('/get-people-by-keyword/:keyword/:page', getPeopleByKeyword)
 
 
 

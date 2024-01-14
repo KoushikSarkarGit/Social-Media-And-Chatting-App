@@ -14,6 +14,7 @@ const postschema = new Schema({
     postPublicID: String,
     likes: [],
     reposts: [],
+
     //no need for this as i have created comment schema seperately
     // comments: [
     //     {
@@ -25,6 +26,7 @@ const postschema = new Schema({
     //         },
     //     }
     // ],
+
     commentNo: {
         type: Number,
         default: 0

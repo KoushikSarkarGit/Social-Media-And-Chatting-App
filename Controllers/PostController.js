@@ -447,6 +447,11 @@ const getPostsByKeyword = async (req, res) => {
         // Using regex to perform a case-insensitive search on postdescription
         const regex = new RegExp(keyword, 'i');
 
+        const totalResults = await Postmodel.countDocuments({
+            postdescription: { $regex: regex }
+        });
+
+
         const matchingPosts = await Postmodel.aggregate([
             {
                 $match: {
@@ -468,7 +473,7 @@ const getPostsByKeyword = async (req, res) => {
             { $limit: 10 }
         ]);
 
-        return res.status(200).json({ success: true, matchingPosts });
+        return res.status(200).json({ success: true, matchingPosts, totalResults, pageSize });
     } catch (error) {
         return res.status(500).json({ success: false, error });
     }
@@ -481,14 +486,21 @@ const getPostsByKeyword = async (req, res) => {
 const getPostsByTagKeyword = async (req, res) => {
     try {
         const keyword = req.params.keyword;
+        const page = req.params.page || 1;
+        const pageSize = 10; // Adjust as needed
 
         // Using regex to perform a case-insensitive search on tags
         const regex = new RegExp(keyword, 'i');
 
+        const totalResults = await Postmodel.countDocuments({
+            'tags.tagname': { $regex: regex }
+        });
+
+
         const matchingPosts = await Postmodel.aggregate([
             {
                 $match: {
-                    tags: { $regex: regex }
+                    'tags.tagname': { $regex: regex }
                 }
             },
             {
@@ -496,19 +508,20 @@ const getPostsByTagKeyword = async (req, res) => {
                     postdescription: 1,
                     postimage: 1,
                     postPublicID: 1,
-                    likescount: { $size: "$likes" },
-                    repostscount: { $size: "$reposts" },
-                    commentscount: { $size: "$comments" },
+                    likescount: { $size: { $ifNull: ["$likes", []] } },
+                    repostscount: { $size: { $ifNull: ["$reposts", []] } },
+                    commentscount: { $size: { $ifNull: ["$comments", []] } },
                     tags: 1
                 }
             },
-            { $limit: 20 }
+            { $skip: (page - 1) * pageSize },
+            { $limit: 10 }
         ]);
 
 
 
 
-        return res.status(200).json({ success: true, matchingPosts: matchingPosts[0] });
+        return res.status(200).json({ success: true, matchingPosts, totalResults, pageSize });
     } catch (error) {
         return res.status(500).json({ success: false, error });
     }
