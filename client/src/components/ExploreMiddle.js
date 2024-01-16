@@ -1,11 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Searchbar from './Searchbar'
 import SinglePostcomponent from './SinglePostcomponent'
 import '../pagecss/explorepage.css'
+import '../pagecss/followercard.css'
 
 import postPic1 from '../img/postpic1.jpg'
 import postPic2 from '../img/postpic2.jpg'
 import postPic3 from '../img/postpic3.JPG'
+import SearchUserElement from './SearchUserElement'
+import axios from 'axios'
+import toast from 'react-hot-toast'
 
 
 
@@ -13,6 +17,45 @@ import postPic3 from '../img/postpic3.JPG'
 
 
 export default function ExploreMiddle() {
+
+
+    const [searchval, setSearchval] = useState([])
+    const [uselist, setUselist] = useState([])
+    const [selectedoption, setSelectedoption] = useState([])
+
+
+    const getSearcgedUsers = async () => {
+        try {
+
+            await axios.get(`http://localhost:9000/api/v1/user/get-people-by-keyword/${searchval}/1`).then(async (res) => {
+
+                if (res.data.success === true) {
+
+                    setUselist(res.data.matchingUsers)
+
+                    console.log(res.data)
+                }
+
+
+
+            }).catch((err) => {
+                console.log(err)
+                toast.error('some internal axios error occured')
+            })
+
+
+        } catch (error) {
+            console.log(error)
+            toast.error('some internal error occured')
+        }
+    }
+
+
+    const handleSearch = async (searchInput) => {
+        await setSearchval(searchInput);
+        await getSearcgedUsers(searchInput);
+    };
+
 
     const allpostdata = [
         {
@@ -41,7 +84,7 @@ export default function ExploreMiddle() {
 
     return (
         <div className='exploremiddlebox'>
-            <Searchbar />
+            <Searchbar onSearch={handleSearch} />
 
             <div className="chooseSearchOption">
                 <div className='indivradio'>
@@ -88,19 +131,15 @@ export default function ExploreMiddle() {
                 } */}
 
 
-
-                <div className='srUser'>
-                    <div className="srUserImg">
-                        <img src={postPic1} alt="myprofilepic" />
-                    </div>
-
-                    <div className="srUserDetails">
-                        <span> <b> Koushik Sarkar</b> </span>
-                        <span >@koushik</span>
-                    </div>
+                {/* <SearchUserElement /> */}
 
 
-                </div>
+                {
+                    uselist.map((item, index) => {
+                        return <SearchUserElement udata={item} key={index} />
+                    })
+
+                }
 
 
             </div>

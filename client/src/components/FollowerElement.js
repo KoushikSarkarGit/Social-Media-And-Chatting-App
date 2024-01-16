@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import '../pagecss/followercard.css'
+
 import img1 from '../img/img1.png'
 import defaultPrifileImg from '../img/defaultImage.jpg'
 import axios from 'axios'

@@ -81,26 +81,26 @@ export default function Profilecardleft({ uId }) {
                         <span>{userprofile?.followingCount !== null ? userprofile?.followingCount : '...'}</span>
                         <span>Followings</span>
                     </div>
-                    <div className="vl"></div>
+                    <div className="verticalHr"></div>
                     <div className="follow">
                         <span>{userprofile?.followersCount !== null ? userprofile?.followersCount : '...'}</span>
                         <span>Followers</span>
                     </div>
 
-                    {ProfilePage && (
-                        <>
-                            <div className="vl"></div>
-                            <div className="follow">
-                                <span>{userprofile?.totalPostsCount !== null ? userprofile?.totalPostsCount.totalpostno
-                                    : '...'}</span>
-                                <span>Posts</span>
-                            </div>
-                        </>
-                    )}
+
+                    <>
+                        <div className="verticalHr"></div>
+                        <div className="follow">
+                            <span>{userprofile?.totalPostsCount !== null ? userprofile?.totalPostsCount.totalpostno
+                                : '...'}</span>
+                            <span>Posts</span>
+                        </div>
+                    </>
+
                 </div>
                 <hr />
             </div>
-            {ProfilePage ? "" : <span>My Profile</span>}
+
 
 
 

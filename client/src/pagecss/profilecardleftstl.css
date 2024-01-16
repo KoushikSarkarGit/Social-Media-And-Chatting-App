@@ -81,7 +81,7 @@
     font-size: 13px;
 }
 
-.vl {
+.verticalHr {
     height: 150%;
     border-left: 2px solid var(--hrColor);
 }

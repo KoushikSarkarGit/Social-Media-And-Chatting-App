@@ -56,29 +56,43 @@
     flex-direction: row;
     width: 100%;
     background-color: white;
-    border-radius: 125px;
-
+    border-radius: 2.2rem;
+    justify-content: space-around;
     align-items: center;
 }
 
 .srUserImg {
-    padding: 10px;
+    padding: 12px 18px 12px 17px;
 }
 
 .srUserImg>img {
-    height: 5.2rem;
-    width: 5.2rem;
+    height: 5.5rem;
+    width: 5.5rem;
     border-radius: 50%;
-    border: 5px double rgb(0, 102, 255);
+    /* border: 2px solid rgb(0, 102, 255); */
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
 
 
 .srUserDetails {
-    width: 100%;
+    width: 18vw;
     display: flex;
     flex-direction: column;
-    /* align-items: center; */
     justify-content: center;
     padding: 10px;
     gap: 5px;
+    margin-right: 10px;
+}
+
+
+
+.userIntro {
+    padding: 2px 5px 2px 5px;
+    width: 80%;
+}
+
+
+.verticalHr {
+    padding-top: 50px;
+    border-left: 2px solid var(--hrColor);
 }

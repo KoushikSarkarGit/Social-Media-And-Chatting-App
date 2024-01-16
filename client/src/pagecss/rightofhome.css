@@ -23,17 +23,14 @@
     outline: none;
     font-size: medium;
     width: 85%;
+    padding: 2px;
 
 }
 
 .searchicon {
-
-    display: flex;
-    /* align-items: center;
-    justify-content: right; */
-    background: linear-gradient(106.23deg, #3690ff, #1e1eff 100%);
+    /* background: linear-gradient(106.23deg, #3690ff, #1e1eff 100%); */
     border-radius: 9px;
-    padding: 4px;
+    padding: 4px 6px 4px 6px;
     color: white;
 }
 
