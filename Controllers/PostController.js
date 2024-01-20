@@ -459,6 +459,14 @@ const getPostsByKeyword = async (req, res) => {
                 }
             },
             {
+                $lookup: {
+                    from: 'users',
+                    localField: 'userId',
+                    foreignField: '_id',
+                    as: 'userDetails'
+                }
+            },
+            {
                 $project: {
                     postdescription: 1,
                     postimage: 1,
@@ -466,7 +474,11 @@ const getPostsByKeyword = async (req, res) => {
                     likescount: { $size: { $ifNull: ["$likes", []] } },
                     repostscount: { $size: { $ifNull: ["$reposts", []] } },
                     commentscount: { $size: { $ifNull: ["$comments", []] } },
-                    tags: 1
+                    tags: 1,
+                    'userDetails.username': 1,
+                    'userDetails.profilePicture': 1,
+                    'userDetails.firstname': 1,
+                    'userDetails.lastname': 1,
                 }
             },
             { $skip: (page - 1) * pageSize },
@@ -504,6 +516,14 @@ const getPostsByTagKeyword = async (req, res) => {
                 }
             },
             {
+                $lookup: {
+                    from: 'users',
+                    localField: 'userId',
+                    foreignField: '_id',
+                    as: 'userDetails'
+                }
+            },
+            {
                 $project: {
                     postdescription: 1,
                     postimage: 1,
@@ -511,7 +531,11 @@ const getPostsByTagKeyword = async (req, res) => {
                     likescount: { $size: { $ifNull: ["$likes", []] } },
                     repostscount: { $size: { $ifNull: ["$reposts", []] } },
                     commentscount: { $size: { $ifNull: ["$comments", []] } },
-                    tags: 1
+                    tags: 1,
+                    'userDetails.username': 1,
+                    'userDetails.profilePicture': 1,
+                    'userDetails.firstname': 1,
+                    'userDetails.lastname': 1,
                 }
             },
             { $skip: (page - 1) * pageSize },

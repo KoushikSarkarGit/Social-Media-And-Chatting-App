@@ -3,29 +3,48 @@ import { UilSearch } from '@iconscout/react-unicons'
 import '../pagecss/rightofhome.css'
 import toast from 'react-hot-toast';
 
-export default function Searchbar({ onSearch }) {
+export default function Searchbar({ searchval, setSearchval, getSearchedUsers, getSearchedPosts, selectedoption, getSearchedTaggedPosts }) {
 
-    const [searchInput, setSearchInput] = useState('');
+
 
     const handleKeyPress = (event) => {
-        if ((event.key === 'Enter' || event.keyCode === 13) && searchInput.trim() === '') {
+        if ((event.key === 'Enter' || event.keyCode === 13) && searchval.trim() === '') {
             event.preventDefault();
             toast.error('Please enter some value');
         } else if (event.key === 'Enter' || event.keyCode === 13) {
-            onSearch(searchInput);
-            console.log(searchInput)
+            if (selectedoption === 'posts') {
+                getSearchedPosts()
+            }
+            else if (selectedoption === 'people') {
+                getSearchedUsers()
+            }
+            else if (selectedoption === 'tags') {
+                getSearchedTaggedPosts()
+            }
+
+            console.log(searchval)
         }
     };
 
 
     const handleSearchIconClick = () => {
-        if (searchInput.trim() === '' || searchInput === null) {
+        if (searchval.trim() === '' || searchval === null) {
             toast.error('Please enter some value');
         } else {
-            onSearch(searchInput);
-            console.log(searchInput)
+            if (selectedoption === 'posts') {
+                getSearchedPosts()
+            }
+            else if (selectedoption === 'people') {
+                getSearchedUsers()
+            }
+            else if (selectedoption === 'tags') {
+                getSearchedTaggedPosts()
+            }
+            console.log(searchval)
         }
     };
+
+
 
     return (
 
@@ -33,7 +52,11 @@ export default function Searchbar({ onSearch }) {
 
             <input type="text"
                 placeholder='Search People or Post'
-                onChange={(e) => setSearchInput(e.target.value)}
+                value={searchval}
+                onChange={(e) => {
+                    setSearchval(e.target.value)
+                    console.log(searchval)
+                }}
                 onKeyDown={handleKeyPress}
             />
 

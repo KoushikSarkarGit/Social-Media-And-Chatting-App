@@ -63,6 +63,8 @@
 
 .srUserImg {
     padding: 12px 18px 12px 17px;
+    background-color: white;
+    border-radius: 50%;
 }
 
 .srUserImg>img {
@@ -95,4 +97,24 @@
 .verticalHr {
     padding-top: 50px;
     border-left: 2px solid var(--hrColor);
+}
+
+
+.minidetails {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    align-items: center;
+    justify-content: center;
+    min-width: 60px;
+}
+
+
+.minidetails>span:nth-of-type(1) {
+    font-weight: bold;
+}
+
+.minidetails>span:nth-of-type(2) {
+    color: var(--gray);
+    font-size: 13px;
 }
