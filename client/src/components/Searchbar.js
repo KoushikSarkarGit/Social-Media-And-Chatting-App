@@ -3,7 +3,7 @@ import { UilSearch } from '@iconscout/react-unicons'
 import '../pagecss/rightofhome.css'
 import toast from 'react-hot-toast';
 
-export default function Searchbar({ searchval, setSearchval, getSearchedUsers, getSearchedPosts, selectedoption, getSearchedTaggedPosts }) {
+export default function Searchbar({ searchval, setSearchval, getSearchedUsers, getSearchedPosts, selectedoption, getSearchedTaggedPosts, setifsearched }) {
 
 
 
@@ -14,15 +14,18 @@ export default function Searchbar({ searchval, setSearchval, getSearchedUsers, g
         } else if (event.key === 'Enter' || event.keyCode === 13) {
             if (selectedoption === 'posts') {
                 getSearchedPosts()
+                setifsearched(true)
             }
             else if (selectedoption === 'people') {
                 getSearchedUsers()
+                setifsearched(true)
             }
             else if (selectedoption === 'tags') {
                 getSearchedTaggedPosts()
+                setifsearched(true)
             }
 
-            console.log(searchval)
+            // console.log(searchval)
         }
     };
 
@@ -33,14 +36,17 @@ export default function Searchbar({ searchval, setSearchval, getSearchedUsers, g
         } else {
             if (selectedoption === 'posts') {
                 getSearchedPosts()
+                setifsearched(true)
             }
             else if (selectedoption === 'people') {
                 getSearchedUsers()
+                setifsearched(true)
             }
             else if (selectedoption === 'tags') {
                 getSearchedTaggedPosts()
+                setifsearched(true)
             }
-            console.log(searchval)
+            // console.log(searchval)
         }
     };
 

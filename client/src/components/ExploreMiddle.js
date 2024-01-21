@@ -4,9 +4,7 @@ import SinglePostcomponent from './SinglePostcomponent'
 import '../pagecss/explorepage.css'
 import '../pagecss/followercard.css'
 
-import postPic1 from '../img/postpic1.jpg'
-import postPic2 from '../img/postpic2.jpg'
-import postPic3 from '../img/postpic3.JPG'
+
 import SearchUserElement from './SearchUserElement'
 import axios from 'axios'
 import toast from 'react-hot-toast'
@@ -25,18 +23,19 @@ export default function ExploreMiddle() {
     const [postlist, setPostlist] = useState([])
     const [pageno, setPageno] = useState(1)
     const [selectedoption, setSelectedoption] = useState('people')
-
+    const [ifsearched, setifsearched] = useState(false)
+    const [totalpostno, setTotalpostno] = useState()
 
     const getSearchedUsers = async () => {
         try {
 
-            await axios.get(`http://localhost:9000/api/v1/user/get-people-by-keyword/${searchval}/1`).then(async (res) => {
+            await axios.get(`http://localhost:9000/api/v1/user/get-people-by-keyword/${searchval}/${pageno}`).then(async (res) => {
 
                 if (res.data.success === true) {
 
-                    setuserlist(res.data.matchingUsers)
-
-                    console.log(res.data)
+                    setuserlist([...userlist, ...res.data.matchingUsers])
+                    setTotalpostno(res.data.totalResults)
+                    // console.log(res.data)
                 }
 
 
@@ -61,9 +60,9 @@ export default function ExploreMiddle() {
 
                 if (res.data.success === true) {
 
-                    setPostlist(res.data.matchingPosts)
-
-                    console.log(res.data)
+                    setPostlist([...postlist, ...res.data.matchingPosts])
+                    setTotalpostno(res.data.totalResults)
+                    // console.log(res.data)
                 }
 
 
@@ -88,9 +87,10 @@ export default function ExploreMiddle() {
 
                 if (res.data.success === true) {
 
-                    setTaggedpostlist(res.data.matchingPosts)
+                    setTaggedpostlist([...taggedpostlist, ...res.data.matchingPosts])
+                    setTotalpostno(res.data.totalResults)
 
-                    console.log(res.data)
+                    // console.log(res.data)
                 }
 
 
@@ -108,42 +108,23 @@ export default function ExploreMiddle() {
     }
 
     useEffect(() => {
-
+        //resetting all the lists
+        setPostlist([])
+        setTaggedpostlist([])
+        setuserlist([])
+        setifsearched(false)
         setSearchval('')
+        setPageno(1)
     }, [selectedoption]);
 
 
 
 
 
-    const allpostdata = [
-        {
-            img: postPic1,
-            name: 'Tzuyu',
-            desc: "Happy New Year all friends! #2023",
-            likes: 2300,
-            liked: true
-        },
-        {
-            img: postPic2,
-            name: 'Maryam',
-            desc: "Party time :)",
-            likes: 2300,
-            liked: false
-
-        },
-        {
-            img: postPic3,
-            name: "Salena Gomez",
-            desc: "At Archery Festival",
-            likes: 3800,
-            liked: false
-        }
-    ]
 
     return (
         <div className='exploremiddlebox'>
-            <Searchbar searchval={searchval} setSearchval={setSearchval} getSearchedUsers={getSearchedUsers} getSearchedPosts={getSearchedPosts} selectedoption={selectedoption} getSearchedTaggedPosts={getSearchedTaggedPosts} />
+            <Searchbar searchval={searchval} setSearchval={setSearchval} getSearchedUsers={getSearchedUsers} getSearchedPosts={getSearchedPosts} selectedoption={selectedoption} getSearchedTaggedPosts={getSearchedTaggedPosts} setifsearched={setifsearched} />
 
             <div className="chooseSearchOption">
                 <div className='indivradio'>
@@ -180,33 +161,91 @@ export default function ExploreMiddle() {
 
             <div className="searchResultsBox">
 
-                <div><h4 className='px-2 text-center'>results for </h4></div>
-
-                {selectedoption === 'posts' &&
-                    postlist?.map((item, index) => {
-                        return <SinglePostcomponent pdata={item} key={index} />
-                    })
-
-                }
-
-
-                {selectedoption === 'tags' &&
-                    taggedpostlist?.map((item, index) => {
-                        return <SinglePostcomponent pdata={item} key={index} />
-                    })
+                {(searchval === '' && ifsearched === false) && <div><h3 className='px-2 text-center' style={{ color: 'grey' }}>Search people, posts or tags </h3></div>
 
                 }
 
 
 
 
+                {selectedoption === 'posts' ?
+                    <>
+                        {(ifsearched === true) &&
+
+                            <>
+                                {postlist.length < 1 ?
+
+                                    <div><h4 className='px-2 text-center'>results for "{searchval}" </h4></div>
+                                    :
+                                    <>
+                                        {postlist?.map((item, index) => {
+                                            return <SinglePostcomponent pdata={item} key={index} />
+                                        })}
+
+                                        {!(pageno * 10 > totalpostno) && ifsearched === true && <button className="morefollowers"
+                                            onClick={async () => {
+                                                await setPageno(pageno + 1)
+                                                await getSearchedPosts();
+                                                // await console.log(pageno, morefollowerlist)
+                                            }} ><hr className='morefhr' /> <h6> Load More</h6> </button>}
+                                    </>
+                                }
+                            </>
+
+                        }
+
+                    </>
+                    :
+                    null
+
+                }
 
 
-                {selectedoption === 'people' &&
+
+
+
+                {selectedoption === 'tags' ?
+                    <>
+                        {(ifsearched === true) &&
+
+                            <>
+                                {taggedpostlist.length < 1 ?
+
+                                    <div><h4 className='px-2 text-center'>results for "{searchval}" </h4></div>
+                                    :
+                                    <>
+                                        {taggedpostlist?.map((item, index) => {
+                                            return <SinglePostcomponent pdata={item} key={index} />
+                                        })}
+
+                                        {!(pageno * 10 > totalpostno) && ifsearched === true && <button className="morefollowers"
+                                            onClick={async () => {
+                                                await setPageno(pageno + 1)
+                                                await getSearchedTaggedPosts();
+                                                // await console.log(pageno, morefollowerlist)
+                                            }} ><hr className='morefhr' /> <h6> Load More</h6> </button>}
+                                    </>
+                                }
+                            </>
+
+                        }
+
+                    </>
+                    :
+                    null
+                }
+
+
+
+
+
+
+                {selectedoption === 'people' ?
                     userlist?.map((item, index) => {
                         return <SearchUserElement udata={item} key={index} />
                     })
-
+                    :
+                    null
                 }
 
 
