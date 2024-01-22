@@ -8,6 +8,7 @@ import '../pagecss/followercard.css'
 import SearchUserElement from './SearchUserElement'
 import axios from 'axios'
 import toast from 'react-hot-toast'
+import CustomEmptybox from './CustomEmptybox'
 
 
 
@@ -25,28 +26,32 @@ export default function ExploreMiddle() {
     const [selectedoption, setSelectedoption] = useState('people')
     const [ifsearched, setifsearched] = useState(false)
     const [totalpostno, setTotalpostno] = useState()
+    const [isloading, setIsloading] = useState(false)
 
     const getSearchedUsers = async () => {
         try {
-
+            setIsloading(true)
             await axios.get(`http://localhost:9000/api/v1/user/get-people-by-keyword/${searchval}/${pageno}`).then(async (res) => {
 
                 if (res.data.success === true) {
 
-                    setuserlist([...userlist, ...res.data.matchingUsers])
+                    // setuserlist([...userlist, ...res.data.matchingUsers])
+                    setuserlist(prevUserlist => [...prevUserlist, ...res.data.matchingUsers])
                     setTotalpostno(res.data.totalResults)
                     // console.log(res.data)
                 }
 
-
+                setIsloading(false)
 
             }).catch((err) => {
+                setIsloading(false)
                 console.log(err)
                 toast.error('some internal axios error occured')
             })
 
 
         } catch (error) {
+            setIsloading(false)
             console.log(error)
             toast.error('some internal error occured')
         }
@@ -55,55 +60,61 @@ export default function ExploreMiddle() {
 
     const getSearchedPosts = async () => {
         try {
-
+            setIsloading(true)
             await axios.get(`http://localhost:9000/api/v1/post/get-post-by-keyword/${searchval}/${pageno}`).then(async (res) => {
 
                 if (res.data.success === true) {
 
-                    setPostlist([...postlist, ...res.data.matchingPosts])
+                    // setPostlist([...postlist, ...res.data.matchingPosts])
+                    setPostlist(prevPostlist => [...prevPostlist, ...res.data.matchingPosts]);
                     setTotalpostno(res.data.totalResults)
                     // console.log(res.data)
                 }
-
+                setIsloading(false)
 
 
             }).catch((err) => {
                 console.log(err)
                 toast.error('some internal axios error occured')
+                setIsloading(false)
             })
 
 
         } catch (error) {
             console.log(error)
             toast.error('some internal error occured')
+            setIsloading(false)
         }
     }
 
 
     const getSearchedTaggedPosts = async () => {
         try {
-
+            setIsloading(true)
             await axios.get(`http://localhost:9000/api/v1/post/get-post-by-tags-keyword/${searchval}/${pageno}`).then(async (res) => {
 
                 if (res.data.success === true) {
 
-                    setTaggedpostlist([...taggedpostlist, ...res.data.matchingPosts])
+                    // setTaggedpostlist([...taggedpostlist, ...res.data.matchingPosts])
+                    setTaggedpostlist(prevTaggedpostlist => [...prevTaggedpostlist, ...res.data.matchingPosts])
                     setTotalpostno(res.data.totalResults)
 
                     // console.log(res.data)
                 }
 
-
+                setIsloading(false)
 
             }).catch((err) => {
                 console.log(err)
                 toast.error('some internal axios error occured')
+                setIsloading(false)
             })
 
 
         } catch (error) {
             console.log(error)
             toast.error('some internal error occured')
+            setIsloading(false)
         }
     }
 
@@ -124,7 +135,17 @@ export default function ExploreMiddle() {
 
     return (
         <div className='exploremiddlebox'>
-            <Searchbar searchval={searchval} setSearchval={setSearchval} getSearchedUsers={getSearchedUsers} getSearchedPosts={getSearchedPosts} selectedoption={selectedoption} getSearchedTaggedPosts={getSearchedTaggedPosts} setifsearched={setifsearched} />
+            <Searchbar
+                searchval={searchval}
+                setSearchval={setSearchval}
+                getSearchedUsers={getSearchedUsers}
+                getSearchedPosts={getSearchedPosts}
+                selectedoption={selectedoption}
+                getSearchedTaggedPosts={getSearchedTaggedPosts}
+                setifsearched={setifsearched}
+                setPostlist={setPostlist}
+                setTaggedpostlist={setTaggedpostlist}
+                setuserlist={setuserlist} />
 
             <div className="chooseSearchOption">
                 <div className='indivradio'>
@@ -175,9 +196,13 @@ export default function ExploreMiddle() {
                             <>
                                 {postlist.length < 1 ?
 
-                                    <div><h4 className='px-2 text-center'>results for "{searchval}" </h4></div>
+                                    <div className='px-2 text-center' style={{ color: 'grey' }}> <CustomEmptybox lodaingTime={2000} textshown={`No results found for "${searchval}"`} cfontsize={'1.75rem'} loadingstatus={isloading} />  </div>
+
                                     :
                                     <>
+
+                                        <div className='px-2 text-center' style={{ color: 'grey' }}> <CustomEmptybox lodaingTime={2000} textshown={`Results for "${searchval}"`} cfontsize={'1.75rem'} loadingstatus={isloading} />  </div>
+
                                         {postlist?.map((item, index) => {
                                             return <SinglePostcomponent pdata={item} key={index} />
                                         })}
@@ -211,9 +236,11 @@ export default function ExploreMiddle() {
                             <>
                                 {taggedpostlist.length < 1 ?
 
-                                    <div><h4 className='px-2 text-center'>results for "{searchval}" </h4></div>
+                                    <div className='px-2 text-center' style={{ color: 'grey' }}> <CustomEmptybox lodaingTime={2000} textshown={`No results found for "${searchval}"`} cfontsize={'1.75rem'} loadingstatus={isloading} />  </div>
                                     :
                                     <>
+                                        <div className='px-2 text-center' style={{ color: 'grey' }}> <CustomEmptybox lodaingTime={2000} textshown={`Results for "${searchval}"`} cfontsize={'1.75rem'} loadingstatus={isloading} />  </div>
+
                                         {taggedpostlist?.map((item, index) => {
                                             return <SinglePostcomponent pdata={item} key={index} />
                                         })}
@@ -227,7 +254,6 @@ export default function ExploreMiddle() {
                                     </>
                                 }
                             </>
-
                         }
 
                     </>
@@ -241,17 +267,39 @@ export default function ExploreMiddle() {
 
 
                 {selectedoption === 'people' ?
-                    userlist?.map((item, index) => {
-                        return <SearchUserElement udata={item} key={index} />
-                    })
+                    <>
+                        {(ifsearched === true) &&
+
+                            <>
+                                {userlist?.length < 1 ?
+                                    <div className='px-2 text-center' style={{ color: 'grey' }}> <CustomEmptybox lodaingTime={2000} textshown={`No results found for "${searchval}"`} cfontsize={'1.75rem'} loadingstatus={isloading} />  </div>
+                                    :
+                                    <>
+                                        <div className='px-2 text-center' style={{ color: 'grey' }}> <CustomEmptybox lodaingTime={2000} textshown={`Results for "${searchval}"`} cfontsize={'1.75rem'} loadingstatus={isloading} />  </div>
+
+                                        {userlist?.map((item, index) => {
+                                            return <SearchUserElement udata={item} key={index} />
+                                        })}
+
+                                        {!(pageno * 10 >= totalpostno) && ifsearched === true && <button className="morefollowers"
+                                            onClick={async () => {
+                                                await setPageno(pageno + 1)
+                                                await getSearchedTaggedPosts();
+                                                // await console.log(pageno, morefollowerlist)
+                                            }} ><hr className='morefhr' /> <h6> Load More</h6> </button>}
+                                    </>
+                                }
+                            </>
+
+                        }
+
+                    </>
+
                     :
                     null
                 }
 
-
             </div>
-
-
 
         </div>
     )

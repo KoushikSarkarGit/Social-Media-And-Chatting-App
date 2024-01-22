@@ -26,8 +26,8 @@ export default function SinglePostcomponent({ pdata }) {
                         <span style={{ color: "var(--gray)", fontSize: '12px' }}>{pdata.likesCount}</span>
                     </div>
 
-                    <div className='featureicon' style={{ color: "gray", cursor: 'text' }} >
-                        <UilRedo style={{ color: "gray" }} />
+                    <div className='featureicon'  >
+                        <UilRedo />
                         <span style={{ fontSize: '12px' }}>{pdata.repostsCount}</span>
                     </div>
 
@@ -84,8 +84,8 @@ export default function SinglePostcomponent({ pdata }) {
                             <span style={{ color: "var(--gray)", fontSize: '12px' }}>{pdata.likesCount}</span>
                         </div>
 
-                        <div className='featureicon' style={{ color: "gray", cursor: 'text' }} >
-                            <UilRedo style={{ color: "gray" }} />
+                        <div className='featureicon'  >
+                            <UilRedo />
                             <span style={{ fontSize: '12px' }}>{pdata.repostsCount}</span>
                         </div>
 

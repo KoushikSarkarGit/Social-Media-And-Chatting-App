@@ -3,24 +3,37 @@ import { UilSearch } from '@iconscout/react-unicons'
 import '../pagecss/rightofhome.css'
 import toast from 'react-hot-toast';
 
-export default function Searchbar({ searchval, setSearchval, getSearchedUsers, getSearchedPosts, selectedoption, getSearchedTaggedPosts, setifsearched }) {
+export default function Searchbar({ searchval, setSearchval, getSearchedUsers, getSearchedPosts, selectedoption, getSearchedTaggedPosts, setifsearched, setPostlist, setTaggedpostlist, setuserlist }) {
 
 
 
-    const handleKeyPress = (event) => {
+    const handleKeyPress = async (event) => {
+
+
+
+
+
+
+
+
         if ((event.key === 'Enter' || event.keyCode === 13) && searchval.trim() === '') {
             event.preventDefault();
             toast.error('Please enter some value');
         } else if (event.key === 'Enter' || event.keyCode === 13) {
+
             if (selectedoption === 'posts') {
+                await setPostlist([])
                 getSearchedPosts()
                 setifsearched(true)
             }
             else if (selectedoption === 'people') {
+
+                await setuserlist([])
                 getSearchedUsers()
                 setifsearched(true)
             }
             else if (selectedoption === 'tags') {
+                await setTaggedpostlist([])
                 getSearchedTaggedPosts()
                 setifsearched(true)
             }
@@ -30,19 +43,25 @@ export default function Searchbar({ searchval, setSearchval, getSearchedUsers, g
     };
 
 
-    const handleSearchIconClick = () => {
+    const handleSearchIconClick = async () => {
+
+
         if (searchval.trim() === '' || searchval === null) {
             toast.error('Please enter some value');
         } else {
+
             if (selectedoption === 'posts') {
+                await setPostlist([])
                 getSearchedPosts()
                 setifsearched(true)
             }
             else if (selectedoption === 'people') {
+                await setuserlist([])
                 getSearchedUsers()
                 setifsearched(true)
             }
             else if (selectedoption === 'tags') {
+                await setTaggedpostlist([])
                 getSearchedTaggedPosts()
                 setifsearched(true)
             }
@@ -61,7 +80,7 @@ export default function Searchbar({ searchval, setSearchval, getSearchedUsers, g
                 value={searchval}
                 onChange={(e) => {
                     setSearchval(e.target.value)
-                    console.log(searchval)
+                    // console.log(searchval)
                 }}
                 onKeyDown={handleKeyPress}
             />

@@ -1,0 +1,21 @@
+.Cemptybox {
+    width: 100%;
+    background-color: var(--cardColor);
+    border-radius: 1rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 15%;
+    padding-bottom: 25%;
+
+
+}
+
+.Cemptyboxtxt {
+
+    font-weight: bolder;
+    color: grey;
+
+}
