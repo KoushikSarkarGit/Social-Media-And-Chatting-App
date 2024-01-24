@@ -34,6 +34,8 @@ export default function AllPostsComponent() {
                     "tagname": "bird"
                 }
             ],
+            "createdAt": "2024-01-03T14:49:23.422Z",
+            "updatedAt": "2024-01-24T08:43:21.965Z",
             "userDetails": [
                 {
                     "username": "MainKoushik",
@@ -44,8 +46,7 @@ export default function AllPostsComponent() {
             ],
             "likescount": 0,
             "repostscount": 0,
-            "commentscount": 0,
-            "liked": false
+            "commentscount": 0
         },
         {
             "_id": "6596ac5ea925fd7223f283b3",
@@ -53,6 +54,8 @@ export default function AllPostsComponent() {
             "postimage": null,
             "postPublicID": "Post Of 659570632454f4234c7fcabd on Thu Jan 04 2024 18:32:22 GMT+0530 (India Standard Time)",
             "tags": [],
+            "createdAt": "2024-01-04T13:02:22.705Z",
+            "updatedAt": "2024-01-24T11:05:38.591Z",
             "userDetails": [
                 {
                     "username": "koushik",
@@ -61,9 +64,8 @@ export default function AllPostsComponent() {
                 }
             ],
             "likescount": 0,
-            "repostscount": 1,
-            "commentscount": 0,
-            "liked": true
+            "repostscount": 0,
+            "commentscount": 0
         }
     ]
 

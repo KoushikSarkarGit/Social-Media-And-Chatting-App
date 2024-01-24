@@ -11,6 +11,7 @@ import '../pagecss/sharecomponent.css'
 import { Appcontext } from '../ContextFolder/ContextCreator';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import Swal from 'sweetalert2';
 
 
 
@@ -105,6 +106,15 @@ export default function SharePostComponent() {
                             setTagmodal(false)
                             // console.log(res.data)
                             toast.success(res.data.msg)
+
+                            Swal.fire({
+                                title: "Post Created Successfully",
+                                icon: 'success',
+                                confirmButtonText: "Ok"
+
+                            })
+
+
                         }
 
                     }).catch((err) => {

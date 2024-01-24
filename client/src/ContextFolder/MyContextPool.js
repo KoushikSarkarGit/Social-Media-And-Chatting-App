@@ -89,6 +89,184 @@ export default function MyContextPool(props) {
 
 
 
+    const LikePost = async (postid, userjwt) => {
+        let curauth = await localStorage.getItem('authdata');
+        if (curauth) {
+            let jsonedcurdata = await JSON.parse(curauth)
+
+            if (jsonedcurdata.jwttoken !== userjwt) {
+                toast.error('Unauthorized Action')
+                return;
+            }
+
+            try {
+                await axios.put(`http://localhost:9000/api/v1/user/like-post/${postid}`,
+                    {},
+                    {
+                        headers: { token: jsonedcurdata.jwttoken }
+                    }
+                ).then(async (res) => {
+                    if (res.data.success === true) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+
+                }).catch((err) => {
+                    console.log(err)
+                    toast.error('some internal axios error occured')
+                })
+
+            } catch (error) {
+                console.log(error)
+                toast.error('some internal error occured')
+
+            }
+        }
+    }
+
+
+    const UnLikePost = async (postid, userjwt) => {
+        let curauth = await localStorage.getItem('authdata');
+        if (curauth) {
+            let jsonedcurdata = await JSON.parse(curauth)
+
+            if (jsonedcurdata.jwttoken !== userjwt) {
+                toast.error('Unauthorized Action')
+                return;
+            }
+
+            try {
+                await axios.put(`http://localhost:9000/api/v1/user/unlike-post/${postid}`,
+                    {},
+                    {
+                        headers: { token: jsonedcurdata.jwttoken }
+                    }
+                ).then(async (res) => {
+                    if (res.data.success === true) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+
+                }).catch((err) => {
+                    console.log(err)
+                    toast.error('some internal axios error occured')
+                })
+
+            } catch (error) {
+                console.log(error)
+                toast.error('some internal error occured')
+
+            }
+        }
+    }
+
+
+    const RepostThePost = async (postid, userjwt) => {
+        let curauth = await localStorage.getItem('authdata');
+        if (curauth) {
+            let jsonedcurdata = await JSON.parse(curauth)
+
+            if (jsonedcurdata.jwttoken !== userjwt) {
+                toast.error('Unauthorized Action')
+                return;
+            }
+
+            try {
+                await axios.put(`http://localhost:9000/api/v1/user/repost/${postid}`,
+                    {},
+                    {
+                        headers: { token: jsonedcurdata.jwttoken }
+                    }
+                ).then(async (res) => {
+                    if (res.data.success === true) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+
+                }).catch((err) => {
+                    console.log(err)
+                    toast.error('some internal axios error occured')
+                })
+
+            } catch (error) {
+                console.log(error)
+                toast.error('some internal error occured')
+
+            }
+        }
+    }
+
+
+
+
+    const UnRepostThePost = async (postid, userjwt) => {
+        let curauth = await localStorage.getItem('authdata');
+        if (curauth) {
+            let jsonedcurdata = await JSON.parse(curauth)
+
+            if (jsonedcurdata.jwttoken !== userjwt) {
+                toast.error('Unauthorized Action')
+                return;
+            }
+
+            try {
+                await axios.put(`http://localhost:9000/api/v1/user/unrepost/${postid}`,
+                    {},
+                    {
+                        headers: { token: jsonedcurdata.jwttoken }
+                    }
+                ).then(async (res) => {
+                    if (res.data.success === true) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+
+                }).catch((err) => {
+                    console.log(err)
+                    toast.error('some internal axios error occured')
+                })
+
+            } catch (error) {
+                console.log(error)
+                toast.error('some internal error occured')
+
+            }
+        }
+    }
+
+
+    const getRelativeTime = (createdAt) => {
+
+        const now = new Date();
+        const commentDate = new Date(createdAt);
+
+        const timeDifferenceInSeconds = Math.floor((now - commentDate) / 1000);
+
+        if (timeDifferenceInSeconds < 60) {
+            return `${timeDifferenceInSeconds} second${timeDifferenceInSeconds !== 1 ? 's' : ''} ago`;
+        } else if (timeDifferenceInSeconds < 3600) {
+            const minutes = Math.floor(timeDifferenceInSeconds / 60);
+            return `${minutes} minute${minutes !== 1 ? 's' : ''} ago`;
+        } else if (timeDifferenceInSeconds < 86400) {
+            const hours = Math.floor(timeDifferenceInSeconds / 3600);
+            return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
+        } else {
+            const days = Math.floor(timeDifferenceInSeconds / 86400);
+            return `${days} day${days !== 1 ? 's' : ''} ago`;
+        }
+
+    };
+
+
+
 
 
     const logoutfunction = async () => {
@@ -113,7 +291,7 @@ export default function MyContextPool(props) {
 
 
     return (
-        <Appcontext.Provider value={{ jwtToken, username, isAdmin, userlastname, userfristname, userprofileimg, setisAdmin, setjwtToken, setUserdata, setusername, userdata, logoutfunction, userId, setUserId }}>
+        <Appcontext.Provider value={{ jwtToken, username, isAdmin, userlastname, userfristname, userprofileimg, setisAdmin, setjwtToken, setUserdata, setusername, userdata, logoutfunction, userId, setUserId, LikePost, UnLikePost, RepostThePost, UnRepostThePost, getRelativeTime }}>
             {!loading && props.children
             }
         </Appcontext.Provider>

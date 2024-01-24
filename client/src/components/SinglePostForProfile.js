@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import "../pagecss/singlepostcomp.css";
 
 // import { UilThumbsUp } from '@iconscout/react-unicons'
@@ -11,9 +11,16 @@ import { AiFillLike } from "react-icons/ai";
 import { AiOutlineLike } from "react-icons/ai";
 
 import defaultprofileimg2 from '../img/defaultprofimg2.jpg'
+import { Appcontext } from '../ContextFolder/ContextCreator';
 
 
 export default function SinglePostForProfile({ pdata }) {
+
+    const cur = useContext(Appcontext);
+    const { getRelativeTime } = cur;
+
+
+
     return (
         <>
             {pdata.postimage ? <div className='singlepostbox my-1'>
@@ -58,9 +65,17 @@ export default function SinglePostForProfile({ pdata }) {
                 </div> */}
 
                 <div className="detail d-flex flex-column">
-                    <div className="d-flex align-items-center spebox ">
-                        <img src={pdata.userDetails[0].profilePicture ? pdata.userDetails[0].profilePicture : defaultprofileimg2} alt="userphoto" className='singlepostuserphoto mx-1 ' />
-                        <span className='mx-1'><b>From  <i style={{ color: 'grey' }}>@{pdata.userDetails[0].username}</i></b></span>
+                    <div className="d-flex align-items-center justify-content-between spebox ">
+                        <div>
+                            <img src={pdata.userDetails[0].profilePicture ? pdata.userDetails[0].profilePicture : defaultprofileimg2} alt="userphoto" className='singlepostuserphoto mx-1 ' />
+                            <span className='mx-1'><b>From  <i style={{ color: 'grey' }}>@{pdata.userDetails[0].username}</i></b></span>
+                        </div>
+
+                        <div className="creationdatebox mx-2">
+                            <span className='creationtext'>
+                                {getRelativeTime(pdata.createdAt)}
+                            </span>
+                        </div>
                     </div>
 
                     <span className='mx-2 mt-3  mb-3'> {pdata.postdescription}</span>
@@ -73,9 +88,17 @@ export default function SinglePostForProfile({ pdata }) {
                 <div className='singlepostbox '>
 
                     <div className="detail d-flex flex-column">
-                        <div className="d-flex align-items-center spebox ">
-                            <img src={pdata.userDetails[0].profilePicture ? pdata.userDetails[0].profilePicture : defaultprofileimg2} alt="userphoto" className='singlepostuserphoto mx-1 ' />
-                            <span className='mx-1'><b>From  <i style={{ color: 'grey' }}>@{pdata.userDetails[0].username}</i></b></span>
+                        <div className="d-flex align-items-center justify-content-between spebox ">
+                            <div>
+                                <img src={pdata.userDetails[0].profilePicture ? pdata.userDetails[0].profilePicture : defaultprofileimg2} alt="userphoto" className='singlepostuserphoto mx-1 ' />
+                                <span className='mx-1'><b>From  <i style={{ color: 'grey' }}>@{pdata.userDetails[0].username}</i></b></span>
+                            </div>
+
+                            <div className="creationdatebox mx-2">
+                                <span className='creationtext'>
+                                    {getRelativeTime(pdata.createdAt)}
+                                </span>
+                            </div>
                         </div>
 
                         <span className='mx-2 mt-3  mb-3'> {pdata.postdescription}</span>

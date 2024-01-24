@@ -1,5 +1,5 @@
 const express = require('express');
-const { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getTimelineForLoginUser, getGeneralTimeline, getUserFollowersid, getFollowerListByPage, getSingleUserLite, checkfrontendtoken, getSingleUserMedium, getPeopleByKeyword, getPostsByKeyword } = require('../Controllers/Usercontroller');
+const { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getTimelineForLoginUser, getGeneralTimeline, getUserFollowersid, getFollowerListByPage, getSingleUserLite, checkfrontendtoken, getSingleUserMedium, getPeopleByKeyword, getPostsByKeyword, getStatusIfPostIsLiked, getStatusIfPostIsReposted } = require('../Controllers/Usercontroller');
 const router = express.Router();
 const formidable = require('express-formidable')
 const { valtokenchecker, extractIdFromToken } = require('../Middlewares/Encryptiontools')
@@ -93,8 +93,14 @@ router.get('/get-followersOf-user', valtokenchecker, extractIdFromToken, getUser
 router.post('/check-validity-of-jwttoken-from-client', checkfrontendtoken)
 
 
+//checking if user likes / retweeted / etc
 
 
+//checking if user liked the post
+router.get('/check-if-user-likes-post/:postId', valtokenchecker, extractIdFromToken, getStatusIfPostIsLiked)
+
+//checking if user  reposted the post
+router.get('/check-if-user-reposted-post/:postId', valtokenchecker, extractIdFromToken, getStatusIfPostIsReposted)
 
 
 

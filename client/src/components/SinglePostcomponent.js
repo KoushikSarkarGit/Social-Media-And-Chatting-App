@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import "../pagecss/singlepostcomp.css";
 
 
@@ -10,8 +10,84 @@ import { UilShare } from '@iconscout/react-unicons'
 import { AiFillLike } from "react-icons/ai";
 import { AiOutlineLike } from "react-icons/ai";
 import defaultprofileimg2 from '../img/defaultprofimg2.jpg'
+import { Appcontext } from '../ContextFolder/ContextCreator';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 export default function SinglePostcomponent({ pdata }) {
+
+    const [isLikedByUser, setIsLikedByUser] = useState(false)
+
+    const [isRepostedByUser, setIsRepostedByUser] = useState(false)
+
+    const cur = useContext(Appcontext);
+    const { jwtToken, LikePost, UnLikePost, RepostThePost, UnRepostThePost, getRelativeTime } = cur;
+
+
+
+    const checkIfUserLikesThePost = async () => {
+        try {
+            if (jwtToken) {
+
+                await axios.get(`http://localhost:9000/api/v1/user/check-if-user-likes-post/${pdata._id}`, {
+                    headers: {
+                        token: jwtToken
+                    }
+                }).then(async (res) => {
+
+                    if (res.data.success === true && res.data.likedByCurrentUser === true) {
+                        setIsLikedByUser(true)
+                    }
+
+                }).catch((err) => {
+                    console.log(err)
+                    toast.error('some internal axios error occured')
+                })
+            }
+
+        } catch (error) {
+            console.log(error)
+            toast.error('some internal error occured')
+        }
+    }
+
+
+
+    const checkIfUserRepostedPost = async () => {
+        try {
+            if (jwtToken) {
+
+                await axios.get(`http://localhost:9000/api/v1/user/check-if-user-reposted-post/${pdata._id}`, {
+                    headers: {
+                        token: jwtToken
+                    }
+                }).then(async (res) => {
+
+                    if (res.data.success === true && res.data.repostedByCurrentUser === true) {
+                        setIsRepostedByUser(true)
+                    }
+
+                }).catch((err) => {
+                    console.log(err)
+                    toast.error('some internal axios error occured')
+                })
+            }
+
+        } catch (error) {
+            console.log(error)
+            toast.error('some internal error occured')
+        }
+    }
+
+
+
+
+
+    useEffect(() => {
+        checkIfUserLikesThePost()
+        checkIfUserRepostedPost()
+    }, [jwtToken]);
+
     return (
         <>
             {pdata.postimage ? <div className='singlepostbox my-1'>
@@ -20,16 +96,55 @@ export default function SinglePostcomponent({ pdata }) {
                 <div className="spostfeatures">
 
                     <div className='featureicon'>
-                        {pdata?.liked ? <AiFillLike style={{ width: '28px', color: 'orange', height: '28px', marginTop: '-3px', paddingLeft: '2px', marginRight: '-3px' }} /> :
-                            <AiOutlineLike style={{ width: '28px', height: '28px', marginTop: '-3px', paddingLeft: '2px', marginRight: '-3px' }} />}
+                        {isLikedByUser ? <AiFillLike
+                            style={{ width: '28px', color: 'orange', height: '28px', marginTop: '-3px', paddingLeft: '2px', marginRight: '-3px' }}
+                            onClick={() => {
+                                UnLikePost(pdata._id, jwtToken)
+                                setIsLikedByUser(false)
+                            }}
+                        />
+
+                            :
+
+                            <AiOutlineLike
+                                style={{ width: '28px', height: '28px', marginTop: '-3px', paddingLeft: '2px', marginRight: '-3px' }}
+                                onClick={() => {
+                                    LikePost(pdata._id, jwtToken)
+                                    setIsLikedByUser(true)
+                                }}
+                            />
+
+                        }
 
                         <span style={{ color: "var(--gray)", fontSize: '12px' }}>{pdata.likesCount}</span>
                     </div>
 
-                    <div className='featureicon'  >
-                        <UilRedo />
-                        <span style={{ fontSize: '12px' }}>{pdata.repostsCount}</span>
-                    </div>
+
+
+
+                    {isRepostedByUser ?
+                        <div className='featureicon' style={{ color: '#00ff00' }} >
+                            <UilRedo
+                                onClick={() => {
+                                    UnRepostThePost(pdata._id, jwtToken)
+                                    setIsRepostedByUser(false)
+                                }} />
+                            <span style={{ fontSize: '12px' }}>{pdata.repostsCount}</span>
+                        </div>
+                        :
+                        <div className='featureicon'  >
+                            <UilRedo
+                                onClick={() => {
+                                    RepostThePost(pdata._id, jwtToken)
+                                    setIsRepostedByUser(true)
+                                }}
+                            />
+                            <span style={{ fontSize: '12px' }}>{pdata.repostsCount}</span>
+                        </div>
+                    }
+
+
+
 
                     <div className='featureicon'>
                         <UilCommentAltNotes />
@@ -53,9 +168,17 @@ export default function SinglePostcomponent({ pdata }) {
             </div> */}
 
                 <div className="detail d-flex flex-column">
-                    <div className="d-flex align-items-center spebox ">
-                        <img src={pdata.userDetails[0].profilePicture ? pdata.userDetails[0].profilePicture : defaultprofileimg2} alt="userphoto" className='singlepostuserphoto mx-1 ' />
-                        <span className='mx-1'><b>From  <i style={{ color: 'grey' }}>@{pdata.userDetails[0].username}</i></b></span>
+                    <div className="d-flex align-items-center justify-content-between spebox ">
+                        <div>
+                            <img src={pdata.userDetails[0].profilePicture ? pdata.userDetails[0].profilePicture : defaultprofileimg2} alt="userphoto" className='singlepostuserphoto mx-1 ' />
+                            <span className='mx-1'><b>From  <i style={{ color: 'grey' }}>@{pdata.userDetails[0].username}</i></b></span>
+                        </div>
+                        <div className="creationdatebox mx-2">
+                            <span className='creationtext'>
+                                {getRelativeTime(pdata.createdAt)}
+                            </span>
+                        </div>
+
                     </div>
 
                     <span className='mx-2 mt-3  mb-3'> {pdata.postdescription}</span>
@@ -68,9 +191,17 @@ export default function SinglePostcomponent({ pdata }) {
                 <div className='singlepostbox '>
 
                     <div className="detail d-flex flex-column">
-                        <div className="d-flex align-items-center spebox ">
-                            <img src={pdata.userDetails[0].profilePicture ? pdata.userDetails[0].profilePicture : defaultprofileimg2} alt="userphoto" className='singlepostuserphoto mx-1 ' />
-                            <span className='mx-1'><b>From  <i style={{ color: 'grey' }}>@{pdata.userDetails[0].username}</i></b></span>
+                        <div className="d-flex align-items-center justify-content-between spebox ">
+                            <div>
+                                <img src={pdata.userDetails[0].profilePicture ? pdata.userDetails[0].profilePicture : defaultprofileimg2} alt="userphoto" className='singlepostuserphoto mx-1 ' />
+                                <span className='mx-1'><b>From  <i style={{ color: 'grey' }}>@{pdata.userDetails[0].username}</i></b></span>
+                            </div>
+
+                            <div className="creationdatebox mx-2">
+                                <span className='creationtext'>
+                                    {getRelativeTime(pdata.createdAt)}
+                                </span>
+                            </div>
                         </div>
 
                         <span className='mx-2 mt-3  mb-3'> {pdata.postdescription}</span>
@@ -78,16 +209,45 @@ export default function SinglePostcomponent({ pdata }) {
                     <div className="spostfeatures">
 
                         <div className='featureicon'>
-                            {pdata?.liked ? <AiFillLike style={{ width: '28px', color: 'orange', height: '28px', marginTop: '-3px', paddingLeft: '2px', marginRight: '-3px' }} /> :
-                                <AiOutlineLike style={{ width: '28px', height: '28px', marginTop: '-3px', paddingLeft: '2px', marginRight: '-3px' }} />}
+                            {isLikedByUser ? <AiFillLike
+                                style={{ width: '28px', color: 'orange', height: '28px', marginTop: '-3px', paddingLeft: '2px', marginRight: '-3px' }}
+                                onClick={() => {
+                                    UnLikePost(pdata._id, jwtToken)
+                                    setIsLikedByUser(false)
+                                }}
+                            />
+                                :
+                                <AiOutlineLike style={{ width: '28px', height: '28px', marginTop: '-3px', paddingLeft: '2px', marginRight: '-3px' }}
+                                    onClick={() => {
+                                        LikePost(pdata._id, jwtToken)
+                                        setIsLikedByUser(true)
+                                    }}
+                                />}
 
                             <span style={{ color: "var(--gray)", fontSize: '12px' }}>{pdata.likesCount}</span>
                         </div>
 
-                        <div className='featureicon'  >
-                            <UilRedo />
-                            <span style={{ fontSize: '12px' }}>{pdata.repostsCount}</span>
-                        </div>
+                        {isRepostedByUser ?
+                            <div className='featureicon' style={{ color: '#00ff00', fontWeight: 'bolder' }} >
+                                <UilRedo
+                                    onClick={() => {
+                                        UnRepostThePost(pdata._id, jwtToken)
+                                        setIsRepostedByUser(false)
+                                    }}
+                                />
+                                <span style={{ fontSize: '12px' }}>{pdata.repostsCount}</span>
+                            </div>
+                            :
+                            <div className='featureicon'  >
+                                <UilRedo
+                                    onClick={() => {
+                                        RepostThePost(pdata._id, jwtToken)
+                                        setIsRepostedByUser(true)
+                                    }}
+                                />
+                                <span style={{ fontSize: '12px' }}>{pdata.repostsCount}</span>
+                            </div>
+                        }
 
                         <div className='featureicon'>
                             <UilCommentAltNotes />

@@ -30,7 +30,7 @@ export default function SharePostModal({ opensharemodal, setopensharemodal }) {
 
                 {/* <SharePostComponent /> */}
 
-                <SharePostWithTexarea />
+                <SharePostWithTexarea setopensharemodal={setopensharemodal} />
 
             </Modal>
 

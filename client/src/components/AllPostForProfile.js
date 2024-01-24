@@ -65,10 +65,13 @@ export default function AllPostForProfile({ selectedtab }) {
                         token: jwtToken
                     }
                 }).then(async (res) => {
+
                     if (res.data.success === true) {
-                        setLikedpostlist([...likedpostlist, ...res.data.fetchedLikedPost[0].likedPost])
-                        setTotalpostno(res.data.res.data.fetchedLikedPost[0].likedpostCount)
-                        console.log(res.data.fetchedLikedPost[0].likedPost)
+
+
+                        setLikedpostlist(prevPostlist => [...prevPostlist, ...res.data.fetchedLikedPost[0].likedposts])
+                        setTotalpostno(res.data.fetchedLikedPost[0].likedpostCount)
+                        // console.log(res.data)
                     }
 
                 }).catch((err) => {

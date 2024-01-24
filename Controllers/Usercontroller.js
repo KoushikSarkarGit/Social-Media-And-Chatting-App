@@ -701,4 +701,84 @@ const checkfrontendtoken = async (req, res) => {
 };
 
 
-module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getTimelineForLoginUser, getGeneralTimeline, getUserFollowersid, getFollowerListByPage, getSingleUserLite, checkfrontendtoken, getSingleUserMedium, getPeopleByKeyword }
+
+
+const getStatusIfPostIsLiked = async (req, res) => {
+    const { curuserid } = req.body;
+    const postid = await req.params.postId;
+    let likedByCurrentUser = false;
+    try {
+
+
+
+        const curId = new mongoose.Types.ObjectId(curuserid)
+        const post_Id = new mongoose.Types.ObjectId(postid)
+
+        const postLikedByUser1 = await Usermodel.exists({
+            _id: curuserid,
+            likedPost: { $elemMatch: { $eq: post_Id } }
+        });
+        const postLikedByUser2 = await Postmodel.exists({
+            _id: postid,
+            likes: { $elemMatch: { $eq: curId } }
+        });
+
+
+        if (postLikedByUser1 || postLikedByUser2) {
+            likedByCurrentUser = true
+        }
+
+
+
+        return res.status(200).json({ success: true, msg: 'post liked by user', likedByCurrentUser });
+    } catch (error) {
+        return res.status(200).json({ success: false, error });
+    }
+
+};
+
+
+
+const getStatusIfPostIsReposted = async (req, res) => {
+    const { curuserid } = req.body;
+    const postid = await req.params.postId;
+    let repostedByCurrentUser = false;
+    try {
+
+
+
+        const curId = new mongoose.Types.ObjectId(curuserid)
+        const post_Id = new mongoose.Types.ObjectId(postid)
+
+        const postRepostedByUser1 = await Usermodel.exists({
+            _id: curuserid,
+            reposted: { $elemMatch: { $eq: post_Id } }
+        });
+        const postRepostedByUser2 = await Postmodel.exists({
+            _id: postid,
+            reposts: { $elemMatch: { $eq: curId } }
+        });
+
+
+        if (postRepostedByUser1 || postRepostedByUser2) {
+            repostedByCurrentUser = true
+        }
+
+
+
+        return res.status(200).json({ success: true, msg: 'post liked by user', repostedByCurrentUser });
+    } catch (error) {
+        return res.status(200).json({ success: false, error });
+    }
+
+};
+
+
+
+
+
+
+
+
+
+module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getTimelineForLoginUser, getGeneralTimeline, getUserFollowersid, getFollowerListByPage, getSingleUserLite, checkfrontendtoken, getSingleUserMedium, getPeopleByKeyword, getStatusIfPostIsLiked, getStatusIfPostIsReposted }
