@@ -1,6 +1,6 @@
 const express = require('express');
 const { valtokenchecker, extractIdFromToken } = require('../Middlewares/Encryptiontools');
-const { addComment, getcommentforthepost, deleteComment, getCommentOfLoggedUser } = require('../Controllers/CommentController');
+const { addComment, getcommentforthepost, deleteComment, getCommentOfLoggedUser, getCommentCountOfPost } = require('../Controllers/CommentController');
 const router = express.Router();
 
 
@@ -16,6 +16,11 @@ router.get('/get-comments-of-logged-user/:page', valtokenchecker, extractIdFromT
 
 //delete a comment 
 router.delete('/delete-comment/:commentId', valtokenchecker, extractIdFromToken, deleteComment);
+
+
+//get comment count of a post
+router.get('/get-comment-Count-of-post/:pId', getCommentCountOfPost);
+
 
 
 module.exports = router

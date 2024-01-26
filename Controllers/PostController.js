@@ -77,7 +77,56 @@ const getPost = async (req, res) => {
 
     try {
 
-        const fetchedpost = await Postmodel.findById(id);
+        const fetchedpost = await Postmodel.aggregate([
+            { $match: { _id: postId } },
+
+            {
+                $lookup: {
+                    from: 'users', // my user model is named 'user' so it becomes users
+                    let: { userId: '$userId' },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: { $eq: ['$_id', '$$userId'] }
+                            }
+                        },
+                        {
+                            $project: {
+                                username: 1,
+                                profilePicture: 1
+                                // Added other fields from the user model as needed
+                            }
+                        }
+                    ],
+                    as: 'userDetails'
+
+                }
+            },
+            {
+                $project: {
+                    userId: 1,
+                    postdescription: 1,
+                    postimage: 1,
+                    postPublicID: 1,
+                    tags: 1,
+                    likedByCurrentUser: { $in: [userId, '$likes'] },
+                    repostedByCurrentUser: { $in: [userId, '$reposts'] },
+                    likeCount: { $size: '$likes' },
+                    repostCount: { $size: '$reposts' },
+                    commentNo: 1,
+                    createdAt: 1,
+                    updatedAt: 1,
+                    'userDetails.username': 1,
+                    'userDetails.firstname': 1,
+                    'userDetails.lastname': 1,
+                    'userDetails.profilePicture': 1
+                }
+            }
+        ]);
+
+
+
+
         return res.status(200).json({ success: true, msg: 'Post fetched successfully', fetchedpost });
 
     } catch (error) {
@@ -242,6 +291,7 @@ const getPostsOfLoggedUser = async (req, res) => {
                     likesCount: { $size: '$likes' },
                     repostsCount: { $size: '$reposts' },
                     tags: 1,
+                    commentNo: 1,
                     createdAt: 1,
                     updatedAt: 1,
                     'userDetails.username': 1,
@@ -371,7 +421,9 @@ const getLoggedPostByIdLite = async (req, res) => {
                     repostedByCurrentUser: { $in: [userId, '$reposts'] },
                     likeCount: { $size: '$likes' },
                     repostCount: { $size: '$reposts' },
+                    commentNo: 1,
                     createdAt: 1,
+                    updatedAt: 1,
                     'userDetails.username': 1,
                     'userDetails.profilePicture': 1
                 }
@@ -473,7 +525,7 @@ const getPostsByKeyword = async (req, res) => {
                     postPublicID: 1,
                     likescount: { $size: { $ifNull: ["$likes", []] } },
                     repostscount: { $size: { $ifNull: ["$reposts", []] } },
-                    commentscount: { $size: { $ifNull: ["$comments", []] } },
+                    commentNo: 1,
                     tags: 1,
                     createdAt: 1,
                     updatedAt: 1,
@@ -532,7 +584,7 @@ const getPostsByTagKeyword = async (req, res) => {
                     postPublicID: 1,
                     likescount: { $size: { $ifNull: ["$likes", []] } },
                     repostscount: { $size: { $ifNull: ["$reposts", []] } },
-                    commentscount: { $size: { $ifNull: ["$comments", []] } },
+                    commentNo: 1,
                     tags: 1,
                     createdAt: 1,
                     updatedAt: 1,

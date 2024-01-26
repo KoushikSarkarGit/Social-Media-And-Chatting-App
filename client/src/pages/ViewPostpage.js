@@ -8,9 +8,12 @@ import '../pagecss/viewpostpage.css'
 // import postPic1 from '../img/postpic1.jpg'
 import postPic1 from '../img/profileImg.jpg'
 import ViewSinglepost from '../components/ViewSinglepost'
+import { useParams } from 'react-router-dom/dist/umd/react-router-dom.development'
 
 
 export default function ViewPostpage() {
+    const params = useParams()
+
 
     const allpostdata = {
         img: postPic1,
@@ -26,7 +29,7 @@ export default function ViewPostpage() {
             <div className="mainpost">
 
 
-                <ViewSinglepost pdata={allpostdata} />
+                <ViewSinglepost pdata={allpostdata} pid={params.postId} />
             </div>
             <RightofHome />
         </div>

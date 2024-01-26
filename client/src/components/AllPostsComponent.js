@@ -46,7 +46,7 @@ export default function AllPostsComponent() {
             ],
             "likescount": 0,
             "repostscount": 0,
-            "commentscount": 0
+            "commentNo": 0
         },
         {
             "_id": "6596ac5ea925fd7223f283b3",
@@ -65,7 +65,7 @@ export default function AllPostsComponent() {
             ],
             "likescount": 0,
             "repostscount": 0,
-            "commentscount": 0
+            "commentNo": 0
         }
     ]
 

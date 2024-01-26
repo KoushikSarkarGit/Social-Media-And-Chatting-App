@@ -146,4 +146,23 @@ const deleteComment = async (req, res) => {
 
 
 
-module.exports = { addComment, getcommentforthepost, getCommentOfLoggedUser, deleteComment };
+
+const getCommentCountOfPost = async (req, res) => {
+
+    const pid = req.params.pId
+
+    try {
+        let convertedpid = new mongoose.Types.ObjectId(pid)
+        const totalCommentCount = await Commentmodel.countDocuments({ postId: convertedpid });
+
+
+        return res.status(200).json({ success: true, msg: 'comment count of post fetched', totalCommentCount });
+
+    } catch (error) {
+        return res.status(500).json({ success: false, err: error.message });
+    }
+};
+
+
+
+module.exports = { addComment, getcommentforthepost, getCommentOfLoggedUser, deleteComment, getCommentCountOfPost };

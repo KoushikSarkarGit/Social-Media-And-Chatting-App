@@ -29,7 +29,7 @@ function App() {
           <Route path='/signup' element={<SignUpPage />} />
           <Route path='/explore' element={<ExplorePage />} />
           <Route path='/timeline' element={<TimelinePage />} />
-          <Route path='/viewpost' element={<ViewPostpage />} />
+          <Route path='/viewpost/:postId' element={<ViewPostpage />} />
 
 
         </Routes>

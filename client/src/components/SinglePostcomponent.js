@@ -13,8 +13,12 @@ import defaultprofileimg2 from '../img/defaultprofimg2.jpg'
 import { Appcontext } from '../ContextFolder/ContextCreator';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom/dist/umd/react-router-dom.development';
 
 export default function SinglePostcomponent({ pdata }) {
+
+    const navigate = useNavigate()
+
 
     const [isLikedByUser, setIsLikedByUser] = useState(false)
 
@@ -91,7 +95,9 @@ export default function SinglePostcomponent({ pdata }) {
     return (
         <>
             {pdata.postimage ? <div className='singlepostbox my-1'>
-                {pdata.postimage && <img src={pdata.postimage} alt="postimage" />}
+                {pdata.postimage && <img src={pdata.postimage} alt="postimage" onClick={() => {
+                    navigate(`/viewpost/${pdata._id}`)
+                }} />}
 
                 <div className="spostfeatures">
 
@@ -101,6 +107,7 @@ export default function SinglePostcomponent({ pdata }) {
                             onClick={() => {
                                 UnLikePost(pdata._id, jwtToken)
                                 setIsLikedByUser(false)
+                                pdata.likescount = (pdata.likescount - 1)
                             }}
                         />
 
@@ -111,12 +118,13 @@ export default function SinglePostcomponent({ pdata }) {
                                 onClick={() => {
                                     LikePost(pdata._id, jwtToken)
                                     setIsLikedByUser(true)
+                                    pdata.likescount = (pdata.likescount + 1)
                                 }}
                             />
 
                         }
 
-                        <span style={{ color: "var(--gray)", fontSize: '12px' }}>{pdata.likesCount}</span>
+                        <span style={{ color: "var(--gray)", fontSize: '12px' }}>{pdata.likescount}</span>
                     </div>
 
 
@@ -128,8 +136,9 @@ export default function SinglePostcomponent({ pdata }) {
                                 onClick={() => {
                                     UnRepostThePost(pdata._id, jwtToken)
                                     setIsRepostedByUser(false)
+                                    pdata.repostscount = (pdata.repostscount - 1)
                                 }} />
-                            <span style={{ fontSize: '12px' }}>{pdata.repostsCount}</span>
+                            <span style={{ fontSize: '12px' }}>{pdata.repostscount}</span>
                         </div>
                         :
                         <div className='featureicon'  >
@@ -137,9 +146,10 @@ export default function SinglePostcomponent({ pdata }) {
                                 onClick={() => {
                                     RepostThePost(pdata._id, jwtToken)
                                     setIsRepostedByUser(true)
+                                    pdata.repostscount = (pdata.repostscount + 1)
                                 }}
                             />
-                            <span style={{ fontSize: '12px' }}>{pdata.repostsCount}</span>
+                            <span style={{ fontSize: '12px' }}>{pdata.repostscount}</span>
                         </div>
                     }
 
@@ -148,7 +158,7 @@ export default function SinglePostcomponent({ pdata }) {
 
                     <div className='featureicon'>
                         <UilCommentAltNotes />
-                        <span style={{ color: "var(--gray)", fontSize: '12px' }}>2222</span>
+                        <span style={{ color: "var(--gray)", fontSize: '12px' }}>{pdata.commentNo}</span>
                     </div>
 
 
@@ -214,6 +224,7 @@ export default function SinglePostcomponent({ pdata }) {
                                 onClick={() => {
                                     UnLikePost(pdata._id, jwtToken)
                                     setIsLikedByUser(false)
+                                    pdata.likescount = (pdata.likescount - 1)
                                 }}
                             />
                                 :
@@ -221,10 +232,11 @@ export default function SinglePostcomponent({ pdata }) {
                                     onClick={() => {
                                         LikePost(pdata._id, jwtToken)
                                         setIsLikedByUser(true)
+                                        pdata.likescount = (pdata.likescount + 1)
                                     }}
                                 />}
 
-                            <span style={{ color: "var(--gray)", fontSize: '12px' }}>{pdata.likesCount}</span>
+                            <span style={{ color: "var(--gray)", fontSize: '12px' }}>{pdata.likescount}</span>
                         </div>
 
                         {isRepostedByUser ?
@@ -233,9 +245,11 @@ export default function SinglePostcomponent({ pdata }) {
                                     onClick={() => {
                                         UnRepostThePost(pdata._id, jwtToken)
                                         setIsRepostedByUser(false)
+                                        pdata.repostscount = (pdata.repostscount - 1)
+
                                     }}
                                 />
-                                <span style={{ fontSize: '12px' }}>{pdata.repostsCount}</span>
+                                <span style={{ fontSize: '12px' }}>{pdata.repostscount}</span>
                             </div>
                             :
                             <div className='featureicon'  >
@@ -243,15 +257,17 @@ export default function SinglePostcomponent({ pdata }) {
                                     onClick={() => {
                                         RepostThePost(pdata._id, jwtToken)
                                         setIsRepostedByUser(true)
+                                        pdata.repostscount = (pdata.repostscount + 1)
+
                                     }}
                                 />
-                                <span style={{ fontSize: '12px' }}>{pdata.repostsCount}</span>
+                                <span style={{ fontSize: '12px' }}>{pdata.repostscount}</span>
                             </div>
                         }
 
                         <div className='featureicon'>
                             <UilCommentAltNotes />
-                            <span style={{ color: "var(--gray)", fontSize: '12px' }}>2222</span>
+                            <span style={{ color: "var(--gray)", fontSize: '12px' }}>{pdata.commentNo}</span>
                         </div>
 
 

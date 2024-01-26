@@ -9,9 +9,44 @@ import { UilShare } from '@iconscout/react-unicons'
 import { AiTwotoneLike } from 'react-icons/ai'
 import postPic2 from '../img/postpic2.jpg'
 import { UilArrowLeft } from '@iconscout/react-unicons'
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 
-export default function ViewSinglepost({ pdata }) {
+export default function ViewSinglepost({ pdata, pid }) {
+
+
+
+    const getPostDetails = async () => {
+        try {
+            // if (jwtToken) {
+
+            //     await axios.get(`http://localhost:9000/api/v1/post/get-post/${pid}`, {
+            //         headers: {
+            //             token: jwtToken
+            //         }
+            //     }).then(async (res) => {
+
+            //         if (res.data.success === true && res.data.repostedByCurrentUser === true) {
+            //             setIsRepostedByUser(true)
+            //         }
+
+            //     }).catch((err) => {
+            //         console.log(err)
+            //         toast.error('some internal axios error occured')
+            //     })
+            // }
+
+        } catch (error) {
+            console.log(error)
+            toast.error('some internal error occured')
+        }
+    }
+
+
+
+
+
 
 
     const commenterdata = [
@@ -55,7 +90,7 @@ export default function ViewSinglepost({ pdata }) {
 
             <div className="backbtn">
                 <UilArrowLeft style={{ width: '40px', height: '40px', cursor: 'pointer' }} />
-                <b>Back</b>
+                <b>Back {pid}</b>
 
             </div>
 
