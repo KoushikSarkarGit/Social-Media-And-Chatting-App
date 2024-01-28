@@ -8,7 +8,7 @@ const router = express.Router();
 router.post('/add-comment/:id', valtokenchecker, extractIdFromToken, addComment);
 
 //get all comments of a post by page
-router.get('/get-comments/:id/:page', valtokenchecker, extractIdFromToken, getcommentforthepost);
+router.get('/get-comments/:id/:page', getcommentforthepost);
 
 
 //get all comments of a user by page

@@ -46,7 +46,7 @@ const addComment = async (req, res) => {
 
 const getcommentforthepost = async (req, res) => {
     const postid = req.params.id;
-    const { curuserid } = await req.body;
+    // const { curuserid } = await req.body;
     const page = req.params.page;
     // const postcheck = await Postmodel.findById(postid)
 
@@ -57,10 +57,40 @@ const getcommentforthepost = async (req, res) => {
 
     try {
 
-        let convertedPostId = new mongoose.Types.ObjectId(postid)
+        let convertedPostId = await new mongoose.Types.ObjectId(postid)
+
+        const totalCommentCount = await Commentmodel.countDocuments({ postId: convertedPostId });
 
         const thepostcomment = await Commentmodel.aggregate([
             { $match: { postId: convertedPostId } },
+
+
+            {
+                $lookup: {
+                    from: 'users', // The name of the Usermodel collection
+                    localField: 'userId', // The field from Commentmodel
+                    foreignField: '_id', // The field from Usermodel
+                    as: 'userDetails'
+                }
+            },
+            {
+                $unwind: '$userDetails' // Deconstruct the array produced by $lookup
+            },
+            {
+                $project: {
+                    commentText: 1, // Include comment details
+                    createdAt: 1,
+                    userId: 1,
+                    postId: 1,
+
+                    'userDetails.profilePicture': 1,
+                    'userDetails.username': 1,
+                    'userDetails.firstname': 1,
+                    'userDetails.lastname': 1
+                }
+            },
+
+
             { $skip: (page - 1) * 10 },
             { $limit: 10 }
         ])
@@ -70,7 +100,7 @@ const getcommentforthepost = async (req, res) => {
             return res.status(401).json({ success: false, msg: 'Comments/Post Not Found' });
         }
 
-        return res.status(200).json({ success: true, msg: 'comment fetched', thepostcomment, page });
+        return res.status(200).json({ success: true, msg: 'comment fetched', thepostcomment, page, totalCommentCount: totalCommentCount });
 
 
 

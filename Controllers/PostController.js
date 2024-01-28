@@ -77,6 +77,8 @@ const getPost = async (req, res) => {
 
     try {
 
+        const postId = await new mongoose.Types.ObjectId(id);
+
         const fetchedpost = await Postmodel.aggregate([
             { $match: { _id: postId } },
 
@@ -93,7 +95,9 @@ const getPost = async (req, res) => {
                         {
                             $project: {
                                 username: 1,
-                                profilePicture: 1
+                                profilePicture: 1,
+                                firstname: 1,
+                                lastname: 1
                                 // Added other fields from the user model as needed
                             }
                         }
@@ -109,8 +113,8 @@ const getPost = async (req, res) => {
                     postimage: 1,
                     postPublicID: 1,
                     tags: 1,
-                    likedByCurrentUser: { $in: [userId, '$likes'] },
-                    repostedByCurrentUser: { $in: [userId, '$reposts'] },
+                    // likedByCurrentUser: { $in: [$userId, '$likes'] },
+                    // repostedByCurrentUser: { $in: [$userId, '$reposts'] },
                     likeCount: { $size: '$likes' },
                     repostCount: { $size: '$reposts' },
                     commentNo: 1,
@@ -127,7 +131,7 @@ const getPost = async (req, res) => {
 
 
 
-        return res.status(200).json({ success: true, msg: 'Post fetched successfully', fetchedpost });
+        return res.status(200).json({ success: true, msg: 'Post fetched successfully', fetchedpost: fetchedpost[0] });
 
     } catch (error) {
 

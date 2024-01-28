@@ -28,24 +28,25 @@ export default function AllPostForProfile({ selectedtab }) {
         try {
             if (jwtToken) {
 
-                await axios.get(`http://localhost:9000/api/v1/post/get-posts-of-logged-user/${page}`, {
-                    headers: {
-                        token: jwtToken
-                    }
-                }).then(async (res) => {
+                await axios.get(`http://localhost:9000/api/v1/post/get-posts-of-logged-user/${page}`,
+                    {
+                        headers: {
+                            token: jwtToken
+                        }
+                    }).then(async (res) => {
 
-                    if (res.data.success === true) {
-                        setPostlist([...postlist, ...res.data.fetchedpost])
-                        setTotalpostno(res.data.totalPostsCount.totalpostno)
-                        // console.log(res.data)
-                    }
+                        if (res.data.success === true) {
+                            setPostlist(prevPostlist => [...prevPostlist, ...res.data.fetchedpost])
+                            setTotalpostno(res.data.totalPostsCount.totalpostno)
+                            console.log(res.data)
+                        }
 
 
 
-                }).catch((err) => {
-                    console.log(err)
-                    toast.error('some internal axios error occured')
-                })
+                    }).catch((err) => {
+                        console.log(err)
+                        toast.error('some internal axios error occured')
+                    })
             }
 
         } catch (error) {
@@ -99,7 +100,7 @@ export default function AllPostForProfile({ selectedtab }) {
                 }).then(async (res) => {
                     if (res.data.success === true) {
 
-                        setRepostedlist([...repostedlist, ...res.data.fetchedRepostedPosts[0].repostedposts])
+                        setRepostedlist(prevPostlist => [...prevPostlist, ...res.data.fetchedRepostedPosts[0].repostedposts])
                         setTotalpostno(res.data.fetchedRepostedPosts[0].totalrepostcount)
                         // console.log(res.data.fetchedRepostedPosts[0].repostedposts)
                     }
@@ -128,7 +129,7 @@ export default function AllPostForProfile({ selectedtab }) {
                 }).then(async (res) => {
                     if (res.data.success === true) {
 
-                        setCommentlist([...commentlist, ...res.data.LoggedUserComments])
+                        setCommentlist(prevCommentlist => [...prevCommentlist, ...res.data.LoggedUserComments])
                         setTotalpostno(res.data.totalCommentCount)
                         // console.log(res.data.LoggedUserComments)
                     }

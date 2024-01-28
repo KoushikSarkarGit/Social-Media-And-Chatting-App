@@ -99,15 +99,20 @@ export default function SinglePostcomponent({ pdata }) {
                     navigate(`/viewpost/${pdata._id}`)
                 }} />}
 
-                <div className="spostfeatures">
+                <div className="spostfeatures" onClick={(event) => { event.stopPropagation(); }}>
 
                     <div className='featureicon'>
                         {isLikedByUser ? <AiFillLike
                             style={{ width: '28px', color: 'orange', height: '28px', marginTop: '-3px', paddingLeft: '2px', marginRight: '-3px' }}
                             onClick={() => {
-                                UnLikePost(pdata._id, jwtToken)
-                                setIsLikedByUser(false)
-                                pdata.likescount = (pdata.likescount - 1)
+                                if (jwtToken) {
+                                    UnLikePost(pdata._id, jwtToken)
+                                    setIsLikedByUser(false)
+                                    pdata.likescount = (pdata.likescount - 1)
+                                }
+                                else {
+                                    navigate('/login')
+                                }
                             }}
                         />
 
@@ -116,9 +121,14 @@ export default function SinglePostcomponent({ pdata }) {
                             <AiOutlineLike
                                 style={{ width: '28px', height: '28px', marginTop: '-3px', paddingLeft: '2px', marginRight: '-3px' }}
                                 onClick={() => {
-                                    LikePost(pdata._id, jwtToken)
-                                    setIsLikedByUser(true)
-                                    pdata.likescount = (pdata.likescount + 1)
+                                    if (jwtToken) {
+                                        LikePost(pdata._id, jwtToken)
+                                        setIsLikedByUser(true)
+                                        pdata.likescount = (pdata.likescount + 1)
+                                    }
+                                    else {
+                                        navigate('/login')
+                                    }
                                 }}
                             />
 
@@ -134,9 +144,14 @@ export default function SinglePostcomponent({ pdata }) {
                         <div className='featureicon' style={{ color: '#00ff00' }} >
                             <UilRedo
                                 onClick={() => {
-                                    UnRepostThePost(pdata._id, jwtToken)
-                                    setIsRepostedByUser(false)
-                                    pdata.repostscount = (pdata.repostscount - 1)
+                                    if (jwtToken) {
+                                        UnRepostThePost(pdata._id, jwtToken)
+                                        setIsRepostedByUser(false)
+                                        pdata.repostscount = (pdata.repostscount - 1)
+                                    }
+                                    else {
+                                        navigate('/login')
+                                    }
                                 }} />
                             <span style={{ fontSize: '12px' }}>{pdata.repostscount}</span>
                         </div>
@@ -144,9 +159,15 @@ export default function SinglePostcomponent({ pdata }) {
                         <div className='featureicon'  >
                             <UilRedo
                                 onClick={() => {
-                                    RepostThePost(pdata._id, jwtToken)
-                                    setIsRepostedByUser(true)
-                                    pdata.repostscount = (pdata.repostscount + 1)
+                                    if (jwtToken) {
+                                        RepostThePost(pdata._id, jwtToken)
+                                        setIsRepostedByUser(true)
+                                        pdata.repostscount = (pdata.repostscount + 1)
+                                    }
+                                    else {
+                                        navigate('/login')
+                                    }
+
                                 }}
                             />
                             <span style={{ fontSize: '12px' }}>{pdata.repostscount}</span>
@@ -157,7 +178,7 @@ export default function SinglePostcomponent({ pdata }) {
 
 
                     <div className='featureicon'>
-                        <UilCommentAltNotes />
+                        <UilCommentAltNotes onClick={(event) => { navigate(`/viewpost/${pdata._id}`) }} />
                         <span style={{ color: "var(--gray)", fontSize: '12px' }}>{pdata.commentNo}</span>
                     </div>
 
@@ -198,7 +219,7 @@ export default function SinglePostcomponent({ pdata }) {
             </div>
 
                 :
-                <div className='singlepostbox '>
+                <div className='singlepostbox ' onClick={() => { navigate(`/viewpost/${pdata._id}`) }}>
 
                     <div className="detail d-flex flex-column">
                         <div className="d-flex align-items-center justify-content-between spebox ">
@@ -216,7 +237,7 @@ export default function SinglePostcomponent({ pdata }) {
 
                         <span className='mx-2 mt-3  mb-3'> {pdata.postdescription}</span>
                     </div>
-                    <div className="spostfeatures">
+                    <div className="spostfeatures" onClick={(event) => { event.stopPropagation(); }}>
 
                         <div className='featureicon'>
                             {isLikedByUser ? <AiFillLike
@@ -266,7 +287,8 @@ export default function SinglePostcomponent({ pdata }) {
                         }
 
                         <div className='featureicon'>
-                            <UilCommentAltNotes />
+                            <UilCommentAltNotes onClick={(event) => { navigate(`/viewpost/${pdata._id}`) }} />
+
                             <span style={{ color: "var(--gray)", fontSize: '12px' }}>{pdata.commentNo}</span>
                         </div>
 

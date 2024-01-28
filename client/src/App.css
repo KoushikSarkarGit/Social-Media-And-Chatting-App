@@ -56,6 +56,7 @@
   border-radius: 0.5rem;
   background: var(--buttonBg);
   transition: all 100ms ease-out;
+  border: 2px solid #4990f4;
 }
 
 .basicbutton:hover {
