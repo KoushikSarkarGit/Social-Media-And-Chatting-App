@@ -1,0 +1,320 @@
+import React, { useContext, useEffect, useState } from 'react'
+import "../pagecss/singlepostcomp.css";
+
+// import { UilThumbsUp } from '@iconscout/react-unicons'
+import { UilRedo } from '@iconscout/react-unicons'
+import { UilCommentAltNotes } from '@iconscout/react-unicons'
+import { UilShare } from '@iconscout/react-unicons'
+// import { AiTwotoneLike } from 'react-icons/ai'
+import { UilEdit } from '@iconscout/react-unicons'
+import { AiFillLike } from "react-icons/ai";
+import { AiOutlineLike } from "react-icons/ai";
+
+import defaultprofileimg2 from '../img/defaultprofimg2.jpg'
+import { Appcontext } from '../ContextFolder/ContextCreator';
+import { useNavigate } from 'react-router-dom/dist/umd/react-router-dom.development';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+
+
+
+
+export default function UserSinglePostForProfile({ pdata }) {
+
+
+
+    const navigate = useNavigate()
+
+    const cur = useContext(Appcontext);
+    const { jwtToken, LikePost, UnLikePost, RepostThePost, UnRepostThePost, getRelativeTime } = cur;
+
+    const [isLikedByUser, setIsLikedByUser] = useState(false)
+    const [isRepostedByUser, setIsRepostedByUser] = useState(false)
+
+    const checkIfUserLikesThePost = async () => {
+        try {
+            if (jwtToken) {
+
+                await axios.get(`http://localhost:9000/api/v1/user/check-if-user-likes-post/${pdata._id}`, {
+                    headers: {
+                        token: jwtToken
+                    }
+                }).then(async (res) => {
+
+                    if (res.data.success === true && res.data.likedByCurrentUser === true) {
+                        setIsLikedByUser(true)
+                    }
+
+                }).catch((err) => {
+                    console.log(err)
+                    toast.error('some internal axios error occured')
+                })
+            }
+
+        } catch (error) {
+            console.log(error)
+            toast.error('some internal error occured')
+        }
+    }
+
+
+
+    const checkIfUserRepostedPost = async () => {
+        try {
+            if (jwtToken) {
+
+                await axios.get(`http://localhost:9000/api/v1/user/check-if-user-reposted-post/${pdata._id}`, {
+                    headers: {
+                        token: jwtToken
+                    }
+                }).then(async (res) => {
+
+                    if (res.data.success === true && res.data.repostedByCurrentUser === true) {
+                        setIsRepostedByUser(true)
+                    }
+
+                }).catch((err) => {
+                    console.log(err)
+                    toast.error('some internal axios error occured')
+                })
+            }
+
+        } catch (error) {
+            console.log(error)
+            toast.error('some internal error occured')
+        }
+    }
+
+
+
+
+
+    useEffect(() => {
+        checkIfUserLikesThePost()
+        checkIfUserRepostedPost()
+    }, [jwtToken]);
+
+
+
+
+
+
+
+    return (
+        <>
+            {pdata.postimage ? <div className='singlepostbox my-1'
+                onClick={() => { navigate(`/viewpost/${pdata._id}`) }} >
+
+                {pdata?.postimage && <img src={pdata.postimage} alt="postimage" style={{ cursor: 'pointer' }} />}
+
+                <div className="spostfeatures" onClick={(event) => { event.stopPropagation(); }}>
+
+                    <div className='featureicon'>
+                        {isLikedByUser ? <AiFillLike
+                            style={{ width: '28px', color: 'orange', height: '28px', marginTop: '-3px', paddingLeft: '2px', marginRight: '-3px' }}
+                            onClick={(event) => {
+                                event.stopPropagation();
+                                if (jwtToken) {
+
+                                    UnLikePost(pdata._id, jwtToken)
+                                    setIsLikedByUser(false)
+                                    pdata.likesCount = (pdata?.likesCount - 1)
+                                }
+                                else {
+                                    navigate('/login')
+                                }
+
+                            }}
+                        /> :
+                            <AiOutlineLike
+                                style={{ width: '28px', height: '28px', marginTop: '-3px', paddingLeft: '2px', marginRight: '-3px' }}
+                                onClick={(event) => {
+                                    event.stopPropagation();
+                                    if (jwtToken) {
+
+                                        LikePost(pdata._id, jwtToken)
+                                        setIsLikedByUser(true)
+                                        pdata.likesCount = (pdata?.likesCount + 1)
+                                    }
+                                    else {
+                                        navigate('/login')
+                                    }
+
+                                }}
+                            />}
+
+                        <span style={{ color: "var(--gray)", fontSize: '12px' }}>{pdata.likesCount}</span>
+                    </div>
+
+                    {isRepostedByUser ?
+                        <div className='featureicon' style={{ color: '#00ff00' }} >
+                            <UilRedo
+                                onClick={() => {
+                                    UnRepostThePost(pdata._id, jwtToken)
+                                    setIsRepostedByUser(false)
+                                    pdata.repostsCount = (pdata.repostsCount - 1)
+                                }} />
+                            <span style={{ fontSize: '12px' }}>{pdata.repostsCount}</span>
+                        </div>
+                        :
+                        <div className='featureicon'  >
+                            <UilRedo
+                                onClick={() => {
+                                    RepostThePost(pdata._id, jwtToken)
+                                    setIsRepostedByUser(true)
+                                    pdata.repostsCount = (pdata?.repostsCount + 1)
+                                }}
+                            />
+                            <span style={{ fontSize: '12px' }}>{pdata.repostsCount}</span>
+                        </div>
+                    }
+
+                    <div className='featureicon'>
+                        <UilCommentAltNotes onClick={(event) => { navigate(`/viewpost/${pdata._id}`) }} />
+                        <span style={{ color: "var(--gray)", fontSize: '12px' }}>{pdata.commentNo}</span>
+                    </div>
+
+
+
+                    <div className='featureicon'>
+                        <UilShare />
+                        <span style={{ color: "var(--gray)", fontSize: '12px' }}></span>
+                    </div>
+
+                </div>
+
+
+
+
+
+                <div className="detail d-flex flex-column">
+                    <div className="d-flex align-items-center justify-content-between spebox ">
+                        <div>
+                            <img src={pdata.userDetails[0].profilePicture ? pdata.userDetails[0].profilePicture : defaultprofileimg2} alt="userphoto" className='singlepostuserphoto mx-1 ' />
+                            <span className='mx-1'><b>From  <i style={{ color: 'grey' }}>@{pdata.userDetails[0].username}</i></b></span>
+                        </div>
+
+                        <div className="creationdatebox mx-2">
+                            <span className='creationtext'>
+                                {getRelativeTime(pdata.createdAt)}
+                            </span>
+                        </div>
+                    </div>
+
+                    <span className='mx-2 mt-3  mb-3'> {pdata.postdescription}</span>
+                </div>
+
+
+            </div>
+
+                :
+                <div className='singlepostbox ' onClick={(event) => {
+                    navigate(`/viewpost/${pdata._id}`)
+                }}
+                >
+
+                    <div className="detail d-flex flex-column">
+                        <div className="d-flex align-items-center justify-content-between spebox ">
+                            <div>
+                                <img src={pdata.userDetails[0].profilePicture ? pdata.userDetails[0].profilePicture : defaultprofileimg2} alt="userphoto" className='singlepostuserphoto mx-1 ' />
+                                <span className='mx-1'><b>From  <i style={{ color: 'grey' }}>@{pdata.userDetails[0].username}</i></b></span>
+                            </div>
+
+                            <div className="creationdatebox mx-2">
+                                <span className='creationtext'>
+                                    {getRelativeTime(pdata.createdAt)}
+                                </span>
+                            </div>
+                        </div>
+
+                        <span className='mx-2 mt-3  mb-3'> {pdata.postdescription}</span>
+                    </div>
+                    <div className="spostfeatures" onClick={(event) => { event.stopPropagation(); }}>
+
+                        <div className='featureicon'>
+                            {isLikedByUser ? <AiFillLike
+                                style={{ width: '28px', color: 'orange', height: '28px', marginTop: '-3px', paddingLeft: '2px', marginRight: '-3px' }}
+                                onClick={() => {
+                                    if (jwtToken) {
+                                        UnLikePost(pdata._id, jwtToken)
+                                        setIsLikedByUser(false)
+                                        pdata.likesCount = (pdata?.likesCount - 1)
+                                    }
+                                    else {
+                                        navigate('/login')
+                                    }
+
+                                }}
+                            /> :
+                                <AiOutlineLike
+                                    style={{ width: '28px', height: '28px', marginTop: '-3px', paddingLeft: '2px', marginRight: '-3px' }}
+                                    onClick={() => {
+
+                                        if (jwtToken) {
+
+                                            LikePost(pdata._id, jwtToken)
+                                            setIsLikedByUser(true)
+                                            pdata.likesCount = (pdata?.likesCount + 1)
+                                        }
+                                        else {
+                                            navigate('/login')
+                                        }
+
+                                    }}
+                                />}
+
+                            <span style={{ color: "var(--gray)", fontSize: '12px' }}>{pdata.likesCount}</span>
+                        </div>
+
+
+
+                        {isRepostedByUser ?
+                            <div className='featureicon' style={{ color: '#00ff00' }} >
+                                <UilRedo
+                                    onClick={() => {
+                                        UnRepostThePost(pdata._id, jwtToken)
+                                        setIsRepostedByUser(false)
+                                        pdata.repostsCount = (pdata.repostsCount - 1)
+                                    }} />
+                                <span style={{ fontSize: '12px' }}>{pdata.repostsCount}</span>
+                            </div>
+                            :
+                            <div className='featureicon'  >
+                                <UilRedo
+                                    onClick={() => {
+                                        RepostThePost(pdata._id, jwtToken)
+                                        setIsRepostedByUser(true)
+                                        pdata.repostsCount = (pdata?.repostsCount + 1)
+                                    }}
+                                />
+                                <span style={{ fontSize: '12px' }}>{pdata.repostsCount}</span>
+                            </div>
+                        }
+
+
+
+                        <div className='featureicon'>
+                            <UilCommentAltNotes onClick={(event) => {
+
+                                navigate(`/viewpost/${pdata._id}`)
+                            }} />
+                            <span style={{ color: "var(--gray)", fontSize: '12px' }}>{pdata.commentNo}</span>
+                        </div>
+
+
+
+                        <div className='featureicon'>
+                            <UilShare />
+                            <span style={{ color: "var(--gray)", fontSize: '12px' }}></span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            }
+
+        </>
+    )
+}

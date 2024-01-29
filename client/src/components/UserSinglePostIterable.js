@@ -6,7 +6,7 @@ import { UilRedo } from '@iconscout/react-unicons'
 import { UilCommentAltNotes } from '@iconscout/react-unicons'
 import { UilShare } from '@iconscout/react-unicons'
 // import { AiTwotoneLike } from 'react-icons/ai'
-import { UilEdit } from '@iconscout/react-unicons'
+
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { AiFillLike } from "react-icons/ai";
@@ -16,13 +16,19 @@ import defaultprofileimg2 from '../img/defaultprofimg2.jpg'
 import { Appcontext } from '../ContextFolder/ContextCreator';
 import { useNavigate } from 'react-router-dom/dist/umd/react-router-dom.development';
 
-export default function SinglePostIterable({ pid, jwtToken }) {
+
+
+
+
+
+
+export default function UserSinglePostIterable({ pid, jwtToken, userId }) {
+
 
     const navigate = useNavigate()
 
     const [postdetails, setPostdetails] = useState()
     const [isLikedByUser, setIsLikedByUser] = useState(false)
-
     const [isRepostedByUser, setIsRepostedByUser] = useState(false)
 
 
@@ -31,17 +37,48 @@ export default function SinglePostIterable({ pid, jwtToken }) {
 
     const getLikedPostsofLoggedUserLiteversion = async () => {
         try {
+
+
+            await axios.post(`http://localhost:9000/api/v1/post/userprofile-get-liked-post-of-logged-user-by-id/${pid}`,
+
+                {
+                    curuserid: userId
+                }
+
+            ).then(async (res) => {
+                if (res.data.success === true) {
+                    setPostdetails(res.data.fetchedLitePost[0])
+
+                    // console.log(res.data.fetchedLitePost[0])
+                }
+
+            }).catch((err) => {
+                console.log(err)
+                toast.error('some internal axios error occured')
+            })
+
+
+        } catch (error) {
+            console.log(error)
+            toast.error('some internal error occured')
+        }
+    }
+
+
+
+
+    const checkIfUserLikesThePost = async () => {
+        try {
             if (jwtToken) {
 
-                await axios.get(`http://localhost:9000/api/v1/post/get-liked-post-of-logged-user-by-id/${pid}`, {
+                await axios.get(`http://localhost:9000/api/v1/user/check-if-user-likes-post/${pid}`, {
                     headers: {
                         token: jwtToken
                     }
                 }).then(async (res) => {
-                    if (res.data.success === true) {
-                        setPostdetails(res.data.fetchedLitePost[0])
 
-                        // console.log(res.data.fetchedLitePost[0])
+                    if (res.data.success === true && res.data.likedByCurrentUser === true) {
+                        setIsLikedByUser(true)
                     }
 
                 }).catch((err) => {
@@ -57,35 +94,76 @@ export default function SinglePostIterable({ pid, jwtToken }) {
     }
 
 
+
+    const checkIfUserRepostedPost = async () => {
+        try {
+            if (jwtToken) {
+
+                await axios.get(`http://localhost:9000/api/v1/user/check-if-user-reposted-post/${pid}`, {
+                    headers: {
+                        token: jwtToken
+                    }
+                }).then(async (res) => {
+
+                    if (res.data.success === true && res.data.repostedByCurrentUser === true) {
+                        setIsRepostedByUser(true)
+                    }
+
+                }).catch((err) => {
+                    console.log(err)
+                    toast.error('some internal axios error occured')
+                })
+            }
+
+        } catch (error) {
+            console.log(error)
+            toast.error('some internal error occured')
+        }
+    }
+
+
+
+
+
+    useEffect(() => {
+        checkIfUserLikesThePost()
+        checkIfUserRepostedPost()
+    }, [jwtToken]);
+
+
+
+
+
+
     useEffect(() => {
         getLikedPostsofLoggedUserLiteversion();
     }, [jwtToken, pid]);
 
 
-    useEffect(() => {
-        //useeffect for setting if liked value
-        if (postdetails?.likedByCurrentUser === true) {
-            setIsLikedByUser(true)
-        }
-        else if (postdetails?.likedByCurrentUser === false) {
-            setIsLikedByUser(false)
-        }
+    // useEffect(() => {
+    //     //useeffect for setting if liked value
+    //     if (postdetails?.likedByCurrentUser === true) {
+    //         setIsLikedByUser(true)
+    //     }
+    //     else if (postdetails?.likedByCurrentUser === false) {
+    //         setIsLikedByUser(false)
+    //     }
 
-    }, [jwtToken, pid, postdetails, postdetails?.likedByCurrentUser]);
-
-
+    // }, [jwtToken, pid, postdetails, postdetails?.likedByCurrentUser]);
 
 
-    useEffect(() => {
-        //useeffect for setting if reposted value
-        if (postdetails?.repostedByCurrentUser === true) {
-            setIsRepostedByUser(true)
-        }
-        else if (postdetails?.repostedByCurrentUser === false) {
-            setIsRepostedByUser(false)
-        }
 
-    }, [jwtToken, pid, postdetails, postdetails?.repostedByCurrentUser]);
+
+    // useEffect(() => {
+    //     //useeffect for setting if reposted value
+    //     if (postdetails?.repostedByCurrentUser === true) {
+    //         setIsRepostedByUser(true)
+    //     }
+    //     else if (postdetails?.repostedByCurrentUser === false) {
+    //         setIsRepostedByUser(false)
+    //     }
+
+    // }, [jwtToken, pid, postdetails, postdetails?.repostedByCurrentUser]);
 
 
 
@@ -273,8 +351,5 @@ export default function SinglePostIterable({ pid, jwtToken }) {
 
 
         </>
-
-
-
     )
 }

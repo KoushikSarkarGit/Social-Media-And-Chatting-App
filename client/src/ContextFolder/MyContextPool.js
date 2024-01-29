@@ -273,9 +273,15 @@ export default function MyContextPool(props) {
         await localStorage.removeItem('authdata');
         // navigate('/')
         await setusername(null);
-        await setjwtToken(null);
+        await setjwtToken('');
         await setUserdata(null)
         await setisAdmin(false)
+        await setUserdata(null);
+        await setUserprofileimg(null)
+        await setUserfristname(null)
+        await setUserlastname(null)
+        await setUserId(null)
+        setLoading(false);
 
         toast('LogOut Successful!', {
             icon: '👋🏼',

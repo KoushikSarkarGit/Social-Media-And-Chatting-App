@@ -9,6 +9,7 @@ import SignUpPage from './pages/SignUpPage';
 import { Routes, Route } from 'react-router-dom'
 import TimelinePage from './pages/TimelinePage';
 import ViewPostpage from './pages/ViewPostpage';
+import UserProfile from './pages/UserProfile';
 
 
 function App() {
@@ -30,7 +31,7 @@ function App() {
           <Route path='/explore' element={<ExplorePage />} />
           <Route path='/timeline' element={<TimelinePage />} />
           <Route path='/viewpost/:postId' element={<ViewPostpage />} />
-
+          <Route path='/view-user-profile/:userId' element={<UserProfile />} />
 
         </Routes>
 

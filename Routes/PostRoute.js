@@ -45,6 +45,58 @@ router.get('/get-reposted-post-of-logged-user/:pageno', valtokenchecker, extract
 router.get('/get-reposted-post-of-logged-user-by-id/:pid', valtokenchecker, extractIdFromToken, getLoggedPostByIdLite)
 
 
+
+
+
+
+
+
+
+//API for user timeline or other peoples timeline so jwt is not required but instead curuserid or the userid will be embeded in body
+
+// get all post of a user  by page (page*10) 
+
+router.post('/userprofile-get-posts-of-logged-user/:pageno', getPostsOfLoggedUser)
+
+
+// get all liked post of a user  by page (page*10) it gives list of postid
+
+router.post('/userprofile-get-liked-post-of-logged-user/:pageno', getLikedPostsOfLoggedUser)
+
+
+// get liter version af liked post (logged in) it gives lighter version of liked post based on the post id. used in singlepostiterable
+
+router.post('/userprofile-get-liked-post-of-logged-user-by-id/:pid', getLoggedPostByIdLite)
+
+
+// get all reposted post of a user  by page (page*10) it gives list of reposted postid
+
+router.post('/userprofile-get-reposted-post-of-logged-user/:pageno', getRepostedPostsOfLoggedUser)
+
+// get reposted posts list of user (logged in) it gives lighter version of reposted post based on the post id. used in singlepostiterable
+
+router.post('/userprofile-get-reposted-post-of-logged-user-by-id/:pid', getLoggedPostByIdLite)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // apis for searching
 
 //get Post by keyword 

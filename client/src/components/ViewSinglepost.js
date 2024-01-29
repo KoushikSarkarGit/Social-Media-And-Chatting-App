@@ -6,7 +6,6 @@ import "../pagecss/viewpostpage.css";
 import { UilRedo } from '@iconscout/react-unicons'
 import { UilCommentAltNotes } from '@iconscout/react-unicons'
 import { UilShare } from '@iconscout/react-unicons'
-
 import { UilArrowLeft } from '@iconscout/react-unicons'
 import axios from 'axios';
 import toast from 'react-hot-toast';
@@ -261,7 +260,12 @@ export default function ViewSinglepost({ pdata, pid }) {
 
                 <div className="posterdetails">
                     <div className='d-flex'>
-                        <img src={postdetails?.userDetails[0]?.profilePicture ? postdetails?.userDetails[0]?.profilePicture : defaultprofileimg2} alt="userimage" className='posterpic' />
+                        <img
+                            src={postdetails?.userDetails[0]?.profilePicture ? postdetails?.userDetails[0]?.profilePicture : defaultprofileimg2}
+                            alt="userimage"
+                            className='posterpic'
+                            onClick={() => { navigate(`/view-user-profile/${postdetails?.userId}`) }}
+                        />
                         <div className="d-flex flex-column">
                             <span className='mx-2'><b>From: {postdetails?.userDetails[0]?.firstname} {postdetails?.userDetails[0]?.lastname}</b></span>
                             <span className='mx-2 text-muted' > @{postdetails?.userDetails[0]?.username}</span>
@@ -437,7 +441,12 @@ export default function ViewSinglepost({ pdata, pid }) {
                             return <div className="singlecomment" key={index}>
                                 <img src={item?.userDetails?.profilePicture ? item?.userDetails?.profilePicture : defaultImage3} alt="profpic" className='commenterpic' />
                                 <div className="usersection">
-                                    <span className='commenterdetails'>@<b>{item?.userDetails?.username}</b> </span>
+                                    <span className='commenterdetails'>@<b>{item?.userDetails?.username}</b>
+
+                                        <span className='ms-2'> {getRelativeTime(item.createdAt)}</span>
+
+
+                                    </span>
                                     <span className='commentdesc'>{item?.commentText} </span>
                                 </div>
 

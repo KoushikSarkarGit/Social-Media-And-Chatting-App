@@ -8,7 +8,10 @@ import { useNavigate } from 'react-router-dom/dist/umd/react-router-dom.developm
 
 
 
-export default function CommentLiteComp({ commentdata, jwtToken }) {
+
+
+export default function UserCommentLiteComp({ commentdata, jwtToken }) {
+
     const navigate = useNavigate()
 
     const [userdetails, setUserdetails] = useState([])
@@ -39,22 +42,19 @@ export default function CommentLiteComp({ commentdata, jwtToken }) {
     const getuserdetails = async () => {
         try {
 
-            if (jwtToken) {
 
-                await axios.get(`http://localhost:9000/api/v1/user/get-user-light/${commentdata.userId}`, {
-                    headers: {
-                        token: jwtToken
-                    }
-                }).then(async (res) => {
 
-                    setUserdetails(res.data.curuser)
+            await axios.get(`http://localhost:9000/api/v1/user/get-user-light/${commentdata.userId}`
+            ).then(async (res) => {
 
-                }).catch((err) => {
-                    console.log(err)
-                    toast.error('some internal axios error occured')
-                })
+                setUserdetails(res.data.curuser)
 
-            }
+            }).catch((err) => {
+                console.log(err)
+                toast.error('some internal axios error occured')
+            })
+
+
 
         } catch (error) {
             console.log(error)
@@ -71,13 +71,13 @@ export default function CommentLiteComp({ commentdata, jwtToken }) {
 
 
 
-    //the classes are automatically fetched from parent component's imported css files
+
     return (
         <div className='litecommentbox d-flex flex-column'>
             <div className='cbox' onClick={() => { navigate(`/viewpost/${commentdata.postId}`) }} style={{ cursor: 'pointer' }}>
 
                 <div className="d-flex justify-content-between">
-                    <span >You commented on this post 👇🏼</span>
+                    <span >User commented on this post 👇🏼</span>
                     <div className="commentcreationdate">
                         <span className='crtext'>
                             {getRelativeTime(commentdata.createdAt)}

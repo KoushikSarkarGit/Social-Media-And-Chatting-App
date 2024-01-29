@@ -23,4 +23,8 @@ router.get('/get-comment-Count-of-post/:pId', getCommentCountOfPost);
 
 
 
+//get all comments of a user by page
+router.post('/userprofile-get-comments-of-logged-user/:page', getCommentOfLoggedUser);
+
+
 module.exports = router
