@@ -25,13 +25,14 @@ export default function MyContextPool(props) {
             let jsonedcurdata = await JSON.parse(curauth)
 
             await setUserdata(jsonedcurdata?.sentuser);
-            await setjwtToken(jsonedcurdata.jwttoken);
-            await setusername(jsonedcurdata.sentuser.username)
-            await setisAdmin(jsonedcurdata.sentuser.isAdmin)
-            await setUserprofileimg(jsonedcurdata.sentuser.profilePicture)
-            await setUserfristname(jsonedcurdata.sentuser.firstname)
-            await setUserlastname(jsonedcurdata.sentuser.lastname)
-            await setUserId(jsonedcurdata.sentuser._id)
+            await setUserprofileimg(jsonedcurdata?.sentuser?.profilePicture)
+            await setjwtToken(jsonedcurdata?.jwttoken);
+            await setusername(jsonedcurdata?.sentuser?.username)
+            await setisAdmin(jsonedcurdata?.sentuser?.isAdmin)
+
+            await setUserfristname(jsonedcurdata?.sentuser?.firstname)
+            await setUserlastname(jsonedcurdata?.sentuser?.lastname)
+            await setUserId(jsonedcurdata?.sentuser?._id)
 
 
 

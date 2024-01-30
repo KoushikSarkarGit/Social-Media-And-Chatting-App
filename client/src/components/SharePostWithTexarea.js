@@ -24,7 +24,7 @@ export default function SharePostWithTexarea({ setopensharemodal }) {
 
 
     const cur = useContext(Appcontext);
-    const { userprofileimg } = cur;
+    const { userdata } = cur;
 
 
 
@@ -34,6 +34,8 @@ export default function SharePostWithTexarea({ setopensharemodal }) {
     const [newtag, setNewtag] = useState('');
     const postimgref = useRef('')
 
+    const [imageSizeNotValid, setImageSizeNotValid] = useState(false);
+
     const textarearef = useRef(null)
     const [textareaval, settextareaval] = useState('');
 
@@ -42,9 +44,17 @@ export default function SharePostWithTexarea({ setopensharemodal }) {
 
     const insertimagehandler = (e) => {
         if (e.target.files && e.target.files[0]) {
+            const selectedFile = e.target.files[0];
+            const allowedFileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
 
-            setpostimage(URL.createObjectURL(e.target.files[0]))
-            console.log('done')
+            if (allowedFileTypes.includes(selectedFile.type)) {
+                setpostimage(URL.createObjectURL(selectedFile));
+
+            } else {
+                // Display an error message or handle it as per your requirement
+                toast.error('Invalid file type. Please select a JPG, JPEG, or PNG file.');
+                return;
+            }
         }
     }
 
@@ -87,6 +97,16 @@ export default function SharePostWithTexarea({ setopensharemodal }) {
 
 
         try {
+
+            const imageSizeLimit = 3 * 1024 * 1024;
+            const selectedFile = postimgref.current.files[0];
+
+            if (selectedFile && selectedFile.size > imageSizeLimit) {
+                // Image size exceeds the limit
+                toast.error('Image size must be less than 3MB.');
+                setImageSizeNotValid(true)
+                return;
+            }
 
             const finalpostval = new FormData();
             finalpostval.append('postdescription', textareaval)
@@ -159,7 +179,7 @@ export default function SharePostWithTexarea({ setopensharemodal }) {
 
         }} >
 
-            <img src={userprofileimg ? userprofileimg : myprofileimage} alt="" className='postcompImg' />
+            <img src={userdata?.profilePicture ? userdata?.profilePicture : myprofileimage} alt="" className='postcompImg' />
 
             <div className="postbox">
 
@@ -175,8 +195,9 @@ export default function SharePostWithTexarea({ setopensharemodal }) {
 
 
                     {postimage && <div className="tobeuloadedimg">
+                        {imageSizeNotValid && <span style={{ color: 'red' }}> *image size must be under 3 Mb</span>}
                         <div className="imgdismiss" >
-                            <UilTimes onClick={() => { setpostimage(null) }} id='postImageDismiss' style={{ color: "rgb(255, 38, 0)" }} />
+                            <UilTimes onClick={() => { setpostimage(null); setImageSizeNotValid(false) }} id='postImageDismiss' style={{ color: "rgb(255, 38, 0)" }} />
                         </div>
 
                         <div className="imgbox">
@@ -234,7 +255,8 @@ export default function SharePostWithTexarea({ setopensharemodal }) {
 
                     <div className="postingfeatures">
                         <div className="feature" style={{ color: "var(--photo)" }} onClick={() => {
-                            postimgref.current.click()
+                            postimgref.current.click();
+                            setImageSizeNotValid(false)
                         }}  >
                             <UilScenery />
                             Photo

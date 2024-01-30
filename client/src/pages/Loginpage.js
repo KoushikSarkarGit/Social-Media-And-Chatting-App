@@ -52,12 +52,12 @@ export default function Loginpage() {
                     await localStorage.setItem('authdata', JSON.stringify(res.data))
                     const gotres = await localStorage.getItem('authdata');
                     const mydata = await JSON.parse(gotres);
-                    await console.log(mydata)
+                    // await console.log(mydata)
 
                     await setUserdata(mydata?.sentuser);
                     await setusername(mydata?.sentuser.username)
                     await setjwtToken(mydata?.jwttoken)
-
+                    // await setUserprofileimg(mydata?.sentuser?.profilePicture)  // for some reson its not working
                     await setisAdmin(mydata.sentuser.isAdmin)
 
                     toast.success(`${res.data.msg}. 😄`);

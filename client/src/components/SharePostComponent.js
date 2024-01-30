@@ -19,7 +19,7 @@ export default function SharePostComponent() {
 
 
     const cur = useContext(Appcontext);
-    const { userprofileimg } = cur;
+    const { userdata } = cur;
 
 
 
@@ -29,6 +29,7 @@ export default function SharePostComponent() {
     const [newtag, setNewtag] = useState('');
     const postimgref = useRef('')
 
+    const [imageSizeNotValid, setImageSizeNotValid] = useState(false);
     const textarearef = useRef(null)
     const [textareaval, settextareaval] = useState('');
 
@@ -61,11 +62,30 @@ export default function SharePostComponent() {
 
 
     const insertimagehandler = (e) => {
-        if (e.target.files && e.target.files[0]) {
+        // if (e.target.files && e.target.files[0]) {
 
-            setpostimage(URL.createObjectURL(e.target.files[0]))
-            console.log('done')
+        //     setpostimage(URL.createObjectURL(e.target.files[0]))
+
+        // }
+
+
+        if (e.target.files && e.target.files[0]) {
+            const selectedFile = e.target.files[0];
+            const allowedFileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+
+            if (allowedFileTypes.includes(selectedFile.type)) {
+                setpostimage(URL.createObjectURL(selectedFile));
+
+            } else {
+                // Display an error message or handle it as per your requirement
+                toast.error('Invalid file type. Please select a JPG, JPEG, or PNG file.');
+                return;
+            }
         }
+
+
+
+
     }
 
 
@@ -80,6 +100,16 @@ export default function SharePostComponent() {
 
 
         try {
+
+            const imageSizeLimit = 3 * 1024 * 1024;
+            const selectedFile = postimgref.current.files[0];
+
+            if (selectedFile && selectedFile.size > imageSizeLimit) {
+                // Image size exceeds the limit
+                toast.error('Image size must be less than 3MB.');
+                setImageSizeNotValid(true)
+                return;
+            }
 
             const finalpostval = new FormData();
             finalpostval.append('postdescription', textareaval)
@@ -137,7 +167,7 @@ export default function SharePostComponent() {
     return (
         <form className='sharecompbox' onSubmit={(e) => { finalsubmit(e) }} >
 
-            <img src={userprofileimg ? userprofileimg : myprofileimage} alt="" className='postcompImg' />
+            <img src={userdata?.profilePicture ? userdata?.profilePicture : myprofileimage} alt="" className='postcompImg' />
 
             <div className="postbox">
 
@@ -147,8 +177,9 @@ export default function SharePostComponent() {
 
 
                     {postimage && <div className="tobeuloadedimg">
+                        {imageSizeNotValid && <span style={{ color: 'red' }}> *image size must be under 3 Mb</span>}
                         <div className="imgdismiss" >
-                            <UilTimes onClick={() => { setpostimage(null) }} id='postImageDismiss' style={{ color: "rgb(255, 38, 0)" }} />
+                            <UilTimes onClick={() => { setpostimage(null); setImageSizeNotValid(false) }} id='postImageDismiss' style={{ color: "rgb(255, 38, 0)" }} />
                         </div>
                         <div className="imgbox">
                             <img src={postimage} alt="postIMG" />
@@ -203,6 +234,7 @@ export default function SharePostComponent() {
                     <div className="postingfeatures">
                         <div className="feature" style={{ color: "var(--photo)" }} onClick={() => {
                             postimgref.current.click()
+                            setImageSizeNotValid(false);
                         }}  >
                             <UilScenery />
                             Photo
