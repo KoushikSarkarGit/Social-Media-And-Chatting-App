@@ -24,11 +24,11 @@ export default function AllPostForProfile({ selectedtab }) {
     const cur = useContext(Appcontext);
     const { jwtToken } = cur;
 
-    const getUserPosts = async () => {
+    const getUserPosts = async (manualpage) => {
         try {
             if (jwtToken) {
 
-                await axios.get(`http://localhost:9000/api/v1/post/get-posts-of-logged-user/${page}`,
+                await axios.get(`http://localhost:9000/api/v1/post/get-posts-of-logged-user/${manualpage}`,
                     {
                         headers: {
                             token: jwtToken
@@ -38,7 +38,7 @@ export default function AllPostForProfile({ selectedtab }) {
                         if (res.data.success === true) {
                             setPostlist(prevPostlist => [...prevPostlist, ...res.data.fetchedpost])
                             setTotalpostno(res.data.totalPostsCount.totalpostno)
-                            console.log(res.data)
+                            // console.log(res.data)
                         }
 
 
@@ -57,11 +57,11 @@ export default function AllPostForProfile({ selectedtab }) {
 
 
 
-    const getLikedPostsofLoggedUser = async () => {
+    const getLikedPostsofLoggedUser = async (manualpage) => {
         try {
             if (jwtToken) {
 
-                await axios.get(`http://localhost:9000/api/v1/post/get-liked-post-of-logged-user/${page}`, {
+                await axios.get(`http://localhost:9000/api/v1/post/get-liked-post-of-logged-user/${manualpage}`, {
                     headers: {
                         token: jwtToken
                     }
@@ -72,7 +72,7 @@ export default function AllPostForProfile({ selectedtab }) {
 
                         setLikedpostlist(prevPostlist => [...prevPostlist, ...res.data.fetchedLikedPost[0].likedposts])
                         setTotalpostno(res.data.fetchedLikedPost[0].totalLikecount)
-                        // console.log(res.data)
+                        console.log(res.data)
                     }
 
                 }).catch((err) => {
@@ -89,11 +89,11 @@ export default function AllPostForProfile({ selectedtab }) {
 
 
 
-    const getRepostedPostsofLoggedUser = async () => {
+    const getRepostedPostsofLoggedUser = async (manualpage) => {
         try {
             if (jwtToken) {
 
-                await axios.get(`http://localhost:9000/api/v1/post/get-reposted-post-of-logged-user/${page}`, {
+                await axios.get(`http://localhost:9000/api/v1/post/get-reposted-post-of-logged-user/${manualpage}`, {
                     headers: {
                         token: jwtToken
                     }
@@ -118,11 +118,11 @@ export default function AllPostForProfile({ selectedtab }) {
     }
 
 
-    const getCommentsofLoggedUser = async () => {
+    const getCommentsofLoggedUser = async (manualpage) => {
         try {
             if (jwtToken) {
 
-                await axios.get(`http://localhost:9000/api/v1/comments/get-comments-of-logged-user/${page}`, {
+                await axios.get(`http://localhost:9000/api/v1/comments/get-comments-of-logged-user/${manualpage}`, {
                     headers: {
                         token: jwtToken
                     }
@@ -155,24 +155,25 @@ export default function AllPostForProfile({ selectedtab }) {
         setCommentlist([])
         setTotalpostno(0)
         setPage(1)
+
         if (selectedtab === 'YourPosts') {
-            getUserPosts()
+            getUserPosts(1)
         }
 
 
         else if (selectedtab === 'Liked') {
 
-            getLikedPostsofLoggedUser()
+            getLikedPostsofLoggedUser(1)
 
         }
         else if (selectedtab === 'Reposts') {
 
-            getRepostedPostsofLoggedUser()
+            getRepostedPostsofLoggedUser(1)
 
         }
         else if (selectedtab === 'Comments') {
 
-            getCommentsofLoggedUser()
+            getCommentsofLoggedUser(1)
 
         } else {
             console.log('others are not implimented yet')
@@ -200,8 +201,25 @@ export default function AllPostForProfile({ selectedtab }) {
                             :
                             <EmptyBox />
                     }
+
+
+                    {!(page * 10 > totalpostno) && <button className="morefollowers"
+                        onClick={async () => {
+                            await getUserPosts(page + 1);
+                            await setPage(prevPage => prevPage + 1)
+
+                            // await console.log(pageno, morefollowerlist)
+                        }} ><hr className='morefhr' /> <h6> Load More</h6> </button>}
                 </>
             }
+
+
+
+
+
+
+
+
 
             {selectedtab === 'Liked' &&
                 <>
@@ -215,9 +233,22 @@ export default function AllPostForProfile({ selectedtab }) {
                         <EmptyBox />
 
                     }
+
+                    {!(page * 10 > totalpostno) && <button className="morefollowers"
+                        onClick={async () => {
+                            await getLikedPostsofLoggedUser(page + 1);
+                            await setPage(prevPage => prevPage + 1)
+
+                            // await console.log(pageno, morefollowerlist)
+                        }} ><hr className='morefhr' /> <h6> Load More</h6> </button>}
                 </>
 
             }
+
+
+
+
+
 
 
             {selectedtab === 'Reposts' &&
@@ -229,8 +260,29 @@ export default function AllPostForProfile({ selectedtab }) {
                         :
                         <EmptyBox />
                     }
+
+                    {!(page * 10 > totalpostno) && <button className="morefollowers"
+                        onClick={async () => {
+                            await getRepostedPostsofLoggedUser(page + 1);
+                            await setPage(prevPage => prevPage + 1)
+
+                            // await console.log(pageno, morefollowerlist)
+                        }} ><hr className='morefhr' /> <h6> Load More</h6> </button>}
                 </>
             }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
             {selectedtab === 'Comments' &&
@@ -243,6 +295,15 @@ export default function AllPostForProfile({ selectedtab }) {
                         <EmptyBox />
 
                     }
+
+
+                    {!(page * 10 > totalpostno) && <button className="morefollowers"
+                        onClick={async () => {
+                            await getCommentsofLoggedUser(page + 1);
+                            await setPage(prevPage => prevPage + 1)
+
+                            // await console.log(pageno, morefollowerlist)
+                        }} ><hr className='morefhr' /> <h6> Load More</h6> </button>}
                 </>
 
             }
@@ -251,12 +312,12 @@ export default function AllPostForProfile({ selectedtab }) {
 
 
 
-            {!(page * 10 > totalpostno) && <button className="morefollowers"
+            {/* {!(page * 10 > totalpostno) && <button className="morefollowers"
                 onClick={async () => {
                     await setPage(page + 1)
                     await getUserPosts();
                     // await console.log(pageno, morefollowerlist)
-                }} ><hr className='morefhr' /> <h6> Load More</h6> </button>}
+                }} ><hr className='morefhr' /> <h6> Load More</h6> </button>} */}
 
         </div>
     )

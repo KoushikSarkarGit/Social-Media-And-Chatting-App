@@ -302,6 +302,7 @@ const getPostsOfLoggedUser = async (req, res) => {
                     'userDetails.profilePicture': 1
                 }
             },
+            { $sort: { createdAt: -1 } },
             { $skip: (page - 1) * 10 },
             { $limit: 10 }
         ]);
@@ -334,11 +335,22 @@ const getLikedPostsOfLoggedUser = async (req, res) => {
 
         const fetchedLikedPost = await Usermodel.aggregate([
             { $match: { _id: userId } },
+
             {
                 $project: {
                     likedposts: {
-                        $slice: ['$likedPost', (page - 1) * 10, 10]
+                        // $slice: ['$likedPost', (page - 1) * 10, 10]
+
+                        // reversing before slicing cuz i want the latest liked post sent first and the latest on is at the end of the array
+                        $slice: [
+                            {
+                                $reverseArray: '$likedPost'
+                            },
+                            (page - 1) * 10,
+                            10
+                        ]
                     },
+
                     totalLikecount: { $size: '$likedPost' }
 
                 }
@@ -350,19 +362,6 @@ const getLikedPostsOfLoggedUser = async (req, res) => {
 
 
 
-        // aggregate([
-        //     { $match: { _id: userId } },
-
-        //     {
-        //         $project: {
-
-        //             likedPost: 1,
-        //             likedpostCount: { $size: '$likedPost' },
-        //         }
-        //     },
-        //     { $skip: (page - 1) * 10 },
-        //     { $limit: 10 }
-        // ]);
 
         return res.status(200).json({
             success: true,
@@ -463,7 +462,16 @@ const getRepostedPostsOfLoggedUser = async (req, res) => {
             {
                 $project: {
                     repostedposts: {
-                        $slice: ['$reposted', (page - 1) * 10, 10]
+                        // $slice: ['$reposted', (page - 1) * 10, 10]
+
+
+                        $slice: [
+                            {
+                                $reverseArray: '$reposted'
+                            },
+                            (page - 1) * 10,
+                            10
+                        ]
                     },
                     totalrepostcount: { $size: '$reposted' }
 

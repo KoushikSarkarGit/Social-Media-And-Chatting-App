@@ -120,6 +120,7 @@ const getCommentOfLoggedUser = async (req, res) => {
         const totalCommentCount = await Commentmodel.countDocuments({ userId: LoggeduserId });
         const LoggedUserComments = await Commentmodel.aggregate([
             { $match: { userId: LoggeduserId } },
+            { $sort: { createdAt: -1 } },
             { $skip: (page - 1) * 10 },
             { $limit: 10 }
         ])
