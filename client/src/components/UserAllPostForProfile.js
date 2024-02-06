@@ -28,11 +28,11 @@ export default function UserAllPostForProfile({ selectedtab, userId }) {
     const cur = useContext(Appcontext);
     const { jwtToken } = cur;
 
-    const getUserPosts = async () => {
+    const getUserPosts = async (manualpage) => {
         try {
 
 
-            await axios.post(`http://localhost:9000/api/v1/post/userprofile-get-posts-of-logged-user/${page}`,
+            await axios.post(`http://localhost:9000/api/v1/post/userprofile-get-posts-of-logged-user/${manualpage}`,
                 {
                     curuserid: userId
                 }).then(async (res) => {
@@ -59,11 +59,11 @@ export default function UserAllPostForProfile({ selectedtab, userId }) {
 
 
 
-    const getLikedPostsofLoggedUser = async () => {
+    const getLikedPostsofLoggedUser = async (manualpage) => {
         try {
 
 
-            await axios.post(`http://localhost:9000/api/v1/post/userprofile-get-liked-post-of-logged-user/${page}`,
+            await axios.post(`http://localhost:9000/api/v1/post/userprofile-get-liked-post-of-logged-user/${manualpage}`,
                 {
                     curuserid: userId
                 }
@@ -91,11 +91,11 @@ export default function UserAllPostForProfile({ selectedtab, userId }) {
 
 
 
-    const getRepostedPostsofLoggedUser = async () => {
+    const getRepostedPostsofLoggedUser = async (manualpage) => {
         try {
 
 
-            await axios.post(`http://localhost:9000/api/v1/post/userprofile-get-reposted-post-of-logged-user/${page}`,
+            await axios.post(`http://localhost:9000/api/v1/post/userprofile-get-reposted-post-of-logged-user/${manualpage}`,
                 {
                     curuserid: userId
                 }
@@ -120,11 +120,11 @@ export default function UserAllPostForProfile({ selectedtab, userId }) {
     }
 
 
-    const getCommentsofLoggedUser = async () => {
+    const getCommentsofLoggedUser = async (manualpage) => {
         try {
 
 
-            await axios.post(`http://localhost:9000/api/v1/comments/userprofile-get-comments-of-logged-user/${page}`,
+            await axios.post(`http://localhost:9000/api/v1/comments/userprofile-get-comments-of-logged-user/${manualpage}`,
 
                 {
                     curuserid: userId
@@ -160,23 +160,23 @@ export default function UserAllPostForProfile({ selectedtab, userId }) {
         setTotalpostno(0)
         setPage(1)
         if (selectedtab === 'YourPosts') {
-            getUserPosts()
+            getUserPosts(1)
         }
 
 
         else if (selectedtab === 'Liked') {
 
-            getLikedPostsofLoggedUser()
+            getLikedPostsofLoggedUser(1)
 
         }
         else if (selectedtab === 'Reposts') {
 
-            getRepostedPostsofLoggedUser()
+            getRepostedPostsofLoggedUser(1)
 
         }
         else if (selectedtab === 'Comments') {
 
-            getCommentsofLoggedUser()
+            getCommentsofLoggedUser(1)
 
         } else {
             console.log('others are not implimented yet')
@@ -214,8 +214,22 @@ export default function UserAllPostForProfile({ selectedtab, userId }) {
                             :
                             <EmptyBox />
                     }
+
+
+                    {!(page * 10 > totalpostno) && <button className="morefollowers"
+                        onClick={async () => {
+                            await getUserPosts(page + 1);
+                            await setPage(prevPage => prevPage + 1)
+
+                            // await console.log(pageno, morefollowerlist)
+                        }} ><hr className='morefhr' /> <h6> Load More</h6> </button>}
                 </>
             }
+
+
+
+
+
 
             {selectedtab === 'Liked' &&
                 <>
@@ -229,9 +243,30 @@ export default function UserAllPostForProfile({ selectedtab, userId }) {
                         <EmptyBox />
 
                     }
+
+
+
+                    {!(page * 10 > totalpostno) && <button className="morefollowers"
+                        onClick={async () => {
+                            await getLikedPostsofLoggedUser(page + 1);
+                            await setPage(prevPage => prevPage + 1)
+
+                            // await console.log(pageno, morefollowerlist)
+                        }} ><hr className='morefhr' /> <h6> Load More</h6> </button>}
+
+
+
                 </>
 
             }
+
+
+
+
+
+
+
+
 
 
             {selectedtab === 'Reposts' &&
@@ -243,8 +278,26 @@ export default function UserAllPostForProfile({ selectedtab, userId }) {
                         :
                         <EmptyBox />
                     }
+
+
+                    {!(page * 10 > totalpostno) && <button className="morefollowers"
+                        onClick={async () => {
+                            await getRepostedPostsofLoggedUser(page + 1);
+                            await setPage(prevPage => prevPage + 1)
+
+                            // await console.log(pageno, morefollowerlist)
+                        }} ><hr className='morefhr' /> <h6> Load More</h6> </button>}
                 </>
             }
+
+
+
+
+
+
+
+
+
 
 
             {selectedtab === 'Comments' &&
@@ -257,6 +310,15 @@ export default function UserAllPostForProfile({ selectedtab, userId }) {
                         <EmptyBox />
 
                     }
+
+
+                    {!(page * 10 > totalpostno) && <button className="morefollowers"
+                        onClick={async () => {
+                            await getCommentsofLoggedUser(page + 1);
+                            await setPage(prevPage => prevPage + 1)
+
+                            // await console.log(pageno, morefollowerlist)
+                        }} ><hr className='morefhr' /> <h6> Load More</h6> </button>}
                 </>
 
             }
@@ -265,12 +327,7 @@ export default function UserAllPostForProfile({ selectedtab, userId }) {
 
 
 
-            {!(page * 10 > totalpostno) && <button className="morefollowers"
-                onClick={async () => {
-                    await setPage(page + 1)
-                    await getUserPosts();
-                    // await console.log(pageno, morefollowerlist)
-                }} ><hr className='morefhr' /> <h6> Load More</h6> </button>}
+
 
         </div>
     )

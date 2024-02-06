@@ -17,7 +17,7 @@ export default function UserProfile() {
 
 
     return (
-        <Layout title={'View Profile'}>
+        <Layout title={'User Profile'}>
             <div className='userprofilebox' >
 
                 <LeftsideOfHome />

@@ -10,7 +10,7 @@ export default function EmptyBox() {
     useEffect(() => {
         setTimeout(() => {
             setFakeloadingtime(false)
-        }, 2000);
+        }, 9000);
 
     }, []);
 

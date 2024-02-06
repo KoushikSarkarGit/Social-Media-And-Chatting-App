@@ -9,6 +9,7 @@ import '../pagecss/viewpostpage.css'
 import postPic1 from '../img/profileImg.jpg'
 import ViewSinglepost from '../components/ViewSinglepost'
 import { useParams } from 'react-router-dom/dist/umd/react-router-dom.development'
+import Layout from '../components/Layout'
 
 
 export default function ViewPostpage() {
@@ -23,17 +24,18 @@ export default function ViewPostpage() {
         liked: true
     }
     return (
-        <div className='viewpostpagebox'>
+        <Layout title={'View Post'}>
+            <div className='viewpostpagebox'>
 
-            <LeftsideOfHome />
-            <div className="mainpost">
+                <LeftsideOfHome />
+                <div className="mainpost">
 
 
-                <ViewSinglepost pdata={allpostdata} pid={params.postId} />
+                    <ViewSinglepost pdata={allpostdata} pid={params.postId} />
+                </div>
+                <RightofHome />
             </div>
-            <RightofHome />
-        </div>
-
+        </Layout>
 
     )
 }

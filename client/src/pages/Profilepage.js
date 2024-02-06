@@ -3,17 +3,23 @@ import ProfileLeft from '../components/ProfileLeft'
 import Profilecenter from '../components/Profilecenter'
 import '../pagecss/profilepage.css'
 import ProfileRight from '../components/ProfileRight'
+import Layout from '../components/Layout'
+
 
 
 export default function Profilepage() {
     return (
-        <div className='profilepagebox'>
-            <ProfileLeft />
+        <Layout title={'Profile Page'}>
+            <div className='profilepagebox'>
 
-            <Profilecenter />
+                <ProfileLeft />
 
-            <ProfileRight />
+                <Profilecenter />
 
-        </div>
+                <ProfileRight />
+
+            </div>
+
+        </Layout>
     )
 }

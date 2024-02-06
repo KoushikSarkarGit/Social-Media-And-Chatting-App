@@ -3,16 +3,19 @@ import LeftsideOfHome from '../components/LeftsideOfHome'
 import '../pagecss/timelinepage.css'
 import Timelinecomponent from '../components/Timelinecomponent'
 import RightofHome from '../components/RightofHome'
+import Layout from '../components/Layout'
 
 export default function TimelinePage() {
     return (
-        <div className='timelinepagebox'>
+        <Layout title={'Your Timeline'}>
+            <div className='timelinepagebox'>
 
-            <LeftsideOfHome />
-            <Timelinecomponent />
-            <RightofHome />
+                <LeftsideOfHome />
+                <Timelinecomponent />
+                <RightofHome />
 
 
-        </div>
+            </div>
+        </Layout>
     )
 }

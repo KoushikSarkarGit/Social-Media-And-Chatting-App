@@ -10,6 +10,8 @@ import { Routes, Route } from 'react-router-dom'
 import TimelinePage from './pages/TimelinePage';
 import ViewPostpage from './pages/ViewPostpage';
 import UserProfile from './pages/UserProfile';
+import PageNotFound from './pages/PageNotFound';
+
 
 
 function App() {
@@ -33,6 +35,9 @@ function App() {
           <Route path='/viewpost/:postId' element={<ViewPostpage />} />
           <Route path='/view-user-profile/:userId' element={<UserProfile />} />
 
+
+
+          <Route path='*' element={<PageNotFound />} />
         </Routes>
 
       </div>

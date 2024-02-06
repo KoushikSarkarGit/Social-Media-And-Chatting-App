@@ -14,6 +14,7 @@ import { Appcontext } from '../ContextFolder/ContextCreator';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom/dist/umd/react-router-dom.development';
 
 
 
@@ -24,9 +25,9 @@ export default function SharePostWithTexarea({ setopensharemodal }) {
 
 
     const cur = useContext(Appcontext);
-    const { userdata } = cur;
+    const { jwtToken, userdata } = cur;
 
-
+    const navigate = useNavigate()
 
     const [postimage, setpostimage] = useState();
     const [taglist, setTaglist] = useState([]);
@@ -90,16 +91,30 @@ export default function SharePostWithTexarea({ setopensharemodal }) {
     const finalsubmit = async (e) => {
 
         e.preventDefault()
-        let jwtToken;
+
+        if (!jwtToken) {
+            navigate('/login')
+            return
+        }
+
+        const selectedFile = postimgref.current.files[0];
+        if (selectedFile && textareaval.length < 1) { return }
+
+        if (textareaval.length < 1) { return }
+
+
+
+
+        let cjwtToken;
         let mydata = await localStorage.getItem('authdata')
         let jsondata = await JSON.parse(mydata)
-        jwtToken = jsondata.jwttoken
+        cjwtToken = jsondata.jwttoken
 
 
         try {
 
             const imageSizeLimit = 3 * 1024 * 1024;
-            const selectedFile = postimgref.current.files[0];
+
 
             if (selectedFile && selectedFile.size > imageSizeLimit) {
                 // Image size exceeds the limit
@@ -116,13 +131,13 @@ export default function SharePostWithTexarea({ setopensharemodal }) {
 
             // console.log(Object.fromEntries(finalpostval))
 
-            if (jwtToken) {
+            if (cjwtToken) {
 
                 await axios.post(`http://localhost:9000/api/v1/post/create-post`,
                     finalpostval,
                     {
                         headers: {
-                            token: jwtToken
+                            token: cjwtToken
                         },
                     }).then(async (res) => {
 
@@ -211,19 +226,24 @@ export default function SharePostWithTexarea({ setopensharemodal }) {
 
                     {
                         tagmodal && <div className='tagbox '>
-                            <div className='d-flex flex-wrap px-2 py-2 my-1'>
+                            <div className='d-flex flex-column  flex-wrap px-2 py-2 my-1'>
+
+                                {taglist.length >= 10 && <span style={{ color: 'red' }}>*maximum tag limit reached (10/10)</span>}
 
                                 <span className='me-2'> <b>Tags:</b></span>
 
-                                {
-                                    taglist.map((item, index) => {
-                                        return <div className="d-flex indivtag align-items-center mx-1 py-1 badge text-bg-primary" key={index + 's'}>
-                                            #{item.tagname}
-                                            <RxCross1 className='ms-2 indivtagcross' type='button' onClick={() => removetag(index)} />
+                                <div className='d-flex flex-row flex-wrap '>
 
-                                        </div>
-                                    })
-                                }
+                                    {
+                                        taglist.map((item, index) => {
+                                            return <div className="d-flex indivtag align-items-center my-1 mx-1 py-1 badge text-bg-primary" key={index + 's'}>
+                                                #{item.tagname}
+                                                <RxCross1 className='ms-2 indivtagcross' type='button' onClick={() => removetag(index)} />
+
+                                            </div>
+                                        })
+                                    }
+                                </div>
 
                             </div>
 
@@ -238,12 +258,15 @@ export default function SharePostWithTexarea({ setopensharemodal }) {
                                         }
                                     }} />
 
-                                <button className="btn btn-outline-primary" disabled={newtag.length < 1} type="button" id="button-addon2"
+                                <button
+                                    className="btn btn-outline-primary"
+                                    disabled={(newtag.length < 1 || taglist.length >= 10)} type="button" id="button-addon2"
 
                                     onClick={() => {
                                         setTaglist([...taglist, { "tagname": newtag }]);
                                         setNewtag('')
-                                    }} >Add tag</button>
+                                    }}
+                                >Add tag</button>
                             </div>
                         </div>
                     }
@@ -288,7 +311,30 @@ export default function SharePostWithTexarea({ setopensharemodal }) {
                             Add Tag
                         </div>
 
-                        <button className="basicbutton postbutton" type='submit'  >Share</button>
+                        <button className="basicbutton postbutton"
+                            type='submit'
+                            onClick={() => {
+                                if (!jwtToken) {
+                                    navigate('/login')
+                                }
+
+
+                                // const selectedFile = postimgref.current.files[0];
+                                if (postimage && textareaval.length < 1) {
+                                    toast('Please Add Caption', {
+                                        icon: '🐣',
+                                    })
+                                    return
+                                }
+                                else if (textareaval.length < 1) {
+                                    toast('Please Enter Some Text In Your Post', {
+                                        icon: '🐣',
+                                    })
+                                    return
+                                }
+
+                            }}
+                        >Share</button>
 
                         <input type="file" name='imgupload' ref={postimgref} style={{ display: 'none' }} onChange={insertimagehandler} />
 

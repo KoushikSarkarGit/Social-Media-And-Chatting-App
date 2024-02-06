@@ -21,7 +21,7 @@ export default function UserTimelineComponent({ userId }) {
 
                 <ul className="nav nav-underline tabitems customStickyTop ">
                     <li className="nav-item" >
-                        <Link className={`nav-link ${selectedoption === 'YourPosts' ? 'active' : ''}`} onClick={() => setSelectedoption('YourPosts')} aria-current="page" to="#">Your Posts</Link>
+                        <Link className={`nav-link ${selectedoption === 'YourPosts' ? 'active' : ''}`} onClick={() => setSelectedoption('YourPosts')} aria-current="page" to="#"> Posts</Link>
                     </li>
                     <li className="nav-item">
                         <Link className={`nav-link ${selectedoption === 'Liked' ? 'active' : ''}`} onClick={() => setSelectedoption('Liked')} to="#">Liked</Link>

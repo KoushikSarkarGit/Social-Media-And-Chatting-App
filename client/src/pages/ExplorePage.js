@@ -4,22 +4,25 @@ import '../pagecss/explorepage.css'
 
 import ExploreRight from '../components/ExploreRight'
 import ExploreMiddle from '../components/ExploreMiddle';
-import { Toaster } from 'react-hot-toast';
+import Layout from '../components/Layout';
+
 
 export default function ExplorePage() {
 
 
     return (
-        <div className='explorepagebox'>
-            <Toaster />
-            <LeftsideOfHome />
-            <div className="mainexplorepagecontent">
+        <Layout title={'Explore'}>
+            <div className='explorepagebox'>
 
-                <ExploreMiddle />
+                <LeftsideOfHome />
+                <div className="mainexplorepagecontent">
+
+                    <ExploreMiddle />
+                </div>
+
+                <ExploreRight />
+
             </div>
-
-            <ExploreRight />
-
-        </div>
+        </Layout>
     )
 }
