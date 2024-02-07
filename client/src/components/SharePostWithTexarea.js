@@ -35,11 +35,13 @@ export default function SharePostWithTexarea({ setopensharemodal }) {
     const [newtag, setNewtag] = useState('');
     const postimgref = useRef('')
 
+    const [isloading, setIsloading] = useState(false);
+    const [wordlimitreached, setwordlimitreached] = useState(false);
     const [imageSizeNotValid, setImageSizeNotValid] = useState(false);
 
     const textarearef = useRef(null)
     const [textareaval, settextareaval] = useState('');
-
+    const maxpostdescriptionlimit = 2000
 
 
 
@@ -99,87 +101,196 @@ export default function SharePostWithTexarea({ setopensharemodal }) {
 
         const selectedFile = postimgref.current.files[0];
         if (selectedFile && textareaval.length < 1) { return }
-
         if (textareaval.length < 1) { return }
 
 
 
 
-        let cjwtToken;
-        let mydata = await localStorage.getItem('authdata')
-        let jsondata = await JSON.parse(mydata)
-        cjwtToken = jsondata.jwttoken
+        //swal
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'The Contents Will Be Posted',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: "rgb(39 216 37)",
+            confirmButtonText: 'Post',
+            cancelButtonText: `Cancel`
+        }).then(async (result) => {
 
 
-        try {
-
-            const imageSizeLimit = 3 * 1024 * 1024;
-
-
-            if (selectedFile && selectedFile.size > imageSizeLimit) {
-                // Image size exceeds the limit
-                toast.error('Image size must be less than 3MB.');
-                setImageSizeNotValid(true)
-                return;
-            }
-
-            const finalpostval = new FormData();
-            finalpostval.append('postdescription', textareaval)
-            await finalpostval.append('hashtags', JSON.stringify(taglist))
-            await finalpostval.append('postimage', postimgref.current.files[0]);
+            if (result.isConfirmed) {
+                let cjwtToken;
+                let mydata = await localStorage.getItem('authdata')
+                let jsondata = await JSON.parse(mydata)
+                cjwtToken = jsondata.jwttoken
 
 
-            // console.log(Object.fromEntries(finalpostval))
+                try {
 
-            if (cjwtToken) {
+                    const imageSizeLimit = 3 * 1024 * 1024;
 
-                await axios.post(`http://localhost:9000/api/v1/post/create-post`,
-                    finalpostval,
-                    {
-                        headers: {
-                            token: cjwtToken
-                        },
-                    }).then(async (res) => {
 
-                        if (res.data.success) {
-                            setTaglist([]);
-                            settextareaval('')
-                            setpostimage('')
-                            setTagmodal(false)
-                            // console.log(res.data)
+                    if (selectedFile && selectedFile.size > imageSizeLimit) {
+                        // Image size exceeds the limit
+                        toast.error('Image size must be less than 3MB.');
+                        setImageSizeNotValid(true)
+                        return;
+                    }
 
-                            Swal.fire({
-                                title: "Post Created Successfully",
-                                icon: 'success',
-                                confirmButtonText: "Ok"
+                    const finalpostval = new FormData();
+                    finalpostval.append('postdescription', textareaval)
+                    await finalpostval.append('hashtags', JSON.stringify(taglist))
+                    await finalpostval.append('postimage', postimgref.current.files[0]);
 
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    setopensharemodal(false)
+
+                    // console.log(Object.fromEntries(finalpostval))
+
+                    if (cjwtToken) {
+                        setIsloading(true)
+
+                        await axios.post(`http://localhost:9000/api/v1/post/create-post`,
+                            finalpostval,
+                            {
+                                headers: {
+                                    token: cjwtToken
+                                },
+                            }).then(async (res) => {
+
+                                if (res.data.success) {
+                                    setTaglist([]);
+                                    settextareaval('')
+                                    setpostimage('')
+                                    setTagmodal(false)
+                                    // console.log(res.data)
+
+                                    Swal.fire({
+                                        title: "Post Created Successfully",
+                                        icon: 'success',
+                                        confirmButtonText: "Ok"
+
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            setopensharemodal(false)
+                                        }
+                                    });
                                 }
-                            });
+                                else {
+                                    Swal.fire({
+                                        title: "Oops...?",
+                                        text: "Something went wrong!",
+                                        icon: "error"
+                                    });
+                                }
+
+                                setIsloading(false)
 
 
 
 
-                        }
+                            }).catch((err) => {
+                                console.log(err)
+                                toast.error('some internal axios error occured')
+                            })
+                    }
 
-                    }).catch((err) => {
-                        console.log(err)
-                        toast.error('some internal axios error occured')
-                    })
+
+                } catch (error) {
+                    console.log(error)
+                    toast.error('Oops! Some error happened')
+                }
+
+
             }
 
 
-        } catch (error) {
-            console.log(error)
-            toast.error('Oops! Some error happened')
-        }
+        })
+
+        //swal
+
+
 
     }
 
 
 
+
+    useEffect(() => {
+        if (textareaval.length >= maxpostdescriptionlimit) {
+            setwordlimitreached(true)
+
+        }
+        else {
+            setwordlimitreached(false)
+        }
+
+    }, [textareaval]);
+
+
+
+
+
+
+    const showAlert = () => {
+        Swal.fire({
+            title: "Your post is being created...", // Adjust title as needed
+            icon: 'info',
+            html: isloading ? `     
+                    <div class="spinner-border my-2 text-warning" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>        
+          `
+                : "",
+            timer: 30000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+            allowOutsideClick: false, // Prevent outside click closing
+            backdrop: true, // Add a backdrop for emphasis
+            willClose: () => {
+
+                if (isloading) {
+                    // Alert the user or prevent closing 
+                    Swal.fire({
+                        title: "Loading...",
+                        icon: 'info',
+                        html: `
+                        <div class="spinner-border text-warning my-2" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div> 
+                        `,
+                        allowOutsideClick: false,
+                        backdrop: true,
+                    });
+                }
+            }
+        });
+    };
+
+
+
+
+
+
+
+
+
+
+
+
+    useEffect(() => {
+        if (isloading) {
+            showAlert();
+
+
+
+            setTimeout(() => {
+                setIsloading(false)
+            }, 20000);
+
+
+
+        }
+    }, [isloading]);
 
 
 
@@ -204,7 +315,7 @@ export default function SharePostWithTexarea({ setopensharemodal }) {
  */}
                     <div className="form-floating">
                         <textarea className="form-control" style={{ paddingTop: '0.6rem' }} id="floatingTextarea" placeholder="What's happening" name='textareaval' value={textareaval} ref={textarearef} onChange={(event) => onchangehandler(event)} ></textarea>
-
+                        {wordlimitreached && <span style={{ color: 'red' }}>*maximum word limit reached  ({maxpostdescriptionlimit}/{maxpostdescriptionlimit})</span>}
                     </div>
 
 

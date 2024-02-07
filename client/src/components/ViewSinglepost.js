@@ -13,13 +13,13 @@ import { Appcontext } from '../ContextFolder/ContextCreator';
 import defaultprofileimg2 from '../img/defaultprofimg2.jpg'
 import { AiFillLike } from "react-icons/ai";
 import { AiOutlineLike } from "react-icons/ai";
-import { useNavigate, useHistory } from 'react-router-dom/dist/umd/react-router-dom.development';
+import { useNavigate } from 'react-router-dom/dist/umd/react-router-dom.development';
 import defaultImage3 from '../img/defaultImage3.png'
 import Swal from 'sweetalert2';
 
 
 
-export default function ViewSinglepost({ pdata, pid }) {
+export default function ViewSinglepost({ pid }) {
 
 
     const navigate = useNavigate()
@@ -31,6 +31,7 @@ export default function ViewSinglepost({ pdata, pid }) {
     const [postdetails, setPostdetails] = useState()
     const [page, setPage] = useState(1)
     const [totalCommentCount, setTotalCommentCount] = useState(0)
+    const [taglist, setTaglist] = useState([])
     const [commentdetails, setCommentdetails] = useState([])
 
     const cur = useContext(Appcontext);
@@ -102,7 +103,8 @@ export default function ViewSinglepost({ pdata, pid }) {
 
                 if (res.data.success === true) {
                     setPostdetails(res.data.fetchedpost)
-                    console.log(res.data.fetchedpost)
+                    setTaglist(res.data.fetchedpost.tags)
+                    // console.log(res.data.fetchedpost)
                 }
 
             }).catch((err) => {
@@ -128,7 +130,7 @@ export default function ViewSinglepost({ pdata, pid }) {
                     setCommentdetails(prevCommentList => [...prevCommentList, ...res.data.thepostcomment])
                     setTotalCommentCount(res.data.totalCommentCount)
 
-                    console.log(res.data)
+                    // console.log(res.data)
                 }
 
             }).catch((err) => {
@@ -277,9 +279,34 @@ export default function ViewSinglepost({ pdata, pid }) {
 
                 </div>
 
-                <div className="detail px-1 py-1 my-1">
+
+
+
+
+                {taglist.length >= 1 && <div className='text-sm-end' style={{ marginBottom: '-40px', marginTop: '-5px' }}>
+                    <p className="d-inline-flex ">
+                        <a className="showtagsbtn btn btn-outline-primary " data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                            Show Tags
+                        </a>
+
+                    </p>
+                    <div className="collapse mb-4" id="collapseExample">
+                        <div className="card card-body text-start d-flex flex-row flex-wrap">
+
+                            {taglist.map((item, index) => {
+
+                                return <a className='mx-1' href='#' key={index} >#{item.tagname}</a>
+                            })}
+                        </div>
+                    </div>
+                </div>}
+
+
+
+                <div className="detail px-1 py-1 mb-1">
 
                     <span> {postdetails?.postdescription}</span>
+
                 </div>
                 {postdetails?.postimage ?
                     <div className="imgcontainer">

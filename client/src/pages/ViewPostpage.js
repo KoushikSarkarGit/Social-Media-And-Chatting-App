@@ -16,13 +16,7 @@ export default function ViewPostpage() {
     const params = useParams()
 
 
-    const allpostdata = {
-        img: postPic1,
-        name: 'Tzuyu',
-        desc: "Happy New Year all friends! #2023 😂🤣 dfdhifdifdifdf idfihdbfhudbhfbdfdbfudbu  duyf duyfydudbfuhjbhjgfhdfcfdf dbfdfgffhfhcfhgfcghgfhgf uhdb fhudfuhdbfuhduhfbd ",
-        likes: 2300,
-        liked: true
-    }
+
     return (
         <Layout title={'View Post'}>
             <div className='viewpostpagebox'>
@@ -31,7 +25,7 @@ export default function ViewPostpage() {
                 <div className="mainpost">
 
 
-                    <ViewSinglepost pdata={allpostdata} pid={params.postId} />
+                    <ViewSinglepost pid={params.postId} />
                 </div>
                 <RightofHome />
             </div>

@@ -219,3 +219,14 @@
     border: none;
     border-radius: 0.1rem 0.1rem 1rem 1rem;
 }
+
+
+
+.showtagsbtn {
+    border: 1px solid rgb(154, 205, 251);
+    border-radius: 1rem;
+    padding: 2px 6px 2px 6px;
+    margin-right: 3px;
+    cursor: pointer;
+    font-size: 12px;
+}

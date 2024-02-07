@@ -24,6 +24,8 @@ export default function SharePostComponent() {
 
     const navigate = useNavigate()
 
+    const [wordlimitreached, setwordlimitreached] = useState(false);
+
     const [postimage, setpostimage] = useState();
     const [taglist, setTaglist] = useState([]);
     const [tagmodal, setTagmodal] = useState(false);
@@ -36,7 +38,7 @@ export default function SharePostComponent() {
     const [textareaval, settextareaval] = useState('');
 
 
-
+    const maxpostdescriptionlimit = 2000
 
 
     const onchangehandler = (event) => {
@@ -116,91 +118,106 @@ export default function SharePostComponent() {
         }
 
         const selectedFile = postimgref.current.files[0];
-        if (selectedFile && textareaval.length < 1) {
-
-            return
-        }
+        if (selectedFile && textareaval.length < 1) { return }
 
 
-        if (textareaval.length < 1) {
-
-            return
-        }
+        if (textareaval.length < 1) { return }
 
 
+        //swal
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'The Contents Will Be Posted',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: "rgb(39 216 37)",
+            confirmButtonText: 'Post',
+            cancelButtonText: `Cancel`
+        }).then(async (result) => {
+
+            if (result.isConfirmed) {
+
+                let cjwtToken;
+                let mydata = await localStorage.getItem('authdata')
+                let jsondata = await JSON.parse(mydata)
+                cjwtToken = jsondata.jwttoken
 
 
+                try {
+
+                    const imageSizeLimit = 3 * 1024 * 1024;
+                    // const selectedFile = postimgref.current.files[0];
+
+                    if (selectedFile && selectedFile.size > imageSizeLimit) {
+                        // Image size exceeds the limit
+                        toast.error('Image size must be less than 3MB.');
+                        setImageSizeNotValid(true)
+                        return;
+                    }
+
+                    const finalpostval = new FormData();
+                    finalpostval.append('postdescription', textareaval)
+                    await finalpostval.append('hashtags', JSON.stringify(taglist))
+                    await finalpostval.append('postimage', postimgref.current.files[0]);
 
 
+                    // console.log(Object.fromEntries(finalpostval))
 
-        let cjwtToken;
-        let mydata = await localStorage.getItem('authdata')
-        let jsondata = await JSON.parse(mydata)
-        cjwtToken = jsondata.jwttoken
+                    if (cjwtToken) {
+                        setIsloading(true)
 
+                        await axios.post(`http://localhost:9000/api/v1/post/create-post`,
+                            finalpostval,
+                            {
+                                headers: {
+                                    token: cjwtToken
+                                },
+                            }).then(async (res) => {
 
-        try {
+                                if (res.data.success) {
+                                    setTaglist([]);
+                                    settextareaval('')
+                                    setpostimage('')
+                                    setTagmodal(false)
+                                    // console.log(res.data)
 
-            const imageSizeLimit = 3 * 1024 * 1024;
-            // const selectedFile = postimgref.current.files[0];
+                                    Swal.fire({
+                                        title: "Post Created Successfully",
+                                        icon: 'success',
+                                        allowOutsideClick: false,
+                                        confirmButtonText: "Ok"
+                                    })
+                                }
+                                else {
+                                    Swal.fire({
+                                        title: "Oops...?",
+                                        text: "Something went wrong!",
+                                        icon: "error"
+                                    });
+                                }
 
-            if (selectedFile && selectedFile.size > imageSizeLimit) {
-                // Image size exceeds the limit
-                toast.error('Image size must be less than 3MB.');
-                setImageSizeNotValid(true)
-                return;
-            }
+                                setIsloading(false)
 
-            const finalpostval = new FormData();
-            finalpostval.append('postdescription', textareaval)
-            await finalpostval.append('hashtags', JSON.stringify(taglist))
-            await finalpostval.append('postimage', postimgref.current.files[0]);
-
-
-            // console.log(Object.fromEntries(finalpostval))
-
-            if (cjwtToken) {
-                setIsloading(true)
-
-                await axios.post(`http://localhost:9000/api/v1/post/create-post`,
-                    finalpostval,
-                    {
-                        headers: {
-                            token: cjwtToken
-                        },
-                    }).then(async (res) => {
-
-                        if (res.data.success) {
-                            setTaglist([]);
-                            settextareaval('')
-                            setpostimage('')
-                            setTagmodal(false)
-                            // console.log(res.data)
-                            toast.success(res.data.msg)
-
-                            Swal.fire({
-                                title: "Post Created Successfully",
-                                icon: 'success',
-                                allowOutsideClick: false,
-                                confirmButtonText: "Ok"
-
+                            }).catch((err) => {
+                                console.log(err)
+                                toast.error('some internal axios error occured')
                             })
+                    }
 
 
-                        }
-                        setIsloading(false)
+                } catch (error) {
+                    console.log(error)
+                    toast.error('Oops! Some error happened')
+                }
 
-                    }).catch((err) => {
-                        console.log(err)
-                        toast.error('some internal axios error occured')
-                    })
+
             }
 
+        })
 
-        } catch (error) {
-            console.log(error)
-            toast.error('Oops! Some error happened')
-        }
+        //swal
+
 
     }
 
@@ -211,14 +228,15 @@ export default function SharePostComponent() {
 
     const showAlert = () => {
         Swal.fire({
-            title: "Loading...", // Adjust title as needed
-            html: isloading ? `
-            <p>Please 1st one.</p>
-            <div className="spinner-border text-warning" role="status">
-                            <span className="visually-hidden">Loading...</span>
-                        </div>
-          ` : "",
-            timer: 10000,
+            title: "Your post is being created...", // Adjust title as needed
+            icon: 'info',
+            html: isloading ? `     
+                    <div class="spinner-border my-2 text-warning" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>        
+          `
+                : "",
+            timer: 20000,
             timerProgressBar: true,
             showConfirmButton: false,
             allowOutsideClick: false, // Prevent outside click closing
@@ -226,14 +244,14 @@ export default function SharePostComponent() {
             willClose: () => {
 
                 if (isloading) {
-                    // Alert the user or prevent closing (consider user experience)
+                    // Alert the user or prevent closing 
                     Swal.fire({
                         title: "Loading...",
+                        icon: 'info',
                         html: `
-                          <p>Please wait while your post is being created.</p>
-                          <div className="spinner-border text-warning" role="status">
-                            <span className="visually-hidden">Loading...</span>
-                        </div>
+                        <div class="spinner-border text-warning my-2" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div> 
                         `,
                         allowOutsideClick: false,
                         backdrop: true,
@@ -271,6 +289,19 @@ export default function SharePostComponent() {
 
 
 
+    useEffect(() => {
+        if (textareaval.length >= maxpostdescriptionlimit) {
+            setwordlimitreached(true)
+
+        }
+        else {
+            setwordlimitreached(false)
+        }
+
+    }, [textareaval]);
+
+
+
 
 
 
@@ -291,7 +322,16 @@ export default function SharePostComponent() {
 
                 <div>
 
-                    <textarea className='form-control ' placeholder="What's happening" name='textareaval' value={textareaval} ref={textarearef} onChange={(event) => onchangehandler(event)} />
+                    <textarea
+                        className='form-control '
+                        placeholder="What's happening"
+                        name='textareaval'
+                        value={textareaval}
+                        ref={textarearef}
+                        maxLength={maxpostdescriptionlimit}
+                        onChange={(event) => onchangehandler(event)} />
+
+                    {wordlimitreached && <span style={{ color: 'red' }}>*maximum word limit reached  ({maxpostdescriptionlimit}/{maxpostdescriptionlimit})</span>}
 
 
                     {postimage && <div className="tobeuloadedimg">
@@ -404,8 +444,6 @@ export default function SharePostComponent() {
                                     navigate('/login')
                                 }
 
-
-                                const selectedFile = postimgref.current.files[0];
                                 if (postimage && textareaval.length < 1) {
                                     toast('Please Add Caption', {
                                         icon: '🐣',
@@ -421,9 +459,9 @@ export default function SharePostComponent() {
 
                             }}
 
-
-
-                        >Share</button>
+                        >
+                            Share
+                        </button>
 
                         <input type="file" name='imgupload' ref={postimgref} style={{ display: 'none' }} onChange={insertimagehandler} />
 
