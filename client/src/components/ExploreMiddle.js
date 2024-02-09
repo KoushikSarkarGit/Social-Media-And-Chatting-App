@@ -15,10 +15,10 @@ import CustomEmptybox from './CustomEmptybox'
 
 
 
-export default function ExploreMiddle() {
+export default function ExploreMiddle({ keyword, type }) {
 
 
-    const [searchval, setSearchval] = useState('')
+    const [searchval, setSearchval] = useState(keyword != null ? keyword : '')
     const [userlist, setuserlist] = useState([])
     const [taggedpostlist, setTaggedpostlist] = useState([])
     const [postlist, setPostlist] = useState([])
@@ -28,10 +28,10 @@ export default function ExploreMiddle() {
     const [totalpostno, setTotalpostno] = useState()
     const [isloading, setIsloading] = useState(false)
 
-    const getSearchedUsers = async () => {
+    const getSearchedUsers = async (manualpageno) => {
         try {
             setIsloading(true)
-            await axios.get(`http://localhost:9000/api/v1/user/get-people-by-keyword/${searchval}/${pageno}`).then(async (res) => {
+            await axios.get(`http://localhost:9000/api/v1/user/get-people-by-keyword/${keyword}/${manualpageno || pageno}`).then(async (res) => {
 
                 if (res.data.success === true) {
 
@@ -58,10 +58,10 @@ export default function ExploreMiddle() {
     }
 
 
-    const getSearchedPosts = async () => {
+    const getSearchedPosts = async (manualpageno) => {
         try {
             setIsloading(true)
-            await axios.get(`http://localhost:9000/api/v1/post/get-post-by-keyword/${searchval}/${pageno}`).then(async (res) => {
+            await axios.get(`http://localhost:9000/api/v1/post/get-post-by-keyword/${keyword}/${manualpageno || pageno}`).then(async (res) => {
 
                 if (res.data.success === true) {
 
@@ -88,10 +88,10 @@ export default function ExploreMiddle() {
     }
 
 
-    const getSearchedTaggedPosts = async () => {
+    const getSearchedTaggedPosts = async (manualpageno) => {
         try {
             setIsloading(true)
-            await axios.get(`http://localhost:9000/api/v1/post/get-post-by-tags-keyword/${searchval}/${pageno}`).then(async (res) => {
+            await axios.get(`http://localhost:9000/api/v1/post/get-post-by-tags-keyword/${keyword}/${manualpageno || pageno}`).then(async (res) => {
 
                 if (res.data.success === true) {
 
@@ -118,18 +118,46 @@ export default function ExploreMiddle() {
         }
     }
 
+    // useEffect(() => {
+    //     //resetting all the lists
+    //     setPostlist([])
+    //     setTaggedpostlist([])
+    //     setuserlist([])
+    //     setifsearched(false)
+    //     setSearchval('')
+    //     setPageno(1)
+
+    // }, [selectedoption]);
+
+
     useEffect(() => {
-        //resetting all the lists
-        setPostlist([])
-        setTaggedpostlist([])
-        setuserlist([])
-        setifsearched(false)
-        setSearchval('')
-        setPageno(1)
-    }, [selectedoption]);
+
+
+        if (type != null && keyword != null) {
+
+            if (type === 'posts' && keyword != null) {
+                setPostlist([])
+                getSearchedPosts()
+
+            }
+
+            else if (type === 'tags' && keyword != null) {
+                setTaggedpostlist([])
+                getSearchedTaggedPosts()
+
+            }
+            else if (type === 'people' && keyword != null) {
+
+                setuserlist([])
+                getSearchedUsers()
+
+            }
+
+        }
 
 
 
+    }, [keyword, type]);
 
 
 
@@ -145,7 +173,9 @@ export default function ExploreMiddle() {
                 setifsearched={setifsearched}
                 setPostlist={setPostlist}
                 setTaggedpostlist={setTaggedpostlist}
-                setuserlist={setuserlist} />
+                setuserlist={setuserlist}
+                setPageno={setPageno}
+            />
 
             <div className="chooseSearchOption">
                 <div className='indivradio'>
@@ -182,26 +212,26 @@ export default function ExploreMiddle() {
 
             <div className="searchResultsBox">
 
-                {(searchval === '' && ifsearched === false) && <div><h3 className='px-2 text-center' style={{ color: 'grey' }}>Search people, posts or tags </h3></div>
+                {(ifsearched === false) && <div><h3 className='px-2 text-center' style={{ color: 'grey' }}>Search people, posts or tags </h3></div>
 
                 }
 
 
 
 
-                {selectedoption === 'posts' ?
+                {type === 'posts' ?
                     <>
                         {(ifsearched === true) &&
 
                             <>
                                 {postlist.length < 1 ?
 
-                                    <div className='px-2 text-center' style={{ color: 'grey' }}> <CustomEmptybox lodaingTime={2000} textshown={`No results found for "${searchval}"`} cfontsize={'1.75rem'} loadingstatus={isloading} />  </div>
+                                    <div className='px-2 text-center' style={{ color: 'grey' }}> <CustomEmptybox lodaingTime={2000} textshown={`No results found for "${keyword}"`} cfontsize={'1.75rem'} loadingstatus={isloading} />  </div>
 
                                     :
                                     <>
 
-                                        <div className='px-2 text-center' style={{ color: 'grey' }}> <CustomEmptybox lodaingTime={2000} textshown={`Results for "${searchval}"`} cfontsize={'1.75rem'} loadingstatus={isloading} />  </div>
+                                        <div className='px-2 text-center' style={{ color: 'grey' }}> <CustomEmptybox lodaingTime={2000} textshown={`Results for "${keyword}"`} cfontsize={'1.75rem'} loadingstatus={isloading} />  </div>
 
                                         {postlist?.map((item, index) => {
                                             return <SinglePostcomponent pdata={item} key={index} />
@@ -209,8 +239,9 @@ export default function ExploreMiddle() {
 
                                         {!(pageno * 10 > totalpostno) && ifsearched === true && <button className="morefollowers"
                                             onClick={async () => {
+                                                await getSearchedPosts(pageno + 1);
                                                 await setPageno(pageno + 1)
-                                                await getSearchedPosts();
+
                                                 // await console.log(pageno, morefollowerlist)
                                             }} ><hr className='morefhr' /> <h6> Load More</h6> </button>}
                                     </>
@@ -229,17 +260,17 @@ export default function ExploreMiddle() {
 
 
 
-                {selectedoption === 'tags' ?
+                {type === 'tags' ?
                     <>
                         {(ifsearched === true) &&
 
                             <>
                                 {taggedpostlist.length < 1 ?
 
-                                    <div className='px-2 text-center' style={{ color: 'grey' }}> <CustomEmptybox lodaingTime={2000} textshown={`No results found for "${searchval}"`} cfontsize={'1.75rem'} loadingstatus={isloading} />  </div>
+                                    <div className='px-2 text-center' style={{ color: 'grey' }}> <CustomEmptybox lodaingTime={2000} textshown={`No results found for "${keyword}"`} cfontsize={'1.75rem'} loadingstatus={isloading} />  </div>
                                     :
                                     <>
-                                        <div className='px-2 text-center' style={{ color: 'grey' }}> <CustomEmptybox lodaingTime={2000} textshown={`Results for "${searchval}"`} cfontsize={'1.75rem'} loadingstatus={isloading} />  </div>
+                                        <div className='px-2 text-center' style={{ color: 'grey' }}> <CustomEmptybox lodaingTime={2000} textshown={`Results for "${keyword}"`} cfontsize={'1.75rem'} loadingstatus={isloading} />  </div>
 
                                         {taggedpostlist?.map((item, index) => {
                                             return <SinglePostcomponent pdata={item} key={index} />
@@ -247,8 +278,9 @@ export default function ExploreMiddle() {
 
                                         {!(pageno * 10 > totalpostno) && ifsearched === true && <button className="morefollowers"
                                             onClick={async () => {
+                                                await getSearchedTaggedPosts(pageno + 1);
                                                 await setPageno(pageno + 1)
-                                                await getSearchedTaggedPosts();
+
                                                 // await console.log(pageno, morefollowerlist)
                                             }} ><hr className='morefhr' /> <h6> Load More</h6> </button>}
                                     </>
@@ -266,16 +298,16 @@ export default function ExploreMiddle() {
 
 
 
-                {selectedoption === 'people' ?
+                {type === 'people' ?
                     <>
                         {(ifsearched === true) &&
 
                             <>
                                 {userlist?.length < 1 ?
-                                    <div className='px-2 text-center' style={{ color: 'grey' }}> <CustomEmptybox lodaingTime={2000} textshown={`No results found for "${searchval}"`} cfontsize={'1.75rem'} loadingstatus={isloading} />  </div>
+                                    <div className='px-2 text-center' style={{ color: 'grey' }}> <CustomEmptybox lodaingTime={2000} textshown={`No results found for "${keyword}"`} cfontsize={'1.75rem'} loadingstatus={isloading} />  </div>
                                     :
                                     <>
-                                        <div className='px-2 text-center' style={{ color: 'grey' }}> <CustomEmptybox lodaingTime={2000} textshown={`Results for "${searchval}"`} cfontsize={'1.75rem'} loadingstatus={isloading} />  </div>
+                                        <div className='px-2 text-center' style={{ color: 'grey' }}> <CustomEmptybox lodaingTime={2000} textshown={`Results for "${keyword}"`} cfontsize={'1.75rem'} loadingstatus={isloading} />  </div>
 
                                         {userlist?.map((item, index) => {
                                             return <SearchUserElement udata={item} key={index} />
@@ -283,8 +315,9 @@ export default function ExploreMiddle() {
 
                                         {!(pageno * 10 >= totalpostno) && ifsearched === true && <button className="morefollowers"
                                             onClick={async () => {
+                                                await getSearchedTaggedPosts(pageno + 1);
                                                 await setPageno(pageno + 1)
-                                                await getSearchedTaggedPosts();
+
                                                 // await console.log(pageno, morefollowerlist)
                                             }} ><hr className='morefhr' /> <h6> Load More</h6> </button>}
                                     </>

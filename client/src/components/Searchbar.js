@@ -2,18 +2,13 @@ import React, { useState } from 'react'
 import { UilSearch } from '@iconscout/react-unicons'
 import '../pagecss/rightofhome.css'
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
-export default function Searchbar({ searchval, setSearchval, getSearchedUsers, getSearchedPosts, selectedoption, getSearchedTaggedPosts, setifsearched, setPostlist, setTaggedpostlist, setuserlist }) {
+export default function Searchbar({ searchval, setSearchval, getSearchedUsers, getSearchedPosts, selectedoption, getSearchedTaggedPosts, setifsearched, setPostlist, setTaggedpostlist, setuserlist, setPageno }) {
 
-
+    const navigate = useNavigate();
 
     const handleKeyPress = async (event) => {
-
-
-
-
-
-
 
 
         if ((event.key === 'Enter' || event.keyCode === 13) && searchval.trim() === '') {
@@ -21,24 +16,28 @@ export default function Searchbar({ searchval, setSearchval, getSearchedUsers, g
             toast.error('Please enter some value');
         } else if (event.key === 'Enter' || event.keyCode === 13) {
 
-            if (selectedoption === 'posts') {
-                await setPostlist([])
-                getSearchedPosts()
-                setifsearched(true)
-            }
-            else if (selectedoption === 'people') {
+            // if (selectedoption === 'posts') {
+            //     await setPostlist([])
+            //     getSearchedPosts()
+            //     setifsearched(true)
+            // }
+            // else if (selectedoption === 'people') {
 
-                await setuserlist([])
-                getSearchedUsers()
-                setifsearched(true)
-            }
-            else if (selectedoption === 'tags') {
-                await setTaggedpostlist([])
-                getSearchedTaggedPosts()
-                setifsearched(true)
-            }
+            //     await setuserlist([])
+            //     getSearchedUsers()
+            //     setifsearched(true)
+            // }
+            // else if (selectedoption === 'tags') {
+            //     await setTaggedpostlist([])
+            //     getSearchedTaggedPosts()
+            //     setifsearched(true)
+            // }
 
-            // console.log(searchval)
+
+            navigate(`/explore/${selectedoption || 'people'}/${searchval}`);
+            setifsearched(true)
+            setPageno(1)
+
         }
     };
 
@@ -50,24 +49,40 @@ export default function Searchbar({ searchval, setSearchval, getSearchedUsers, g
             toast.error('Please enter some value');
         } else {
 
-            if (selectedoption === 'posts') {
-                await setPostlist([])
-                getSearchedPosts()
-                setifsearched(true)
-            }
-            else if (selectedoption === 'people') {
-                await setuserlist([])
-                getSearchedUsers()
-                setifsearched(true)
-            }
-            else if (selectedoption === 'tags') {
-                await setTaggedpostlist([])
-                getSearchedTaggedPosts()
-                setifsearched(true)
-            }
-            // console.log(searchval)
+            // if (selectedoption === 'posts') {
+            //     await setPostlist([])
+            //     getSearchedPosts()
+            //     setifsearched(true)
+            // }
+            // else if (selectedoption === 'people') {
+            //     await setuserlist([])
+            //     getSearchedUsers()
+            //     setifsearched(true)
+            // }
+            // else if (selectedoption === 'tags') {
+            //     await setTaggedpostlist([])
+            //     getSearchedTaggedPosts()
+            //     setifsearched(true)
+            // }
+
+
+
+            navigate(`/explore/${selectedoption}/${searchval}`);
+
+            setifsearched(true)
+            setPageno(1)
+
         }
     };
+
+
+
+
+
+
+
+
+
 
 
 

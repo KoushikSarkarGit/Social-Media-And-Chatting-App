@@ -30,6 +30,7 @@ function App() {
           <Route path='/profile' element={<Profilepage />} />
           <Route path='/login' element={<Loginpage />} />
           <Route path='/signup' element={<SignUpPage />} />
+          <Route path='/explore/:type/:keyword' element={<ExplorePage />} />
           <Route path='/explore' element={<ExplorePage />} />
           <Route path='/timeline' element={<TimelinePage />} />
           <Route path='/viewpost/:postId' element={<ViewPostpage />} />
