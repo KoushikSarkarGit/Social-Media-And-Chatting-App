@@ -2,11 +2,16 @@ import React, { useState } from 'react'
 import { UilSearch } from '@iconscout/react-unicons'
 import '../pagecss/rightofhome.css'
 import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-export default function Searchbar({ searchval, setSearchval, getSearchedUsers, getSearchedPosts, selectedoption, getSearchedTaggedPosts, setifsearched, setPostlist, setTaggedpostlist, setuserlist, setPageno }) {
+export default function Searchbar({ selectedoption }) {
 
     const navigate = useNavigate();
+    const { keyword } = useParams();
+
+
+    const [searchval, setSearchval] = useState(keyword ? keyword : '')
+
 
     const handleKeyPress = async (event) => {
 
@@ -16,27 +21,8 @@ export default function Searchbar({ searchval, setSearchval, getSearchedUsers, g
             toast.error('Please enter some value');
         } else if (event.key === 'Enter' || event.keyCode === 13) {
 
-            // if (selectedoption === 'posts') {
-            //     await setPostlist([])
-            //     getSearchedPosts()
-            //     setifsearched(true)
-            // }
-            // else if (selectedoption === 'people') {
-
-            //     await setuserlist([])
-            //     getSearchedUsers()
-            //     setifsearched(true)
-            // }
-            // else if (selectedoption === 'tags') {
-            //     await setTaggedpostlist([])
-            //     getSearchedTaggedPosts()
-            //     setifsearched(true)
-            // }
-
-
             navigate(`/explore/${selectedoption || 'people'}/${searchval}`);
-            setifsearched(true)
-            setPageno(1)
+
 
         }
     };
@@ -48,29 +34,7 @@ export default function Searchbar({ searchval, setSearchval, getSearchedUsers, g
         if (searchval.trim() === '' || searchval === null) {
             toast.error('Please enter some value');
         } else {
-
-            // if (selectedoption === 'posts') {
-            //     await setPostlist([])
-            //     getSearchedPosts()
-            //     setifsearched(true)
-            // }
-            // else if (selectedoption === 'people') {
-            //     await setuserlist([])
-            //     getSearchedUsers()
-            //     setifsearched(true)
-            // }
-            // else if (selectedoption === 'tags') {
-            //     await setTaggedpostlist([])
-            //     getSearchedTaggedPosts()
-            //     setifsearched(true)
-            // }
-
-
-
-            navigate(`/explore/${selectedoption}/${searchval}`);
-
-            setifsearched(true)
-            setPageno(1)
+            navigate(`/explore/${selectedoption || 'people'}/${searchval}`);
 
         }
     };

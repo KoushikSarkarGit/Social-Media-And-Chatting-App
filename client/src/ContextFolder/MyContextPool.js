@@ -16,6 +16,7 @@ export default function MyContextPool(props) {
     const [userfristname, setUserfristname] = useState(null)
     const [userlastname, setUserlastname] = useState(null)
     const [userId, setUserId] = useState(null);
+    const [needtorun, setNeedtorun] = useState(false);
 
     const [loading, setLoading] = useState(true)
 
@@ -82,7 +83,7 @@ export default function MyContextPool(props) {
         settingloginStatus();
 
 
-    }, [])
+    }, [needtorun])
 
 
 
@@ -298,7 +299,7 @@ export default function MyContextPool(props) {
 
 
     return (
-        <Appcontext.Provider value={{ jwtToken, username, isAdmin, userlastname, userfristname, userprofileimg, setisAdmin, setjwtToken, setUserdata, setusername, userdata, logoutfunction, userId, setUserId, LikePost, UnLikePost, RepostThePost, UnRepostThePost, getRelativeTime }}>
+        <Appcontext.Provider value={{ jwtToken, username, isAdmin, userlastname, userfristname, userprofileimg, setisAdmin, setjwtToken, setUserdata, setusername, userdata, logoutfunction, userId, setUserId, LikePost, UnLikePost, RepostThePost, UnRepostThePost, getRelativeTime, setNeedtorun }}>
             {!loading && props.children
             }
         </Appcontext.Provider>

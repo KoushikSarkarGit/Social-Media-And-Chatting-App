@@ -8,9 +8,10 @@ import myprofileimage from "../img/defaultprofimg2.jpg";
 import { RxCross1 } from "react-icons/rx";
 import { UilLabelAlt } from '@iconscout/react-unicons'
 import '../pagecss/sharecomponent.css'
+
 import { Appcontext } from '../ContextFolder/ContextCreator';
 import axios from 'axios';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom/dist/umd/react-router-dom.development';
 
@@ -66,20 +67,12 @@ export default function SharePostComponent() {
 
 
     const insertimagehandler = (e) => {
-        // if (e.target.files && e.target.files[0]) {
 
-        //     setpostimage(URL.createObjectURL(e.target.files[0]))
-
-        // }
         const imageSizeLimit = 3 * 1024 * 1024;
 
         if (e.target.files && e.target.files[0]) {
             const selectedFile = e.target.files[0];
             const allowedFileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
-
-
-
-
 
 
             if (selectedFile && selectedFile.size > imageSizeLimit) {
@@ -100,8 +93,6 @@ export default function SharePostComponent() {
                 return;
             }
         }
-
-
 
 
     }
@@ -408,7 +399,7 @@ export default function SharePostComponent() {
                             <UilScenery />
                             Photo
                         </div>
-                        <div className="feature" style={{ color: "red" }}>
+                        <div className="feature" style={{ color: "#bc00ff" }}>
                             <UilPlayCircle />
                             Video
                         </div>{" "}

@@ -18,7 +18,7 @@ import CustomEmptybox from './CustomEmptybox'
 export default function ExploreMiddle({ keyword, type }) {
 
 
-    const [searchval, setSearchval] = useState(keyword != null ? keyword : '')
+
     const [userlist, setuserlist] = useState([])
     const [taggedpostlist, setTaggedpostlist] = useState([])
     const [postlist, setPostlist] = useState([])
@@ -118,38 +118,33 @@ export default function ExploreMiddle({ keyword, type }) {
         }
     }
 
-    // useEffect(() => {
-    //     //resetting all the lists
-    //     setPostlist([])
-    //     setTaggedpostlist([])
-    //     setuserlist([])
-    //     setifsearched(false)
-    //     setSearchval('')
-    //     setPageno(1)
 
-    // }, [selectedoption]);
 
 
     useEffect(() => {
 
+        setPageno(1)
 
         if (type != null && keyword != null) {
 
             if (type === 'posts' && keyword != null) {
                 setPostlist([])
-                getSearchedPosts()
+                getSearchedPosts(1)
+                setifsearched(true)
 
             }
 
             else if (type === 'tags' && keyword != null) {
                 setTaggedpostlist([])
-                getSearchedTaggedPosts()
+                getSearchedTaggedPosts(1)
+                setifsearched(true)
 
             }
             else if (type === 'people' && keyword != null) {
 
                 setuserlist([])
-                getSearchedUsers()
+                getSearchedUsers(1)
+                setifsearched(true)
 
             }
 
@@ -164,17 +159,7 @@ export default function ExploreMiddle({ keyword, type }) {
     return (
         <div className='exploremiddlebox'>
             <Searchbar
-                searchval={searchval}
-                setSearchval={setSearchval}
-                getSearchedUsers={getSearchedUsers}
-                getSearchedPosts={getSearchedPosts}
                 selectedoption={selectedoption}
-                getSearchedTaggedPosts={getSearchedTaggedPosts}
-                setifsearched={setifsearched}
-                setPostlist={setPostlist}
-                setTaggedpostlist={setTaggedpostlist}
-                setuserlist={setuserlist}
-                setPageno={setPageno}
             />
 
             <div className="chooseSearchOption">

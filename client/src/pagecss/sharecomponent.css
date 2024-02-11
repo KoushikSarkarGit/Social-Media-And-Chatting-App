@@ -42,7 +42,7 @@
 
 .postingfeatures {
     display: flex;
-
+    flex-wrap: wrap;
     justify-content: space-around;
 }
 
@@ -70,17 +70,19 @@
 
 .tobeuloadedimg {
     position: relative;
+    padding: 35px 40px 5px 5px;
+
 }
 
 .imgbox {
-    width: 100%;
+    width: auto;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .tobeuloadedimg>div>Img {
-    width: auto;
+    width: 100%;
     max-width: 43rem;
     max-height: 24rem;
     object-fit: cover;
@@ -101,8 +103,8 @@
     right: 1rem;
     top: 0.5rem;
     cursor: pointer;
-    background-color: rgb(174, 174, 179);
-    padding: 10px;
+    background-color: rgb(173, 238, 239);
+    padding: 5px;
     border-radius: 50%;
 
 }

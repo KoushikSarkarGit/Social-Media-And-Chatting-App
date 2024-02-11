@@ -251,7 +251,7 @@ const updateProfilepic = async (req, res) => {
 
             const updateduser = await Usermodel.findByIdAndUpdate(curuserid, { profilePicture: imageurl1 }, { new: true, });
 
-            res.status(200).json(updateduser.profilePicture);
+            res.status(200).json({ success: true, imageurl: updateduser.profilePicture });
         } catch (error) {
             res.status(500).json({ success: false, error });
         }
@@ -284,7 +284,7 @@ const updateCoverpic = async (req, res) => {
 
             const updateduser = await Usermodel.findByIdAndUpdate(curuserid, { coverPicture: imageurl1.url }, { new: true, });
 
-            res.status(200).json(updateduser.coverPicture);
+            res.status(200).json({ success: true, imageurl: updateduser.profilePicture });
         } catch (error) {
             res.status(500).json({ success: false, error });
         }

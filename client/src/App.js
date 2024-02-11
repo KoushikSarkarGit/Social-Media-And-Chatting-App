@@ -18,7 +18,7 @@ function App() {
   return (
 
     <MyContextPool>
-      <div className="mainapp">
+      <div className="mainapp" style={{ overflowX: 'auto' }}>
         <div className="backgroundblur" style={{ top: '-18%', right: '0%' }}    ></div>
         <div className="backgroundblur" style={{ top: '37%', left: '-10%' }}    ></div>
         <div className="backgroundblur2" style={{ top: '-30%', left: '-15%', backgroundColor: 'rgba(113, 198, 255, 0.664)' }}    ></div>
