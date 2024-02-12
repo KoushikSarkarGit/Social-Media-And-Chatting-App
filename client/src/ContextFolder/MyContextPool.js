@@ -16,7 +16,7 @@ export default function MyContextPool(props) {
     const [userfristname, setUserfristname] = useState(null)
     const [userlastname, setUserlastname] = useState(null)
     const [userId, setUserId] = useState(null);
-    const [needtorun, setNeedtorun] = useState(false);
+
 
     const [loading, setLoading] = useState(true)
 
@@ -78,12 +78,65 @@ export default function MyContextPool(props) {
 
 
 
-
     useEffect(() => {
         settingloginStatus();
 
 
-    }, [needtorun])
+    }, [])
+
+
+
+
+
+
+    const refreshLoggedUserDetails = async () => {
+        let curauth = await localStorage.getItem('authdata');
+        if (curauth) {
+            let jsonedcurdata = await JSON.parse(curauth)
+
+            try {
+
+                await axios.get(`http://localhost:9000/api/v1/user/refresh-logged-user-data`,
+                    {
+                        headers: { token: jsonedcurdata.jwttoken }
+                    }
+                ).then(async (res) => {
+                    // console.log(res.data)
+
+                    if (res.data.success === true) {
+
+                        jsonedcurdata.sentuser = await res.data.refreshedUserdetails;
+                        const updatedAuthData = await JSON.stringify(jsonedcurdata);
+                        await localStorage.setItem('authdata', updatedAuthData);
+
+
+                        await setUserdata(res.data?.refreshedUserdetails);
+                        await setUserprofileimg(res.data?.refreshedUserdetails?.profilePicture)
+
+                        await setusername(res.data?.refreshedUserdetails?.username)
+                        await setisAdmin(res.data?.refreshedUserdetails?.isAdmin)
+
+                        await setUserfristname(res.data?.refreshedUserdetails?.firstname)
+                        await setUserlastname(res.data?.refreshedUserdetails?.lastname)
+                        await setUserId(res.data?.refreshedUserdetails?._id)
+
+
+                    }
+
+                }).catch((err) => {
+                    console.log(err)
+                    toast.error('some internal axios error occured')
+                })
+
+            } catch (error) {
+                console.log(error)
+                toast.error('some internal error occured')
+                setLoading(false);
+            }
+
+        }
+
+    }
 
 
 
@@ -299,7 +352,7 @@ export default function MyContextPool(props) {
 
 
     return (
-        <Appcontext.Provider value={{ jwtToken, username, isAdmin, userlastname, userfristname, userprofileimg, setisAdmin, setjwtToken, setUserdata, setusername, userdata, logoutfunction, userId, setUserId, LikePost, UnLikePost, RepostThePost, UnRepostThePost, getRelativeTime, setNeedtorun }}>
+        <Appcontext.Provider value={{ jwtToken, username, isAdmin, userlastname, userfristname, userprofileimg, setisAdmin, setjwtToken, setUserdata, setusername, userdata, logoutfunction, userId, setUserId, LikePost, UnLikePost, RepostThePost, UnRepostThePost, getRelativeTime, refreshLoggedUserDetails }}>
             {!loading && props.children
             }
         </Appcontext.Provider>

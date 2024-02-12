@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 
 import '../pagecss/miniprofilecard.css'
 
@@ -14,10 +14,13 @@ import Swal from 'sweetalert2'
 export default function MiniProfileCompund() {
 
     const cur = useContext(Appcontext);
-    const { username, userdata, jwtToken, userId, setNeedtorun, needtorun } = cur;
+    const { username, userdata, jwtToken, userId, refreshLoggedUserDetails } = cur;
     const [tobeuploadedprofilePic, setTobeuploadedprofilePic] = useState()
     const [imageSizeNotValid, setImageSizeNotValid] = useState(false);
     const profileImageRef = useRef(null)
+    const [isloading, setIsloading] = useState(false);
+    const closemodalRef = useRef(null)
+
 
     const [profilepicselected, setProfilepicselected] = useState(false);
     const [coverpicselected, setCoverpicselected] = useState(false);
@@ -25,8 +28,13 @@ export default function MiniProfileCompund() {
     const uploadProfileImage = async () => {
 
         const imageSizeLimit = 3 * 1024 * 1024;
-
         const selectedFile = profileImageRef.current.files[0];
+
+        if (!selectedFile) {
+            toast.error('No Image Selected');
+            return;
+        }
+
         if (selectedFile && selectedFile.size > imageSizeLimit) {
             // Image size exceeds the limit
             toast.error('Image size must be less than 3MB.');
@@ -40,6 +48,8 @@ export default function MiniProfileCompund() {
 
         if (jwtToken && userId) {
 
+            setIsloading(true)
+
             try {
                 await axios.put(`http://localhost:9000/api/v1/user/update-profilepic/${userId}`,
                     finalimage,
@@ -50,9 +60,11 @@ export default function MiniProfileCompund() {
                     }
 
                 ).then(async (res) => {
-                    console.log(res.data)
+
 
                     if (res.data.success === true) {
+                        closemodalRef.current.click()
+                        refreshLoggedUserDetails()
                         Swal.fire({
                             title: "Profile Image Updated Successfully",
                             icon: 'success',
@@ -60,15 +72,18 @@ export default function MiniProfileCompund() {
                             confirmButtonText: "Ok"
                         })
 
-                        needtorun ? setNeedtorun(false) : setNeedtorun(true);
 
                     } else {
+                        closemodalRef.current.click()
                         Swal.fire({
                             title: "Oops...?",
                             text: "Something went wrong!",
                             icon: "error"
                         });
                     }
+
+
+                    setIsloading(false)
 
 
                 }).catch((err) => {
@@ -96,7 +111,7 @@ export default function MiniProfileCompund() {
         const imageSizeLimit = 3 * 1024 * 1024;
         const selectedFile = profileImageRef.current.files[0];
 
-        if (selectedFile) {
+        if (!selectedFile) {
             toast.error('No Image Selected');
             return;
         }
@@ -114,6 +129,7 @@ export default function MiniProfileCompund() {
 
         if (jwtToken && userId) {
 
+            setIsloading(true)
             try {
                 await axios.put(`http://localhost:9000/api/v1/user/update-coverpic/${userId}`,
                     finalimage,
@@ -126,6 +142,8 @@ export default function MiniProfileCompund() {
                 ).then(async (res) => {
 
                     if (res.data.success === true) {
+                        closemodalRef.current.click()
+                        refreshLoggedUserDetails()
                         Swal.fire({
                             title: "Cover Image Updated Successfully",
                             icon: 'success',
@@ -133,6 +151,7 @@ export default function MiniProfileCompund() {
                             confirmButtonText: "Ok"
                         })
                     } else {
+                        closemodalRef.current.click()
                         Swal.fire({
                             title: "Oops...?",
                             text: "Something went wrong!",
@@ -140,6 +159,7 @@ export default function MiniProfileCompund() {
                         });
                     }
 
+                    setIsloading(false)
 
                 }).catch((err) => {
                     console.log(err)
@@ -193,6 +213,59 @@ export default function MiniProfileCompund() {
     }
 
 
+
+
+
+
+    const showAlert = () => {
+        Swal.fire({
+            title: "Image is being Updated...", // Adjust title as needed
+            icon: 'info',
+            html: isloading ? `     
+                    <div class="spinner-border my-2 text-warning" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>        
+          `
+                : "",
+            timer: 20000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+            allowOutsideClick: false, // Prevent outside click closing
+            backdrop: true, // Add a backdrop for emphasis
+            willClose: () => {
+
+                if (isloading) {
+                    // Alert the user or prevent closing 
+                    Swal.fire({
+                        title: "Loading...",
+                        icon: 'info',
+                        html: `
+                        <div class="spinner-border text-warning my-2" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div> 
+                        `,
+                        allowOutsideClick: false,
+                        backdrop: true,
+                    });
+                }
+            }
+        });
+    };
+
+
+
+
+
+    useEffect(() => {
+        if (isloading) {
+            showAlert();
+
+            setTimeout(() => {
+                setIsloading(false)
+            }, 10000);
+
+        }
+    }, [isloading]);
 
 
 
@@ -328,12 +401,15 @@ export default function MiniProfileCompund() {
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-secondary"
                                     data-bs-dismiss="modal"
+                                    ref={closemodalRef}
                                     onClick={() => {
                                         setTobeuploadedprofilePic(null);
                                         setImageSizeNotValid(false)
                                         profileImageRef.current.value = null
                                     }}
                                 >Close</button>
+
+
                                 <button type="button"
                                     className="btn btn-primary"
                                     onClick={() => {
@@ -349,7 +425,8 @@ export default function MiniProfileCompund() {
                                         }).then(async (result) => {
 
                                             if (result.isConfirmed) {
-                                                if (profileImageRef) {
+
+                                                if (profilepicselected) {
                                                     uploadProfileImage()
                                                 }
                                                 else if (coverpicselected) {

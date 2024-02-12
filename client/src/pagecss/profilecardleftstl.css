@@ -18,17 +18,33 @@
 
 .ProfileImages>img:nth-of-type(1) {
     width: 100%;
+    min-height: 20rem;
     max-height: 20rem;
     object-fit: cover;
 }
 
-.ProfileImages>img:nth-of-type(2) {
-    width: 6rem;
+.profileimagebox {
+    width: 6.5rem;
+    height: 6.5rem;
     border-radius: 50%;
     position: absolute;
     bottom: -3rem;
-    box-shadow: var(--profileShadow);
+    padding: 4px 4px 4px 4px;
+    background-color: white;
 }
+
+.ProfileImages>div>img {
+    width: 6rem;
+    height: 6rem;
+    border-radius: 50%;
+    /* position: absolute;
+    bottom: -3rem; */
+    box-shadow: rgba(16, 11, 45, 0.241) 0px 17px 25px 0px;
+
+
+}
+
+
 
 .ProfileName {
     display: flex;

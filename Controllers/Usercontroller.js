@@ -70,6 +70,7 @@ const loginBackend = async (req, res) => {
                 { $match: { email: email } },
                 {
                     $project: {
+                        _id: 1,
                         firstname: 1,
                         lastname: 1,
                         sex: 1,
@@ -100,6 +101,60 @@ const loginBackend = async (req, res) => {
         res.status(500).json({ success, msg: error.message });
     }
 }
+
+// user login controller
+const refershLoggedUserData = async (req, res) => {
+
+    const { curuserid } = req.body;
+
+
+    try {
+
+        const MyUserId = await new mongoose.Types.ObjectId(curuserid)
+
+        const refreshedUserdetails = await Usermodel.aggregate([
+            { $match: { _id: MyUserId } },
+            {
+                $project: {
+                    _id: 1,
+                    firstname: 1,
+                    lastname: 1,
+                    sex: 1,
+                    email: 1,
+                    isAdmin: 1,
+                    phone: 1,
+                    username: 1,
+                    profilePicture: 1,
+                    coverPicture: 1,
+                    bio: 1,
+                    livesin: 1,
+                    worksAt: 1,
+                    relationship: 1,
+                    followersCount: { $size: "$followers" },
+                    followingCount: { $size: "$following" },
+                    likedPostCount: { $size: "$likedPost" },
+                    repostedCount: { $size: "$reposted" }
+                }
+            }
+        ]);
+
+
+        return res.status(201).json({ success: true, refreshedUserdetails: refreshedUserdetails[0] });
+
+    } catch (error) {
+        console.log('error happened', error.message)
+        return res.status(500).json({ success: false, msg: error.message });
+    }
+}
+
+
+
+
+
+
+
+
+
 
 // get a User controller
 const getSingleUser = async (req, res) => {
@@ -284,7 +339,7 @@ const updateCoverpic = async (req, res) => {
 
             const updateduser = await Usermodel.findByIdAndUpdate(curuserid, { coverPicture: imageurl1.url }, { new: true, });
 
-            res.status(200).json({ success: true, imageurl: updateduser.profilePicture });
+            res.status(200).json({ success: true, imageurl: updateduser.coverPicture });
         } catch (error) {
             res.status(500).json({ success: false, error });
         }
@@ -685,7 +740,7 @@ const checkfrontendtoken = async (req, res) => {
             process.env.jwt_secret_key
         );
         const curuserid = decode.id;
-        const user = await Usermodel.findById(curuserid);
+        const user = await Usermodel.findById(curuserid).select('_id');
         if (!user) {
             return res.status(400).json({ success: false, msg: 'User does not exist' });
         }
@@ -781,4 +836,4 @@ const getStatusIfPostIsReposted = async (req, res) => {
 
 
 
-module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getTimelineForLoginUser, getGeneralTimeline, getUserFollowersid, getFollowerListByPage, getSingleUserLite, checkfrontendtoken, getSingleUserMedium, getPeopleByKeyword, getStatusIfPostIsLiked, getStatusIfPostIsReposted }
+module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getTimelineForLoginUser, getGeneralTimeline, getUserFollowersid, getFollowerListByPage, getSingleUserLite, checkfrontendtoken, getSingleUserMedium, getPeopleByKeyword, getStatusIfPostIsLiked, getStatusIfPostIsReposted, refershLoggedUserData }

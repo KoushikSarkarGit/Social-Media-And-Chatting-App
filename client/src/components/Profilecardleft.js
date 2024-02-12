@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Cover from '../img/defaultCoverpic.jpg'
 import Profile from '../img/defaultprofimg2.jpg'
 import '../pagecss/profilecardleftstl.css'
+
 import axios from 'axios'
 import toast from 'react-hot-toast'
 
@@ -49,18 +50,30 @@ export default function Profilecardleft({ uId }) {
 
 
 
-    const ProfilePage = true;
+
     return (
         <div className="ProfileCard">
             <div className="ProfileImages">
-                <img src={userprofile?.coverPicture ? userprofile?.coverPicture : Cover} alt="" />
-                <img src={userprofile?.profilePicture ? userprofile?.profilePicture : Profile} alt="" style={{ cursor: 'pointer' }} onClick={() => {
-                    Swal.fire({
-                        imageUrl: userprofile?.profilePicture,
+                <img src={userprofile?.coverPicture ? userprofile?.coverPicture : Cover} alt=""
+                    onClick={() => {
+                        Swal.fire({
+                            imageUrl: userprofile?.coverPicture ? userprofile?.coverPicture : Cover,
 
-                        imageAlt: "profile image"
-                    });
-                }} />
+                            imageAlt: "cover image"
+                        });
+                    }}
+                />
+
+
+                <div className='profileimagebox'>
+                    <img src={userprofile?.profilePicture ? userprofile?.profilePicture : Profile} alt="" style={{ cursor: 'pointer' }} onClick={() => {
+                        Swal.fire({
+                            imageUrl: userprofile?.profilePicture,
+
+                            imageAlt: "profile image"
+                        });
+                    }} />
+                </div>
             </div>
 
             <div className="ProfileName">

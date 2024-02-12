@@ -1,5 +1,5 @@
 const express = require('express');
-const { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getTimelineForLoginUser, getGeneralTimeline, getUserFollowersid, getFollowerListByPage, getSingleUserLite, checkfrontendtoken, getSingleUserMedium, getPeopleByKeyword, getPostsByKeyword, getStatusIfPostIsLiked, getStatusIfPostIsReposted } = require('../Controllers/Usercontroller');
+const { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getTimelineForLoginUser, getGeneralTimeline, getUserFollowersid, getFollowerListByPage, getSingleUserLite, checkfrontendtoken, getSingleUserMedium, getPeopleByKeyword, getPostsByKeyword, getStatusIfPostIsLiked, getStatusIfPostIsReposted, refershLoggedUserData } = require('../Controllers/Usercontroller');
 const router = express.Router();
 const formidable = require('express-formidable')
 const { valtokenchecker, extractIdFromToken } = require('../Middlewares/Encryptiontools')
@@ -10,6 +10,11 @@ const { valtokenchecker, extractIdFromToken } = require('../Middlewares/Encrypti
 //user authentication
 router.post('/register', userRegistration);
 router.post('/login', loginBackend)
+
+// refreshing localstorage data
+
+router.get('/refresh-logged-user-data', valtokenchecker, extractIdFromToken, refershLoggedUserData)
+
 
 // user crud operation
 router.get('/getuser/:id', getSingleUser)
