@@ -830,10 +830,40 @@ const getStatusIfPostIsReposted = async (req, res) => {
 
 
 
+const checkIfLoggedUserFollowsUser = async (req, res) => {
+    const { curuserid } = req.body;
+    const userid = await req.params.id;
+    let followedbyuser = false;
+    try {
+
+        const curId = new mongoose.Types.ObjectId(curuserid)
+        const User_Id = new mongoose.Types.ObjectId(userid)
+
+        const userfollowed = await Usermodel.exists({
+            _id: curuserid,
+            following: { $elemMatch: { $eq: User_Id } }
+        });
+        const userfollowed2 = await Usermodel.exists({
+            _id: User_Id,
+            followers: { $elemMatch: { $eq: curId } }
+        });
+
+
+        if (userfollowed || userfollowed2) {
+            followedbyuser = true
+        }
+
+
+
+        return res.status(200).json({ success: true, msg: 'post liked by user', followedbyuser });
+    } catch (error) {
+        return res.status(200).json({ success: false, error });
+    }
+
+};
 
 
 
 
 
-
-module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getTimelineForLoginUser, getGeneralTimeline, getUserFollowersid, getFollowerListByPage, getSingleUserLite, checkfrontendtoken, getSingleUserMedium, getPeopleByKeyword, getStatusIfPostIsLiked, getStatusIfPostIsReposted, refershLoggedUserData }
+module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getTimelineForLoginUser, getGeneralTimeline, getUserFollowersid, getFollowerListByPage, getSingleUserLite, checkfrontendtoken, getSingleUserMedium, getPeopleByKeyword, getStatusIfPostIsLiked, getStatusIfPostIsReposted, refershLoggedUserData, checkIfLoggedUserFollowsUser }

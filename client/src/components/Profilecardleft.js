@@ -8,13 +8,21 @@ import axios from 'axios'
 import toast from 'react-hot-toast'
 
 import Swal from 'sweetalert2'
+import { Appcontext } from '../ContextFolder/ContextCreator'
+import { useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 
 
 
 export default function Profilecardleft({ uId }) {
 
-    const [userprofile, setUserprofile] = useState()
+    const cur = useContext(Appcontext);
+    const { jwtToken, userId, followSomeone, UnfollowSomeone, checkIfLoggedUserFollowsUser } = cur;
+    const navigate = useNavigate()
+
+    const [isfollwedbyuser, setIsfollwedbyuser] = useState()
+    const [userprofile, setUserprofile] = useState(false)
 
 
     const getUserprofile = async () => {
@@ -26,7 +34,7 @@ export default function Profilecardleft({ uId }) {
 
                     if (res.data.success === true) {
                         setUserprofile(res.data.finaldata)
-                        // console.log(res.data)
+                        console.log(res.data)
                     }
 
                 }).catch((err) => {
@@ -45,6 +53,8 @@ export default function Profilecardleft({ uId }) {
 
     useEffect(() => {
         getUserprofile()
+
+        setIsfollwedbyuser(checkIfLoggedUserFollowsUser(uId))
 
     }, [uId]);
 
@@ -68,7 +78,7 @@ export default function Profilecardleft({ uId }) {
                 <div className='profileimagebox'>
                     <img src={userprofile?.profilePicture ? userprofile?.profilePicture : Profile} alt="" style={{ cursor: 'pointer' }} onClick={() => {
                         Swal.fire({
-                            imageUrl: userprofile?.profilePicture,
+                            imageUrl: userprofile?.profilePicture ? userprofile?.profilePicture : Profile,
 
                             imageAlt: "profile image"
                         });
@@ -87,6 +97,45 @@ export default function Profilecardleft({ uId }) {
 
             </div>
 
+
+            {userId !== uId ?
+                <>
+                    {isfollwedbyuser ? <div type='button'
+                        className="btn btn-primary profilecardfollowbtn"
+                        onClick={() => {
+                            if (!jwtToken) {
+                                navigate('/login')
+                            } else {
+                                UnfollowSomeone(uId)
+                                setIsfollwedbyuser(false)
+                            }
+                        }}
+                    >
+                        Unfollow
+                    </div>
+                        :
+                        <div type='button'
+                            className="btn btn-primary profilecardfollowbtn"
+                            onClick={() => {
+                                if (!jwtToken) {
+                                    navigate('/login')
+                                } else {
+                                    followSomeone(uId)
+                                    setIsfollwedbyuser(true)
+                                }
+                            }}
+                        >
+                            follow
+                        </div>
+
+                    }
+
+                </>
+
+                :
+                null
+            }
+
             <div className="followStatus">
                 <hr />
                 <div>
@@ -104,7 +153,7 @@ export default function Profilecardleft({ uId }) {
                     <>
                         <div className="verticalHr"></div>
                         <div className="follow">
-                            <span>{userprofile?.totalPostsCount !== null ? userprofile?.totalPostsCount.totalpostno
+                            <span>{userprofile?.totalPostsCount !== null ? userprofile?.totalPostsCount?.totalpostno
                                 : '...'}</span>
                             <span>Posts</span>
                         </div>

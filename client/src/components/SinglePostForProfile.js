@@ -38,7 +38,10 @@ export default function SinglePostForProfile({ pdata }) {
             {pdata.postimage ? <div className='singlepostbox my-1'
                 onClick={() => { navigate(`/viewpost/${pdata._id}`) }} >
 
-                {pdata?.postimage && <img src={pdata.postimage} alt="postimage" style={{ cursor: 'pointer' }} />}
+                {pdata?.postimage && <img src={pdata.postimage} alt="postimage"
+                    style={{ cursor: 'pointer' }}
+                // onClick={() => { navigate(`/view-user-profile/${postdetails?.userId}`) }}
+                />}
 
                 <div className="spostfeatures" onClick={(event) => { event.stopPropagation(); }}>
 

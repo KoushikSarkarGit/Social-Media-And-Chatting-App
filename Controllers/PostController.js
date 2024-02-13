@@ -275,7 +275,8 @@ const getPostsOfLoggedUser = async (req, res) => {
                         {
                             $project: {
                                 username: 1,
-                                profilePicture: 1
+                                profilePicture: 1,
+                                _id: 1
                                 // Add other fields from the user model as needed
                             }
                         }

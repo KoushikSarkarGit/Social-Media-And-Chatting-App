@@ -23,24 +23,6 @@ export default function FollowerCard() {
     const { jwtToken } = cur;
 
 
-    const followSomeone = async () => {
-        try {
-            await axios.put(`http://localhost:9000/api/v1/user/follow-user/64d104c56d7a4d72168abaa4`).then(async (res) => {
-
-                console.log(res.data)
-
-
-            }).catch((err) => {
-
-                console.log(err)
-                toast.error('some internal axios error occured')
-
-            })
-        } catch (error) {
-            console.log(error)
-            toast.error('some internal error occured')
-        }
-    }
 
 
 

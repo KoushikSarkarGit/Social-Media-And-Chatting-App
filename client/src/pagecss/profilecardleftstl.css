@@ -119,3 +119,14 @@
     font-size: 12px;
 
 }
+
+
+
+.profilecardfollowbtn {
+    position: absolute;
+    top: 21rem;
+    right: 1rem;
+    border-radius: 0.6rem;
+    padding: 2px 7px 2px 7px;
+    font-size: 15px;
+}

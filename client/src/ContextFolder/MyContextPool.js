@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { Appcontext } from './ContextCreator'
 import toast from 'react-hot-toast';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function MyContextPool(props) {
+
 
     const [jwtToken, setjwtToken] = useState('');
     const [username, setusername] = useState(null)
@@ -298,6 +300,129 @@ export default function MyContextPool(props) {
     }
 
 
+
+
+    const followSomeone = async (tobefollowedId) => {
+
+        if (tobefollowedId == userId) { return }
+
+        if (jwtToken) {
+
+            try {
+                await axios.put(`http://localhost:9000/api/v1/user/follow-user/${tobefollowedId}`,
+                    {},
+                    {
+                        headers: { token: jwtToken }
+                    }).then(async (res) => {
+
+                        console.log(res.data)
+
+                    }).catch((err) => {
+                        console.log(err)
+                        toast.error('some internal axios error occured')
+                    })
+            } catch (error) {
+                console.log(error)
+                toast.error('some internal error occured')
+            }
+
+        }
+        else {
+            toast.error('no token found. please login again')
+            return;
+        }
+
+    }
+
+
+
+
+
+
+
+    const UnfollowSomeone = async (tobeunfollowedId) => {
+
+        if (tobeunfollowedId == userId) { return }
+
+        if (jwtToken) {
+
+            try {
+                await axios.put(`http://localhost:9000/api/v1/user/unfollow-user/${tobeunfollowedId}`,
+                    {},
+                    {
+                        headers: { token: jwtToken }
+                    }).then(async (res) => {
+
+                        console.log(res.data)
+
+                    }).catch((err) => {
+                        console.log(err)
+                        toast.error('some internal axios error occured')
+                    })
+            } catch (error) {
+                console.log(error)
+                toast.error('some internal error occured')
+            }
+
+        }
+        else {
+            toast.error('no token found. please login again')
+            return;
+        }
+
+    }
+
+
+
+
+
+    const checkIfLoggedUserFollowsUser = async (tocheckuserId) => {
+        let curauth = await localStorage.getItem('authdata');
+        if (curauth || jwtToken) {
+            let jsonedcurdata = await JSON.parse(curauth)
+
+            if (tocheckuserId === userId) {
+                return;
+            }
+
+            try {
+                await axios.get(`http://localhost:9000/api/v1/user/check-if-logged-user-follows-user/${tocheckuserId}`,
+                    {
+                        headers: { token: jsonedcurdata.jwttoken || jwtToken }
+                    }
+                ).then(async (res) => {
+                    if (res.data.success === true) {
+                        if (res.data.followedbyuser) {
+                            return true;
+                        }
+                        else {
+                            return false;
+                        }
+
+                    }
+                    else {
+                        return false;
+                    }
+
+                }).catch((err) => {
+                    console.log(err)
+                    toast.error('some internal axios error occured')
+                })
+
+            } catch (error) {
+                console.log(error)
+                toast.error('some internal error occured')
+
+            }
+        }
+    }
+
+
+
+
+
+
+
     const getRelativeTime = (createdAt) => {
 
         const now = new Date();
@@ -352,7 +477,7 @@ export default function MyContextPool(props) {
 
 
     return (
-        <Appcontext.Provider value={{ jwtToken, username, isAdmin, userlastname, userfristname, userprofileimg, setisAdmin, setjwtToken, setUserdata, setusername, userdata, logoutfunction, userId, setUserId, LikePost, UnLikePost, RepostThePost, UnRepostThePost, getRelativeTime, refreshLoggedUserDetails }}>
+        <Appcontext.Provider value={{ jwtToken, username, isAdmin, userlastname, userfristname, userprofileimg, setisAdmin, setjwtToken, setUserdata, setusername, userdata, logoutfunction, userId, setUserId, LikePost, UnLikePost, RepostThePost, UnRepostThePost, getRelativeTime, refreshLoggedUserDetails, followSomeone, UnfollowSomeone, checkIfLoggedUserFollowsUser }}>
             {!loading && props.children
             }
         </Appcontext.Provider>
