@@ -7,16 +7,15 @@ import '../pagecss/followercard.css'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 import { Appcontext } from '../ContextFolder/ContextCreator'
-import SinglePostForProfile from './SinglePostForProfile'
-import SinglePostIterable from './SinglePostIterable'
-import CommentLiteComp from './CommentLiteComp'
 import EmptyBox from './EmptyBox'
 import UserSinglePostIterable from './UserSinglePostIterable'
 import UserSinglePostForProfile from './UserSinglePostForProfile'
 import UserCommentLiteComp from './UserCommentLiteComp'
+import { useParams } from 'react-router-dom'
 
 export default function UserAllPostForProfile({ selectedtab, userId }) {
 
+    const { viewOtherUserProfileuserId } = useParams()
 
     const [postlist, setPostlist] = useState([])
     const [likedpostlist, setLikedpostlist] = useState([])
@@ -39,7 +38,7 @@ export default function UserAllPostForProfile({ selectedtab, userId }) {
 
                     if (res.data.success === true) {
                         setPostlist(prevPostlist => [...prevPostlist, ...res.data.fetchedpost])
-                        setTotalpostno(res.data.totalPostsCount.totalpostno)
+                        setTotalpostno(res.data.totalPostsCount?.totalpostno)
                         // console.log(res.data)
                     }
 
@@ -182,7 +181,7 @@ export default function UserAllPostForProfile({ selectedtab, userId }) {
             console.log('others are not implimented yet')
         }
 
-    }, [jwtToken, selectedtab]);
+    }, [jwtToken, selectedtab, viewOtherUserProfileuserId]);
 
 
 

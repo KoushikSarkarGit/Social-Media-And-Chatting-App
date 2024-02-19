@@ -72,7 +72,7 @@ export default function AllPostForProfile({ selectedtab }) {
 
                         setLikedpostlist(prevPostlist => [...prevPostlist, ...res.data.fetchedLikedPost[0].likedposts])
                         setTotalpostno(res.data.fetchedLikedPost[0].totalLikecount)
-                        console.log(res.data)
+                        // console.log(res.data)
                     }
 
                 }).catch((err) => {

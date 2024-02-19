@@ -22,12 +22,12 @@ export default function SharePostModal({ openfollower, setopenfollower, initialL
     const { jwtToken } = cur;
 
 
-    const getFollowerList = async () => {
+    const getFollowerList = async (manualpage) => {
         try {
 
             if (jwtToken) {
 
-                await axios.get(`http://localhost:9000/api/v1/user/get-follower-list/${pageno}`, {
+                await axios.get(`http://localhost:9000/api/v1/user/get-follower-list/${manualpage || 1}`, {
                     headers: {
                         token: jwtToken
                     }
@@ -94,8 +94,9 @@ export default function SharePostModal({ openfollower, setopenfollower, initialL
                         }
 
                         <div className="seemorebtn" onClick={async () => {
+                            await getFollowerList(pageno + 1);
                             await setPageno(pageno + 1)
-                            await getFollowerList();
+
                             // await console.log(pageno, morefollowerlist)
                         }} > See More</div>
 

@@ -23,8 +23,8 @@ export default function UserProfile() {
                 <LeftsideOfHome />
                 <div className='userprofilecenter'>
 
-                    <Profilecardleft uId={params.userId} />
-                    <UserTimelineComponent userId={params.userId} />
+                    <Profilecardleft uId={params.viewOtherUserProfileuserId} />
+                    <UserTimelineComponent userId={params.viewOtherUserProfileuserId} />
                 </div>
 
                 <RightofHome />

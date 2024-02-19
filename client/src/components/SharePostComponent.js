@@ -192,6 +192,7 @@ export default function SharePostComponent() {
 
                             }).catch((err) => {
                                 console.log(err)
+                                setIsloading(false)
                                 toast.error('some internal axios error occured')
                             })
                     }
@@ -199,6 +200,7 @@ export default function SharePostComponent() {
 
                 } catch (error) {
                     console.log(error)
+                    setIsloading(false)
                     toast.error('Oops! Some error happened')
                 }
 
@@ -237,13 +239,16 @@ export default function SharePostComponent() {
                 if (isloading) {
                     // Alert the user or prevent closing 
                     Swal.fire({
-                        title: "Loading...",
+                        title: "Still trying...",
                         icon: 'info',
                         html: `
                         <div class="spinner-border text-warning my-2" role="status">
                         <span class="visually-hidden">Loading...</span>
                     </div> 
                         `,
+                        timer: 10000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
                         allowOutsideClick: false,
                         backdrop: true,
                     });

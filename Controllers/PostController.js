@@ -40,18 +40,35 @@ const createPost = async (req, res) => {
 
             for (const element of newhashtags) {
 
-                const iftagexist = await Tagmodel.find({ tagname: element.tagname })
+                const iftagexist = await Tagmodel.find({ tagname: element.tagname }).select('_id tagname count')
 
                 if (iftagexist.length < 1) {
                     let relatedpostdata = [];
                     relatedpostdata.push(newpost._id)
 
-                    await Tagmodel.create({ tagname: element.tagname, relatedpost: relatedpostdata })
+                    await Tagmodel.create({
+                        tagname: element.tagname,
+                        relatedpost: relatedpostdata,
+                        countHistory: [{
+                            count: 1,
+                            timestamp: Date.now()
+                        }]
+                    })
                 }
                 else {
 
                     await Tagmodel.updateOne(
                         { tagname: element.tagname },
+                        {
+                            $inc: { count: 1 },
+                            $push: { relatedpost: new mongoose.Types.ObjectId(newpost._id) },
+                            $push: {
+                                countHistory: {
+                                    count: iftagexist[0]?.count + 1,
+                                    timestamp: Date.now() // Use current timestamp
+                                }
+                            }
+                        },
                         { $inc: { count: 1 }, $push: { relatedpost: new mongoose.Types.ObjectId(newpost._id) } },
                         { new: true }
                     );
@@ -66,6 +83,7 @@ const createPost = async (req, res) => {
     } catch (error) {
         // this one for failed cases where image is uploaded but post creation is failed. so we have to delete the image from cloud to save space
         await cloudinary.uploader.destroy(finalpublicid);
+        console.log('not happening', error)
         return res.status(500).json({ success: false, msg: error.message });
     }
 

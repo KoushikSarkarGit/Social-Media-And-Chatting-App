@@ -49,7 +49,7 @@ export default function UserSinglePostIterable({ pid, jwtToken, userId }) {
                 if (res.data.success === true) {
                     setPostdetails(res.data.fetchedLitePost[0])
 
-                    // console.log(res.data.fetchedLitePost[0])
+                    console.log(res.data.fetchedLitePost[0])
                 }
 
             }).catch((err) => {
@@ -140,30 +140,6 @@ export default function UserSinglePostIterable({ pid, jwtToken, userId }) {
     }, [jwtToken, pid]);
 
 
-    // useEffect(() => {
-    //     //useeffect for setting if liked value
-    //     if (postdetails?.likedByCurrentUser === true) {
-    //         setIsLikedByUser(true)
-    //     }
-    //     else if (postdetails?.likedByCurrentUser === false) {
-    //         setIsLikedByUser(false)
-    //     }
-
-    // }, [jwtToken, pid, postdetails, postdetails?.likedByCurrentUser]);
-
-
-
-
-    // useEffect(() => {
-    //     //useeffect for setting if reposted value
-    //     if (postdetails?.repostedByCurrentUser === true) {
-    //         setIsRepostedByUser(true)
-    //     }
-    //     else if (postdetails?.repostedByCurrentUser === false) {
-    //         setIsRepostedByUser(false)
-    //     }
-
-    // }, [jwtToken, pid, postdetails, postdetails?.repostedByCurrentUser]);
 
 
 
@@ -239,7 +215,14 @@ export default function UserSinglePostIterable({ pid, jwtToken, userId }) {
                 <div className="detail d-flex flex-column ">
                     <div className="d-flex align-items-center justify-content-between spebox ">
                         <div>
-                            <img src={postdetails?.userDetails[0].profilePicture ? postdetails?.userDetails[0].profilePicture : defaultprofileimg2} alt="userphoto" className='singlepostuserphoto mx-1 ' />
+                            <img src={postdetails?.userDetails[0].profilePicture ? postdetails?.userDetails[0].profilePicture : defaultprofileimg2}
+                                alt="userphoto"
+                                className='singlepostuserphoto mx-1 '
+                                onClick={(event) => {
+                                    event.stopPropagation();
+                                    navigate(`/view-user-profile/${postdetails?.userId}`)
+                                }}
+                            />
                             <span className='mx-1'><b>From  <i style={{ color: 'grey' }}>@{postdetails?.userDetails[0].username}</i></b></span>
                         </div>
 
@@ -262,7 +245,14 @@ export default function UserSinglePostIterable({ pid, jwtToken, userId }) {
                     <div className="detail d-flex flex-column ">
                         <div className="d-flex align-items-center justify-content-between spebox ">
                             <div>
-                                <img src={postdetails?.userDetails[0].profilePicture ? postdetails?.userDetails[0].profilePicture : defaultprofileimg2} alt="userphoto" className='singlepostuserphoto mx-1 ' />
+                                <img src={postdetails?.userDetails[0].profilePicture ? postdetails?.userDetails[0].profilePicture : defaultprofileimg2}
+                                    alt="userphoto"
+                                    className='singlepostuserphoto mx-1 '
+                                    onClick={(event) => {
+                                        event.stopPropagation();
+                                        navigate(`/view-user-profile/${postdetails?.userId}`)
+                                    }}
+                                />
                                 <span className='mx-1'><b>From  <i style={{ color: 'grey' }}>@{postdetails?.userDetails[0].username}</i></b></span>
                             </div>
 

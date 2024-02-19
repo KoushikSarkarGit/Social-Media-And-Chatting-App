@@ -8,7 +8,7 @@ const UserRoute = require('./Routes/UserRoute')
 const PostRoute = require('./Routes/PostRoute')
 
 const CommentRoute = require('./Routes/CommentRoute')
-
+const TagsRoute = require('./Routes/TagsRoute')
 
 
 const port = 9000
@@ -26,6 +26,7 @@ app.use(cors())
 app.use('/api/v1/user', UserRoute)
 app.use('/api/v1/post', PostRoute)
 app.use('/api/v1/comments', CommentRoute)
+app.use('/api/v1/tags', TagsRoute)
 
 //mongodb connection
 

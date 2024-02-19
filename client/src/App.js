@@ -34,7 +34,7 @@ function App() {
           <Route path='/explore' element={<ExplorePage />} />
           <Route path='/timeline' element={<TimelinePage />} />
           <Route path='/viewpost/:postId' element={<ViewPostpage />} />
-          <Route path='/view-user-profile/:userId' element={<UserProfile />} />
+          <Route path='/view-user-profile/:viewOtherUserProfileuserId' element={<UserProfile />} />
 
 
 

@@ -19,7 +19,21 @@ const tagschema = new Schema({
     count: {
         type: Number,
         default: 1
-    }
+    },
+
+
+    countHistory: [
+        {
+            count: {
+                type: Number,
+                required: true
+            },
+            timestamp: {
+                type: Date,
+                default: Date.now
+            }
+        }
+    ]
 
 }, { timestamps: true })
 

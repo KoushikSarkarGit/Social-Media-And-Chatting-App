@@ -99,13 +99,14 @@ export default function UserSinglePostForProfile({ pdata }) {
 
 
 
-
     return (
         <>
             {pdata.postimage ? <div className='singlepostbox my-1'
                 onClick={() => { navigate(`/viewpost/${pdata._id}`) }} >
 
-                {pdata?.postimage && <img src={pdata.postimage} alt="postimage" style={{ cursor: 'pointer' }} />}
+                {pdata?.postimage && <img src={pdata.postimage} alt="postimage" style={{ cursor: 'pointer' }}
+                />
+                }
 
                 <div className="spostfeatures" onClick={(event) => { event.stopPropagation(); }}>
 
@@ -190,7 +191,12 @@ export default function UserSinglePostForProfile({ pdata }) {
                 <div className="detail d-flex flex-column">
                     <div className="d-flex align-items-center justify-content-between spebox ">
                         <div>
-                            <img src={pdata.userDetails[0].profilePicture ? pdata.userDetails[0].profilePicture : defaultprofileimg2} alt="userphoto" className='singlepostuserphoto mx-1 ' />
+                            <img src={pdata.userDetails[0].profilePicture ? pdata.userDetails[0].profilePicture : defaultprofileimg2} alt="userphoto"
+                                className='singlepostuserphoto mx-1 '
+                                onClick={(event) => {
+                                    event.stopPropagation();
+                                    navigate(`/view-user-profile/${pdata?.userId}`)
+                                }} />
                             <span className='mx-1'><b>From  <i style={{ color: 'grey' }}>@{pdata.userDetails[0].username}</i></b></span>
                         </div>
 
@@ -216,7 +222,12 @@ export default function UserSinglePostForProfile({ pdata }) {
                     <div className="detail d-flex flex-column">
                         <div className="d-flex align-items-center justify-content-between spebox ">
                             <div>
-                                <img src={pdata.userDetails[0].profilePicture ? pdata.userDetails[0].profilePicture : defaultprofileimg2} alt="userphoto" className='singlepostuserphoto mx-1 ' />
+                                <img src={pdata.userDetails[0].profilePicture ? pdata.userDetails[0].profilePicture : defaultprofileimg2} alt="userphoto"
+                                    className='singlepostuserphoto mx-1 '
+                                    onClick={(event) => {
+                                        event.stopPropagation();
+                                        navigate(`/view-user-profile/${pdata?.userId}`)
+                                    }} />
                                 <span className='mx-1'><b>From  <i style={{ color: 'grey' }}>@{pdata.userDetails[0].username}</i></b></span>
                             </div>
 

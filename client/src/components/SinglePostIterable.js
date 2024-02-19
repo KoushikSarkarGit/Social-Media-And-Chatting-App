@@ -161,7 +161,14 @@ export default function SinglePostIterable({ pid, jwtToken }) {
                 <div className="detail d-flex flex-column ">
                     <div className="d-flex align-items-center justify-content-between spebox ">
                         <div>
-                            <img src={postdetails?.userDetails[0].profilePicture ? postdetails?.userDetails[0].profilePicture : defaultprofileimg2} alt="userphoto" className='singlepostuserphoto mx-1 ' />
+                            <img src={postdetails?.userDetails[0].profilePicture ? postdetails?.userDetails[0].profilePicture : defaultprofileimg2}
+                                alt="userphoto"
+                                className='singlepostuserphoto mx-1 '
+                                onClick={(event) => {
+                                    event.stopPropagation();
+                                    navigate(`/view-user-profile/${postdetails?.userId}`)
+                                }}
+                            />
                             <span className='mx-1'><b>From  <i style={{ color: 'grey' }}>@{postdetails?.userDetails[0].username}</i></b></span>
                         </div>
 
@@ -184,7 +191,14 @@ export default function SinglePostIterable({ pid, jwtToken }) {
                     <div className="detail d-flex flex-column ">
                         <div className="d-flex align-items-center justify-content-between spebox ">
                             <div>
-                                <img src={postdetails?.userDetails[0].profilePicture ? postdetails?.userDetails[0].profilePicture : defaultprofileimg2} alt="userphoto" className='singlepostuserphoto mx-1 ' />
+                                <img src={postdetails?.userDetails[0].profilePicture ? postdetails?.userDetails[0].profilePicture : defaultprofileimg2}
+                                    alt="userphoto"
+                                    className='singlepostuserphoto mx-1 '
+                                    onClick={(event) => {
+                                        event.stopPropagation();
+                                        navigate(`/view-user-profile/${postdetails?.userId}`)
+                                    }}
+                                />
                                 <span className='mx-1'><b>From  <i style={{ color: 'grey' }}>@{postdetails?.userDetails[0].username}</i></b></span>
                             </div>
 
