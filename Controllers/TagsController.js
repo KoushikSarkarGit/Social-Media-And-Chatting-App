@@ -10,7 +10,8 @@ const getTrendingTags = async (req, res) => {
     fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5);
 
     const TenDaysAgo = new Date();
-    TenDaysAgo.setDate(TenDaysAgo.getDate() - 15)
+    // its actually for 20 days ago but it is written 10 days ago so i don't have to change stuff in frontend. ...I am lazy
+    TenDaysAgo.setDate(TenDaysAgo.getDate() - 20)
 
     try {
 

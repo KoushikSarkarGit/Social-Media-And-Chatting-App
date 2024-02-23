@@ -9,6 +9,8 @@ import { UilShare } from '@iconscout/react-unicons'
 import { UilEdit } from '@iconscout/react-unicons'
 import { AiFillLike } from "react-icons/ai";
 import { AiOutlineLike } from "react-icons/ai";
+import { UilTrashAlt } from '@iconscout/react-unicons'
+
 
 import defaultprofileimg2 from '../img/defaultprofimg2.jpg'
 import { Appcontext } from '../ContextFolder/ContextCreator';
@@ -82,10 +84,7 @@ export default function SinglePostForProfile({ pdata }) {
                         <span style={{ color: "var(--gray)", fontSize: '12px' }}>{pdata.likesCount}</span>
                     </div>
 
-                    <div className='featureicon' style={{ color: "gray", cursor: 'text' }} >
-                        <UilRedo style={{ color: "gray" }} />
-                        <span style={{ fontSize: '12px' }}>{pdata.repostsCount}</span>
-                    </div>
+
 
                     <div className='featureicon'>
                         <UilCommentAltNotes onClick={(event) => { navigate(`/viewpost/${pdata._id}`) }} />
@@ -95,6 +94,10 @@ export default function SinglePostForProfile({ pdata }) {
                     <div className='featureicon'>
                         <UilEdit />
                         <span style={{ color: "var(--gray)", fontSize: '12px' }}></span>
+                    </div>
+                    <div className='featureicon'  >
+                        <UilTrashAlt />
+                        <span style={{ fontSize: '12px' }}></span>
                     </div>
 
                     <div className='featureicon'>
@@ -187,10 +190,7 @@ export default function SinglePostForProfile({ pdata }) {
                             <span style={{ color: "var(--gray)", fontSize: '12px' }}>{pdata.likesCount}</span>
                         </div>
 
-                        <div className='featureicon' style={{ color: "gray", cursor: 'text' }} >
-                            <UilRedo style={{ color: "gray" }} />
-                            <span style={{ fontSize: '12px' }}>{pdata.repostsCount}</span>
-                        </div>
+
 
                         <div className='featureicon'>
                             <UilCommentAltNotes onClick={(event) => {
@@ -203,6 +203,10 @@ export default function SinglePostForProfile({ pdata }) {
                         <div className='featureicon'>
                             <UilEdit />
                             <span style={{ color: "var(--gray)", fontSize: '12px' }}></span>
+                        </div>
+                        <div className='featureicon'  >
+                            <UilTrashAlt />
+                            <span style={{ fontSize: '12px' }}></span>
                         </div>
 
                         <div className='featureicon'>

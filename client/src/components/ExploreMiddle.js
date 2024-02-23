@@ -9,6 +9,7 @@ import SearchUserElement from './SearchUserElement'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 import CustomEmptybox from './CustomEmptybox'
+import { useParams } from 'react-router-dom'
 
 
 
@@ -17,7 +18,7 @@ import CustomEmptybox from './CustomEmptybox'
 
 export default function ExploreMiddle({ keyword, type }) {
 
-
+    const params = useParams();
 
     const [userlist, setuserlist] = useState([])
     const [taggedpostlist, setTaggedpostlist] = useState([])
@@ -165,7 +166,16 @@ export default function ExploreMiddle({ keyword, type }) {
             <div className="chooseSearchOption">
                 <div className='indivradio'>
                     <div className="form-check ms-2">
-                        <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" onClick={() => setSelectedoption('posts')} />
+
+
+                        {
+                            params?.type === 'posts' ?
+                                <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" defaultChecked onClick={() => setSelectedoption('posts')} />
+                                :
+                                <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" onClick={() => setSelectedoption('posts')} />
+                        }
+
+
                         <label className="form-check-label" htmlFor="flexRadioDefault1">
                             Posts
                         </label>
@@ -175,7 +185,20 @@ export default function ExploreMiddle({ keyword, type }) {
 
                 <div className='indivradio'>
                     <div className="form-check ms-2">
-                        <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" defaultChecked onClick={() => setSelectedoption('people')} />
+
+
+
+                        {params?.type === 'people' ? <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" defaultChecked onClick={() => setSelectedoption('people')} />
+                            :
+                            <>
+                                {
+                                    (params?.type !== 'people' && params?.type !== 'tags' && params?.type !== 'posts') ? <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" defaultChecked onClick={() => setSelectedoption('people')} />
+                                        :
+                                        <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" onClick={() => setSelectedoption('people')} />
+                                }
+                            </>
+                        }
+
                         <label className="form-check-label" htmlFor="flexRadioDefault2">
                             People
                         </label>
@@ -185,7 +208,15 @@ export default function ExploreMiddle({ keyword, type }) {
 
                 <div className='indivradio'>
                     <div className="form-check ms-2">
-                        <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3" onClick={() => setSelectedoption('tags')} />
+
+
+                        {params?.type === 'tags' ?
+                            <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3" defaultChecked onClick={() => setSelectedoption('tags')} />
+                            :
+                            <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3" onClick={() => setSelectedoption('tags')} />
+
+                        }
+
                         <label className="form-check-label" htmlFor="flexRadioDefault3">
                             Tags
                         </label>

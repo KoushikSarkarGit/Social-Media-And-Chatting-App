@@ -1,15 +1,20 @@
 import React, { useContext, useEffect, useState } from 'react'
 import '../pagecss/trendcard.css'
 import '../pagecss/followercard.css'
+
 import MoretrendingModal from './MoretrendingModal'
+import CustomEmptybox from './CustomEmptybox'
 import axios from 'axios'
 import toast from 'react-hot-toast'
+import { useNavigate } from 'react-router-dom'
 
 export default function Trendingcard() {
 
+
+
     const [opentrending, setopentrending] = useState(false)
 
-
+    const navigate = useNavigate()
 
 
 
@@ -63,77 +68,48 @@ export default function Trendingcard() {
 
 
 
-    const trenddata = [
-        {
-            name: "Minions",
-            shares: 97,
-        },
-        {
-            name: "Avangers",
-            shares: 80.5,
-        },
-        {
-            name: "Minions",
-            shares: 97,
-        },
-        {
-            name: "Minions",
-            shares: 97,
-        },
-        {
-            name: "Minions",
-            shares: 97,
-        },
-        {
-            name: "Minions",
-            shares: 97,
-        },
-        {
-            name: "Minions",
-            shares: 97,
-        },
-        {
-            name: "Avangers",
-            shares: 80.5,
-        },
-        {
-            name: "Avangers",
-            shares: 80.5,
-        }
-    ];
+
 
     return (
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
             <div className='trendingbox'>
                 <div className="h3box">
-                    <h5>What's Trending Today</h5>
+                    <h5 style={{ color: 'rgb(255, 94, 0)' }}>What's Trending Today</h5>
                 </div>
 
 
-                {
-                    trendingTagsList.map((item, index) => {
-                        return <div className="singletrend" key={index * 2}>
-                            <span>#{item.tagname}</span>
+                {trendingTagsList.length >= 1 ?
 
-                            <div className='tagdetails'>
-                                <div className="indivclassname">
-                                    <span> shares in last 5 days</span>
-                                    <span>{item.fiveDaysAgoCount} </span>
+                    <>
+                        {
+                            trendingTagsList.map((item, index) => {
+                                return <div
+                                    className="singletrend"
+                                    key={index * 2}
+                                    onClick={() => { navigate(`/explore/tags/${item.tagname}`) }}
+                                >
+                                    <span>#{item.tagname}</span>
+
+                                    <div className='tagdetails'   >
+                                        <span>{item?.fiveDaysAgoCount ? item?.fiveDaysAgoCount : item?.tenDaysAgoCount} shares recently </span>
+
+                                        <span>{item?.count} total</span>
+                                        <span></span>
+
+
+                                    </div>
+
                                 </div>
+                            })
+                        }
+                    </>
+                    :
 
-                                <div className="indivclassname">
-                                    <span> total shares</span>
-                                    <span>{item.count}</span>
-                                </div>
-
-                            </div>
-
-                        </div>
-                    })
+                    <CustomEmptybox lodaingTime={10000} cfontsize={'18px'} textshown={'Nothing Here'} loadingstatus={true} />
                 }
 
 
-                <MoretrendingModal opentrending={opentrending} setopentrending={setopentrending} />
+                <MoretrendingModal opentrending={opentrending} initialtaglist={trendingTagsList} setopentrending={setopentrending} />
 
 
 
