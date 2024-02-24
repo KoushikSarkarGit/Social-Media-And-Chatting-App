@@ -44,6 +44,12 @@
 
 }
 
+.ProfileImages>img {
+    border-radius: 14px 14px 0px 0px;
+
+
+}
+
 
 
 .ProfileName {

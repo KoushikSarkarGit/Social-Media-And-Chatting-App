@@ -35,8 +35,9 @@ export default function ViewSinglepost({ pid }) {
     const [commentdetails, setCommentdetails] = useState([])
 
     const cur = useContext(Appcontext);
-    const { jwtToken, LikePost, UnLikePost, RepostThePost, UnRepostThePost, getRelativeTime } = cur;
+    const { jwtToken, LikePost, UnLikePost, RepostThePost, UnRepostThePost, getRelativeTime, userId, followSomeone, UnfollowSomeone, checkIfLoggedUserFollowsUser } = cur;
 
+    const [isfollwedbyuser, setIsfollwedbyuser] = useState()
 
     const checkIfUserLikesThePost = async () => {
         try {
@@ -104,6 +105,7 @@ export default function ViewSinglepost({ pid }) {
                 if (res.data.success === true) {
                     setPostdetails(res.data.fetchedpost)
                     setTaglist(res.data.fetchedpost.tags)
+                    setIsfollwedbyuser(checkIfLoggedUserFollowsUser(res.data.fetchedpost.userId))
                     // console.log(res.data.fetchedpost)
                 }
 
@@ -200,6 +202,7 @@ export default function ViewSinglepost({ pid }) {
     useEffect(() => {
         getPostDetails()
         getCommentsOfPosts()
+
     }, []);
 
 
@@ -275,7 +278,62 @@ export default function ViewSinglepost({ pid }) {
 
                     </div>
 
-                    <button className='basicbutton px-3 py-1'>follow</button>
+                    {/* <button className='basicbutton px-3 py-1'>follow</button> */}
+
+
+
+
+
+
+
+
+                    {userId !== postdetails?.userId ?
+                        <>
+                            {isfollwedbyuser ? <div type='button'
+                                className="basicbutton px-3 py-1"
+                                onClick={() => {
+                                    if (!jwtToken) {
+                                        navigate('/login')
+                                    } else {
+                                        UnfollowSomeone(postdetails?.userId)
+                                        setIsfollwedbyuser(false)
+                                    }
+                                }}
+                            >
+                                Unfollow
+                            </div>
+                                :
+                                <div type='button'
+                                    className="basicbutton px-3 py-1"
+                                    onClick={() => {
+                                        if (!jwtToken) {
+                                            navigate('/login')
+                                        } else {
+                                            followSomeone(postdetails?.userId)
+                                            setIsfollwedbyuser(true)
+                                        }
+                                    }}
+                                >
+                                    follow
+                                </div>
+
+                            }
+
+                        </>
+
+                        :
+                        null
+                    }
+
+
+
+
+
+
+
+
+
+
 
                 </div>
 

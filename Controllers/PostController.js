@@ -4,7 +4,8 @@ const Usermodel = require('../Models/Usermodel')
 const Tagmodel = require('../Models/TagsModel')
 const cloudinary = require('../Tools/CloudinarySetup')
 
-const { createBase64AndUpload, updateimageincloudinary } = require('../Tools/ImageToBase64')
+const { createBase64AndUpload, updateimageincloudinary } = require('../Tools/ImageToBase64');
+const Commentmodel = require('../Models/CommentModel');
 
 require('dotenv').config();
 
@@ -214,11 +215,17 @@ const deletePost = async (req, res) => {
 
         try {
 
-            let deleteresult = await cloudinary.uploader.destroy(existingpost.postPublicID, function (err, result) { console.log(result) });
-            const deletedpost = await Postmodel.findByIdAndDelete(existingpost._id)
+            if (existingpost.postimage) {
+                await cloudinary.uploader.destroy(existingpost.postPublicID,
+                    function (err, result) {
+                        console.log(result)
+                    });
+            }
 
-            return res.status(200).json({ success: true, msg: 'Post Deleted successfully', deletedpost, postpublicid: existingpost.postPublicID });
+            await Postmodel.findByIdAndDelete(existingpost._id)
+            await Commentmodel.deleteMany({ postId: existingpost._id });
 
+            return res.status(200).json({ success: true, msg: 'Post Deleted successfully', postpublicid: existingpost.postPublicID });
 
 
         } catch (error) {

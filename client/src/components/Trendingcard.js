@@ -32,7 +32,7 @@ export default function Trendingcard() {
 
             await axios.get(`http://localhost:9000/api/v1/tags/get-trending-tags/${manualpage || 1}`
             ).then(async (res) => {
-                console.log(res.data)
+                // console.log(res.data)
                 setTrendingTagsList(prevTaglist => [...prevTaglist, ...res.data.trendingTags])
                 setTotalTags5days(res.data.totalTagsUpdatedinpast5days)
                 setTotalTags15days(res.data.totalTagsUpdatedinpast10days)
