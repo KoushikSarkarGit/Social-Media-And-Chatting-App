@@ -28,7 +28,7 @@ const getTrendingTags = async (req, res) => {
         let trendingTags;
 
 
-        if (page <= Math.ceil(totalTagsUpdatedinpast5days / pageSize)) {
+        if (page * pageSize <= totalTagsUpdatedinpast5days) {
 
             trendingTags = await Tagsmodel.aggregate([
                 {
@@ -74,7 +74,7 @@ const getTrendingTags = async (req, res) => {
 
 
         }
-        else {
+        else if (page * pageSize <= totalTagsUpdatedinpast10days) {
 
 
             trendingTags = await Tagsmodel.aggregate([
@@ -119,6 +119,12 @@ const getTrendingTags = async (req, res) => {
                 }
             ]);
 
+
+        }
+        else {
+
+
+            trendingTags = await Tagsmodel.find({}).skip((page - 1) * pageSize).sort({ count: -1 }).limit(10).select('tagname count');
 
         }
 

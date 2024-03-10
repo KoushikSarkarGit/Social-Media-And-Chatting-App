@@ -386,28 +386,35 @@ export default function MyContextPool(props) {
             }
 
             try {
-                await axios.get(`http://localhost:9000/api/v1/user/check-if-logged-user-follows-user/${tocheckuserId}`,
+                const res = await axios.get(`http://localhost:9000/api/v1/user/check-if-logged-user-follows-user/${tocheckuserId}`,
                     {
                         headers: { token: jsonedcurdata.jwttoken || jwtToken }
                     }
-                ).then(async (res) => {
-                    if (res.data.success === true) {
-                        if (res.data.followedbyuser) {
-                            return true;
-                        }
-                        else {
-                            return false;
-                        }
-
-                    }
-                    else {
-                        return false;
-                    }
-
-                }).catch((err) => {
+                ).catch((err) => {
                     console.log(err)
                     toast.error('some internal axios error occured')
                 })
+
+
+
+                if (res.data.success === true) {
+                    // console.log(res.data.followedbyuser)
+                    if (res.data.followedbyuser) {
+                        // console.log('entered block true')
+                        return true;
+                    }
+                    else {
+                        // console.log('entered block false')
+                        return false;
+                    }
+
+                }
+                else {
+                    return false;
+                }
+
+
+
 
             } catch (error) {
                 console.log(error)

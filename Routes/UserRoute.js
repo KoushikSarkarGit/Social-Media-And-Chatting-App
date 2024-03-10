@@ -71,13 +71,21 @@ router.put('/unrepost/:id', valtokenchecker, extractIdFromToken, unrePost)
 
 
 
-//get timeline for logged in user
+//get feed for logged in user
 
-router.get('/get-feed/:id', valtokenchecker, extractIdFromToken, getTimelineForLoginUser)
+router.get('/get-feed/:id/:page', valtokenchecker, extractIdFromToken, getTimelineForLoginUser)
 
-//get timeline for non logged in user
+//get feed for non logged in user
 
 router.get('/get-general-feed/', getGeneralTimeline)
+
+
+
+
+
+
+
+
 
 
 //get people by keyword 

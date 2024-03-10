@@ -17,15 +17,28 @@ export default function SearchUserElement({ udata }) {
     const cur = useContext(Appcontext);
     const { jwtToken, userId, followSomeone, UnfollowSomeone, checkIfLoggedUserFollowsUser } = cur;
 
-    const [isfollwedbyuser, setIsfollwedbyuser] = useState()
+    const [isfollwedbyuser, setIsfollwedbyuser] = useState(false)
 
 
 
 
     useEffect(() => {
+        if (jwtToken) {
+            async function checkfollowedstatus(id) {
+                let result = await checkIfLoggedUserFollowsUser(id)
+
+                if (result) {
+                    setIsfollwedbyuser(true)
+                }
+                else {
+                    setIsfollwedbyuser(false)
+                }
+            }
+
+            checkfollowedstatus(udata._id);
+        }
 
 
-        setIsfollwedbyuser(checkIfLoggedUserFollowsUser(udata._id))
 
     }, [udata]);
 

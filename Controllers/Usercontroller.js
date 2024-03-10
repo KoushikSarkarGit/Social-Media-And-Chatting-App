@@ -5,7 +5,8 @@ const Postmodel = require('../Models/PostModel')
 const { encrytpassword, checkpassword } = require('../Middlewares/Encryptiontools')
 const { createBase64AndUpload } = require('../Tools/ImageToBase64')
 const { checkAdmin } = require('../Tools/checkingFunction')
-
+const { getTrendingTags } = require('../Controllers/TagsController');
+const Tagsmodel = require("../Models/TagsModel")
 
 const jwt = require('jsonwebtoken')
 const { default: mongoose } = require('mongoose')
@@ -572,8 +573,16 @@ const unrePost = async (req, res) => {
 // feed for logged in user
 const getTimelineForLoginUser = async (req, res) => {
     const usert = req.params.id;
-
+    const page = req.params.page
     const { curuserid } = req.body;
+    const postsPerPage = 10;
+    const followingPostsLimit = 5;
+
+    const fiveDaysAgo = new Date();
+    fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5);
+    const TenDaysAgo = new Date();
+    TenDaysAgo.setDate(TenDaysAgo.getDate() - 20)
+
     try {
         const user = await Usermodel.findById(curuserid);
 
@@ -582,25 +591,200 @@ const getTimelineForLoginUser = async (req, res) => {
         }
 
 
-        let yourFeed = await Usermodel.aggregate([
-            { $match: { $_id: new mongoose.Types.ObjectId(user._id) } },
-
+        const followingPosts = await Usermodel.aggregate([
+            { $match: { _id: new mongoose.Types.ObjectId(user._id) } },
             {
                 $lookup: {
                     from: 'post',
                     localField: 'following',
                     foreignField: 'userId',
-                    as: 'followingpost'
+                    as: 'followingposts'
+                }
+            },
+            { $unwind: '$followingposts' },
+            {
+                $project: {
+                    '_id': '$followingposts._id',
+                    'userId': '$followingposts.userId',
+                    'postdescription': '$followingposts.postdescription',
+                    'postimage': '$followingposts.postimage',
+                    'postPublicID': '$followingposts.postPublicID',
+                    'createdAt': '$followingposts.createdAt',
+                    'likescount': { $size: '$followingposts.likes' },
+                    'repostedcount': { $size: '$followingposts.reposts' },
+                    'tags': '$followingposts.tags'
+                }
+            },
+            { $sort: { 'createdAt': -1 } }, // Sort by timestamp in descending order
+            { $skip: page * followingPostsLimit },
+            { $limit: followingPostsLimit } // Adjust the limit as needed for pagination
+        ]);
+
+
+        const remainingTrendingPostsLimit = postsPerPage - followingPosts.length;
+
+
+        const totalTagsUpdatedinpast5days = await Tagsmodel.countDocuments({
+            updatedAt: { $gte: fiveDaysAgo }
+        });
+
+
+
+        const totalTagsUpdatedinpast10days = await Tagsmodel.countDocuments({
+            updatedAt: { $gte: TenDaysAgo }
+        });
+
+
+        let mytrendingTags;
+
+        if (totalTagsUpdatedinpast5days > 0) {
+
+            mytrendingTags = await Tagsmodel.aggregate([
+                {
+                    $match: {
+                        updatedAt: { $gte: fiveDaysAgo }
+                    }
+                },
+                {
+                    $addFields: {
+                        countHistoryWithin5Days: {
+                            $filter: {
+                                input: {
+                                    $ifNull: ["$countHistory", []] // Provide an empty array if countHistory is null
+                                },
+                                as: "entry",
+                                cond: { $gte: ["$$entry.timestamp", fiveDaysAgo] }
+                            }
+                        }
+                    }
+                },
+                {
+                    $addFields: {
+                        fiveDaysAgoCount: { $size: "$countHistoryWithin5Days" }
+                    }
+                },
+                {
+                    $project: {
+                        tagname: 1,
+                        fiveDaysAgoCount: 1,
+
+                        count: 1
+                    }
+                },
+                {
+                    $sort: { fiveDaysAgoCount: -1, count: -1 }
+                },
+
+
+                {
+                    $limit: 10 // Adjust the limit as per your requirement
+                }
+            ]);
+
+
+        }
+        else if (totalTagsUpdatedinpast10days > 0) {
+
+
+            mytrendingTags = await Tagsmodel.aggregate([
+                {
+                    $match: {
+                        updatedAt: { $gte: TenDaysAgo }
+                    }
+                },
+                {
+                    $addFields: {
+                        countHistoryWithin10Days: {
+                            $filter: {
+                                input: {
+                                    $ifNull: ["$countHistory", []] // Provide an empty array if countHistory is null
+                                },
+                                as: "entry",
+                                cond: { $gte: ["$$entry.timestamp", TenDaysAgo] }
+                            }
+                        }
+                    }
+                },
+                {
+                    $addFields: {
+                        tenDaysAgoCount: { $size: "$countHistoryWithin10Days" }
+                    }
+                },
+                {
+                    $project: {
+                        tagname: 1,
+                        tenDaysAgoCount: 1,
+
+                        count: 1
+                    }
+                },
+                {
+                    $sort: { tenDaysAgoCount: -1, count: -1 }
+                },
+
+
+                {
+                    $limit: 10 // Adjust the limit as per your requirement
+                }
+            ]);
+
+
+        }
+        else {
+
+
+            mytrendingTags = await Tagsmodel.find({}).sort({ count: -1 }).limit(20).select('tagname count');
+
+        }
+
+
+
+
+
+
+
+
+
+        const trendingTags = mytrendingTags.length > 0 ? mytrendingTags : [];
+
+
+        const trendingPosts = [];
+        for (const tag of trendingTags) {
+            const tagDocument = await Tagsmodel.findOne({ tagname: tag.tagname });
+            if (tagDocument && tagDocument.relatedpost && tagDocument.relatedpost.length > 0) {
+                const postFromTag = await Postmodel.findById(tagDocument.relatedpost[0]); // Fetch the first related post
+                if (postFromTag) {
+                    trendingPosts.push(postFromTag);
+                    if (trendingPosts.length === remainingTrendingPostsLimit) {
+                        break; // Break the loop when the limit is reached
+                    }
                 }
             }
+        }
 
 
-        ])
 
 
-        res.status(200).json({ success: true, yourFeed });
+
+
+        // Combine and sort both sets of posts
+        const combinedPosts = [...followingPosts, ...trendingPosts];
+        const sortedPosts = combinedPosts.sort((a, b) => b.createdAt - a.createdAt);
+
+        return res.status(200).json({ success: true, feed: sortedPosts });
+
+
+
+
+
+
+
+
+
+
     } catch (error) {
-        res.status(500).json({ success: false, error });
+        console.log(error)
+        return res.status(500).json({ success: false, error });
     }
 
 };

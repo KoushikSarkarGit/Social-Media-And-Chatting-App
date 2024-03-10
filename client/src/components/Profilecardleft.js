@@ -54,7 +54,18 @@ export default function Profilecardleft({ uId }) {
     useEffect(() => {
         getUserprofile()
 
-        setIsfollwedbyuser(checkIfLoggedUserFollowsUser(uId))
+        async function checkfollowedstatus(id) {
+            let result = await checkIfLoggedUserFollowsUser(id)
+
+            if (result) {
+                setIsfollwedbyuser(true)
+            }
+            else {
+                setIsfollwedbyuser(false)
+            }
+        }
+
+        checkfollowedstatus(uId);
 
     }, [uId]);
 
