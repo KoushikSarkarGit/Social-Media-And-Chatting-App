@@ -11,19 +11,22 @@ import { useNavigate } from 'react-router-dom';
 
 
 
-export default function TrendingModal({ opentrending, setopentrending, initialtaglist }) {
+export default function TrendingModal({ opentrending, setopentrending, initialtaglist, pretotalTags5days, pretotalTags15days }) {
     const theme = useMantineTheme();
 
     const navigate = useNavigate()
 
     const [trendingTagsList, setTrendingTagsList] = useState([])
 
-    const [totalTags5days, setTotalTags5days] = useState(0)
-    const [totalTags15days, setTotalTags15days] = useState(0)
+    const [totalTags5days, setTotalTags5days] = useState(pretotalTags5days)
+    const [totalTags15days, setTotalTags15days] = useState(pretotalTags15days)
 
     const [pageno, setpageno] = useState(1)
 
-
+    const updateTotalTags = () => {
+        setTotalTags5days(pretotalTags5days);
+        setTotalTags15days(pretotalTags15days);
+    };
 
 
 
@@ -32,10 +35,11 @@ export default function TrendingModal({ opentrending, setopentrending, initialta
 
             await axios.get(`http://localhost:9000/api/v1/tags/get-trending-tags/${manualpage || 1}`
             ).then(async (res) => {
-                console.log(res.data)
+                // console.log(res.data)
                 setTrendingTagsList(prevTaglist => [...prevTaglist, ...res.data.trendingTags])
                 setTotalTags5days(res.data.totalTagsUpdatedinpast5days)
                 setTotalTags15days(res.data.totalTagsUpdatedinpast10days)
+
 
             }).catch((err) => {
                 console.log(err)
@@ -51,15 +55,19 @@ export default function TrendingModal({ opentrending, setopentrending, initialta
 
 
 
+
+
+
+
+    useEffect(() => {
+        updateTotalTags();
+    }, [pretotalTags5days, pretotalTags15days]);
+
     useEffect(() => {
         setTrendingTagsList(initialtaglist)
         setpageno(1)
+
     }, [opentrending]);
-
-
-
-
-
 
 
     return (

@@ -19,7 +19,7 @@ export default function AllPostForProfile({ selectedtab }) {
     const [repostedlist, setRepostedlist] = useState([])
     const [commentlist, setCommentlist] = useState([])
     const [page, setPage] = useState(1)
-    const [totalpostno, setTotalpostno] = useState()
+    const [totalpostno, setTotalpostno] = useState(0)
 
     const cur = useContext(Appcontext);
     const { jwtToken } = cur;
@@ -37,7 +37,7 @@ export default function AllPostForProfile({ selectedtab }) {
 
                         if (res.data.success === true) {
                             setPostlist(prevPostlist => [...prevPostlist, ...res.data.fetchedpost])
-                            setTotalpostno(res.data.totalPostsCount.totalpostno)
+                            setTotalpostno(res.data?.totalPostsCount?.totalpostno)
                             // console.log(res.data)
                         }
 

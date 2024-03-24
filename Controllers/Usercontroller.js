@@ -92,11 +92,11 @@ const loginBackend = async (req, res) => {
                     }
                 }
             ]);
-
-            validity ? res.status(200).json({ success: true, jwttoken: token, sentuser: sentuser[0], msg: 'Login Successful' }) : res.status(400).json({ success: false, msg: "Wrong Username or Password" })
+            // console.log(validity)
+            validity ? res.status(200).json({ success: true, jwttoken: token, sentuser: sentuser[0], msg: 'Login Successful' }) : res.status(401).json({ success: false, msg: "Wrong Username or Password" })
         }
         else {
-            res.status(404).json("User does not exists. Please Sign Up first")
+            res.status(401).json("User does not exists. Please Sign Up first")
         }
     } catch (error) {
         res.status(500).json({ success, msg: error.message });
@@ -223,11 +223,13 @@ const getSingleUserMedium = async (req, res) => {
             }
         ]);
 
-        const [totalPostsCount] = await Postmodel.aggregate([
+        let [totalPostsCount] = await Postmodel.aggregate([
             { $match: { userId: userid } },
             { $count: 'totalpostno' }
         ]);
-
+        if (!totalPostsCount || totalPostsCount.length < 1) {
+            totalPostsCount = { "totalpostno": 0 }
+        }
 
         const finaldata = {
 
@@ -751,8 +753,10 @@ const getTimelineForLoginUser = async (req, res) => {
         const trendingPosts = [];
         for (const tag of trendingTags) {
             const tagDocument = await Tagsmodel.findOne({ tagname: tag.tagname });
+
             if (tagDocument && tagDocument.relatedpost && tagDocument.relatedpost.length > 0) {
-                const postFromTag = await Postmodel.findById(tagDocument.relatedpost[0]); // Fetch the first related post
+
+                const postFromTag = await Postmodel.findById(tagDocument.relatedpost[page]); // Fetch the first related post
                 if (postFromTag) {
                     trendingPosts.push(postFromTag);
                     if (trendingPosts.length === remainingTrendingPostsLimit) {

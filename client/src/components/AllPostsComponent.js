@@ -27,7 +27,7 @@ export default function AllPostsComponent() {
         {
             "_id": "659573f32454f4234c7fcadc",
             "postdescription": "Testing post",
-            "postimage": "http://res.cloudinary.com/dcyrnfucz/image/upload/v1704293362/SocialMediaStorage/Post%20Of%20659572c12454f4234c7fcacb%20on%20Wed%20Jan%2003%202024%2020:19:20%20GMT%2B0530%20%28India%20Standard%20Time%29.jpg",
+            "postimage": "https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
             "postPublicID": "SocialMediaStorage/Post Of 659572c12454f4234c7fcacb on Wed Jan 03 2024 20:19:20 GMT+0530 (India Standard Time)",
             "tags": [
                 {

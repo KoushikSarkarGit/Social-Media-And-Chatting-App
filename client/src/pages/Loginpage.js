@@ -48,29 +48,37 @@ export default function Loginpage() {
                     password: values.password,
                 }).then(async (res) => {
 
+                    if (res.data.success === true) {
+                        await localStorage.setItem('authdata', JSON.stringify(res.data))
+                        const gotres = await localStorage.getItem('authdata');
+                        const mydata = await JSON.parse(gotres);
 
-                    await localStorage.setItem('authdata', JSON.stringify(res.data))
-                    const gotres = await localStorage.getItem('authdata');
-                    const mydata = await JSON.parse(gotres);
-                    // await console.log(mydata)
 
-                    await setUserdata(mydata?.sentuser);
-                    await setusername(mydata?.sentuser.username)
-                    await setjwtToken(mydata?.jwttoken)
-                    // await setUserprofileimg(mydata?.sentuser?.profilePicture)  // for some reson its not working
-                    await setisAdmin(mydata.sentuser.isAdmin)
+                        await setUserdata(mydata?.sentuser);
+                        await setusername(mydata?.sentuser.username)
+                        await setjwtToken(mydata?.jwttoken)
+                        // await setUserprofileimg(mydata?.sentuser?.profilePicture)  // for some reson its not working
+                        await setisAdmin(mydata.sentuser.isAdmin)
 
-                    toast.success(`${res.data.msg}. 😄`);
+                        toast.success(`${res.data.msg}. 😄`);
 
-                    setTimeout(() => {
+                        setTimeout(() => {
 
-                        navigate('/');
-                    }, 100);
+                            navigate('/');
+                        }, 100);
+
+                    }
+                    else {
+                        toast.error(`${res.data.msg}. 😔`)
+                    }
+
+
+
 
                 }).catch((err) => {
 
                     console.log(err)
-                    toast.error('some internal axios error occured')
+                    toast.error(`${err.response.data}`)
 
                 })
             } catch (error) {

@@ -37,6 +37,7 @@ export default function Trendingcard() {
                 setTotalTags5days(res.data.totalTagsUpdatedinpast5days)
                 setTotalTags15days(res.data.totalTagsUpdatedinpast10days)
 
+
             }).catch((err) => {
                 console.log(err)
                 toast.error('some internal axios error occured')
@@ -109,7 +110,14 @@ export default function Trendingcard() {
                 }
 
 
-                <MoretrendingModal opentrending={opentrending} initialtaglist={trendingTagsList} setopentrending={setopentrending} />
+                <MoretrendingModal opentrending={opentrending}
+                    initialtaglist={trendingTagsList}
+                    setopentrending={setopentrending}
+                    pretotalTags5days={totalTags5days}
+                    pretotalTags15days={totalTags15days}
+
+
+                />
 
 
 

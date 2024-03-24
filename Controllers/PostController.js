@@ -280,7 +280,7 @@ const getPostsOfLoggedUser = async (req, res) => {
     try {
         const userId = new mongoose.Types.ObjectId(curuserid);
 
-        const [totalPostsCount] = await Postmodel.aggregate([
+        let [totalPostsCount] = await Postmodel.aggregate([
             { $match: { userId: userId } },
             { $count: 'totalpostno' }
         ]);
@@ -332,6 +332,10 @@ const getPostsOfLoggedUser = async (req, res) => {
             { $skip: (page - 1) * 10 },
             { $limit: 10 }
         ]);
+
+        if (!totalPostsCount || totalPostsCount.length < 1) {
+            totalPostsCount = { "totalpostno": 0 }
+        }
 
         return res.status(200).json({
             success: true,
