@@ -573,12 +573,15 @@ const unrePost = async (req, res) => {
 
 
 // feed for logged in user
-const getTimelineForLoginUser = async (req, res) => {
-    const usert = req.params.id;
-    const page = req.params.page
+const getFeedForLoginUser = async (req, res) => {
+    // const usert = req.params.id;
+
+    const curindex = parseInt(req.body.followerindex)
+    const popularindex = parseInt(req.body.popularindex)
+
     const { curuserid } = req.body;
-    const postsPerPage = 10;
-    const followingPostsLimit = 5;
+    const postsPerPage = 20;
+    const followingPostsLimit = 15;
 
     const fiveDaysAgo = new Date();
     fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5);
@@ -586,203 +589,111 @@ const getTimelineForLoginUser = async (req, res) => {
     TenDaysAgo.setDate(TenDaysAgo.getDate() - 20)
 
     try {
-        const user = await Usermodel.findById(curuserid);
+        const user = await Usermodel.findById(curuserid).select('_id following');
 
         if (!user) {
             res.status(200).json({ success: false, msg: 'User does not exist' });
         }
 
+        const followingUserIds = user.following;
 
-        const followingPosts = await Usermodel.aggregate([
-            { $match: { _id: new mongoose.Types.ObjectId(user._id) } },
-            {
-                $lookup: {
-                    from: 'post',
-                    localField: 'following',
-                    foreignField: 'userId',
-                    as: 'followingposts'
+        // Array to store all posts
+        let followingPosts = [];
+
+        let intpage = 0
+        let iterator = 0
+        if (followingUserIds.length > 0) {
+
+
+            for (let i = 0; followingPosts.length < followingPostsLimit && i < 15; i++) {
+                // Loop through each followed user and fetch their posts
+                for (const userId of followingUserIds) {
+                    if (iterator < curindex) {
+                        iterator++;
+                        continue;
+                    }
+
+                    // Fetch the current post for the followe
+                    const curpost = await Postmodel.aggregate([
+                        { $match: { userId: new mongoose.Types.ObjectId(userId) } },
+                        {
+                            $project: {
+                                '_id': '$_id',
+                                'userId': '$userId',
+                                'postdescription': '$postdescription',
+                                'postimage': '$postimage',
+                                'postPublicID': '$postPublicID',
+                                'createdAt': '$createdAt',
+                                'likescount': { $size: '$likes' },
+                                'repostedcount': { $size: '$reposts' },
+                                'tags': '$tags'
+                            }
+                        },
+
+                        { $skip: intpage },
+
+                        { $limit: 1 }
+                    ]);
+
+                    // Add the fetched post to followingPosts array
+                    if (curpost.length > 0 && curpost !== undefined) {
+                        followingPosts.push(curpost[0]);
+                    }
+
+                    // Check if the followingPostsLimit is reached
+                    if (followingPosts.length >= followingPostsLimit) {
+                        break;
+                    }
                 }
-            },
-            { $unwind: '$followingposts' },
-            {
-                $project: {
-                    '_id': '$followingposts._id',
-                    'userId': '$followingposts.userId',
-                    'postdescription': '$followingposts.postdescription',
-                    'postimage': '$followingposts.postimage',
-                    'postPublicID': '$followingposts.postPublicID',
-                    'createdAt': '$followingposts.createdAt',
-                    'likescount': { $size: '$followingposts.likes' },
-                    'repostedcount': { $size: '$followingposts.reposts' },
-                    'tags': '$followingposts.tags'
+
+                if (followingPosts.length < followingPostsLimit) {
+                    intpage++;
                 }
-            },
-            { $sort: { 'createdAt': -1 } }, // Sort by timestamp in descending order
-            { $skip: page * followingPostsLimit },
-            { $limit: followingPostsLimit } // Adjust the limit as needed for pagination
-        ]);
+
+                if (followingPosts.length >= followingPostsLimit) {
+                    break;
+                }
+            }
+
+
+
+        }
+
 
 
         const remainingTrendingPostsLimit = postsPerPage - followingPosts.length;
+        const followingPostIds = followingPosts.map(post => post._id);
 
+        let popularPosts = [];
 
-        const totalTagsUpdatedinpast5days = await Tagsmodel.countDocuments({
-            updatedAt: { $gte: fiveDaysAgo }
-        });
+        popularPosts = await Postmodel.aggregate([
+            { $match: { _id: { $nin: followingPostIds } } },
 
-
-
-        const totalTagsUpdatedinpast10days = await Tagsmodel.countDocuments({
-            updatedAt: { $gte: TenDaysAgo }
-        });
-
-
-        let mytrendingTags;
-
-        if (totalTagsUpdatedinpast5days > 0) {
-
-            mytrendingTags = await Tagsmodel.aggregate([
-                {
-                    $match: {
-                        updatedAt: { $gte: fiveDaysAgo }
-                    }
-                },
-                {
-                    $addFields: {
-                        countHistoryWithin5Days: {
-                            $filter: {
-                                input: {
-                                    $ifNull: ["$countHistory", []] // Provide an empty array if countHistory is null
-                                },
-                                as: "entry",
-                                cond: { $gte: ["$$entry.timestamp", fiveDaysAgo] }
-                            }
-                        }
-                    }
-                },
-                {
-                    $addFields: {
-                        fiveDaysAgoCount: { $size: "$countHistoryWithin5Days" }
-                    }
-                },
-                {
-                    $project: {
-                        tagname: 1,
-                        fiveDaysAgoCount: 1,
-
-                        count: 1
-                    }
-                },
-                {
-                    $sort: { fiveDaysAgoCount: -1, count: -1 }
-                },
-
-
-                {
-                    $limit: 10 // Adjust the limit as per your requirement
+            {
+                $project: {
+                    '_id': '$_id',
+                    'userId': '$userId',
+                    'postdescription': '$postdescription',
+                    'postimage': '$postimage',
+                    'postPublicID': '$postPublicID',
+                    'createdAt': '$createdAt',
+                    'likescount': { $size: '$likes' },
+                    'repostedcount': { $size: '$reposts' },
+                    'tags': '$tags'
                 }
-            ]);
-
-
-        }
-        else if (totalTagsUpdatedinpast10days > 0) {
-
-
-            mytrendingTags = await Tagsmodel.aggregate([
-                {
-                    $match: {
-                        updatedAt: { $gte: TenDaysAgo }
-                    }
-                },
-                {
-                    $addFields: {
-                        countHistoryWithin10Days: {
-                            $filter: {
-                                input: {
-                                    $ifNull: ["$countHistory", []] // Provide an empty array if countHistory is null
-                                },
-                                as: "entry",
-                                cond: { $gte: ["$$entry.timestamp", TenDaysAgo] }
-                            }
-                        }
-                    }
-                },
-                {
-                    $addFields: {
-                        tenDaysAgoCount: { $size: "$countHistoryWithin10Days" }
-                    }
-                },
-                {
-                    $project: {
-                        tagname: 1,
-                        tenDaysAgoCount: 1,
-
-                        count: 1
-                    }
-                },
-                {
-                    $sort: { tenDaysAgoCount: -1, count: -1 }
-                },
-
-
-                {
-                    $limit: 10 // Adjust the limit as per your requirement
-                }
-            ]);
-
-
-        }
-        else {
-
-
-            mytrendingTags = await Tagsmodel.find({}).sort({ count: -1 }).limit(20).select('tagname count');
-
-        }
-
-
-
-
-
-
-
-
-
-        const trendingTags = mytrendingTags.length > 0 ? mytrendingTags : [];
-
-
-        const trendingPosts = [];
-        for (const tag of trendingTags) {
-            const tagDocument = await Tagsmodel.findOne({ tagname: tag.tagname });
-
-            if (tagDocument && tagDocument.relatedpost && tagDocument.relatedpost.length > 0) {
-
-                const postFromTag = await Postmodel.findById(tagDocument.relatedpost[page]); // Fetch the first related post
-                if (postFromTag) {
-                    trendingPosts.push(postFromTag);
-                    if (trendingPosts.length === remainingTrendingPostsLimit) {
-                        break; // Break the loop when the limit is reached
-                    }
-                }
-            }
-        }
-
-
-
+            },
+            { $sort: { likescount: -1 } },
+            { $skip: popularindex },
+            { $limit: remainingTrendingPostsLimit }
+        ]);
 
 
 
         // Combine and sort both sets of posts
-        const combinedPosts = [...followingPosts, ...trendingPosts];
+        const combinedPosts = [...followingPosts, ...popularPosts];
         const sortedPosts = combinedPosts.sort((a, b) => b.createdAt - a.createdAt);
 
-        return res.status(200).json({ success: true, feed: sortedPosts });
-
-
-
-
-
-
-
+        return res.status(200).json({ success: true, feed: sortedPosts, followingpostcount: followingPosts.length, popularpostcount: popularPosts.length });
 
 
 
@@ -794,14 +705,33 @@ const getTimelineForLoginUser = async (req, res) => {
 };
 
 
-const getGeneralTimeline = async (req, res) => {
+const getGeneralFeed = async (req, res) => {
 
     try {
+        const page = req.params.page
 
-        let yourtimeline = await Postmodel.find().sort({ "createdAt": -1 })
+        let yourFeed = [];
 
+        yourFeed = await Postmodel.aggregate([
+            {
+                $project: {
+                    '_id': '$_id',
+                    'userId': '$userId',
+                    'postdescription': '$postdescription',
+                    'postimage': '$postimage',
+                    'postPublicID': '$postPublicID',
+                    'createdAt': '$createdAt',
+                    'likescount': { $size: '$likes' },
+                    'repostedcount': { $size: '$reposts' },
+                    'tags': '$tags'
+                }
+            },
+            { $sort: { likescount: -1 } },
+            { $skip: (page - 1) * 20 },
+            { $limit: 20 }
+        ]);
 
-        res.status(200).json({ success: true, yourtimeline });
+        res.status(200).json({ success: true, feed: yourFeed });
     } catch (error) {
         res.status(500).json({ success: false, error });
     }
@@ -1054,4 +984,4 @@ const checkIfLoggedUserFollowsUser = async (req, res) => {
 
 
 
-module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getTimelineForLoginUser, getGeneralTimeline, getUserFollowersid, getFollowerListByPage, getSingleUserLite, checkfrontendtoken, getSingleUserMedium, getPeopleByKeyword, getStatusIfPostIsLiked, getStatusIfPostIsReposted, refershLoggedUserData, checkIfLoggedUserFollowsUser }
+module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getFeedForLoginUser, getGeneralFeed, getUserFollowersid, getFollowerListByPage, getSingleUserLite, checkfrontendtoken, getSingleUserMedium, getPeopleByKeyword, getStatusIfPostIsLiked, getStatusIfPostIsReposted, refershLoggedUserData, checkIfLoggedUserFollowsUser }

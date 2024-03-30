@@ -1,5 +1,5 @@
 const express = require('express');
-const { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getTimelineForLoginUser, getGeneralTimeline, getUserFollowersid, getFollowerListByPage, getSingleUserLite, checkfrontendtoken, getSingleUserMedium, getPeopleByKeyword, getPostsByKeyword, getStatusIfPostIsLiked, getStatusIfPostIsReposted, refershLoggedUserData, checkIfLoggedUserFollowsUser } = require('../Controllers/Usercontroller');
+const { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getUserFollowersid, getFollowerListByPage, getSingleUserLite, checkfrontendtoken, getSingleUserMedium, getPeopleByKeyword, getPostsByKeyword, getStatusIfPostIsLiked, getStatusIfPostIsReposted, refershLoggedUserData, checkIfLoggedUserFollowsUser, getFeedForLoginUser, getGeneralFeed } = require('../Controllers/Usercontroller');
 const router = express.Router();
 const formidable = require('express-formidable')
 const { valtokenchecker, extractIdFromToken } = require('../Middlewares/Encryptiontools')
@@ -73,11 +73,11 @@ router.put('/unrepost/:id', valtokenchecker, extractIdFromToken, unrePost)
 
 //get feed for logged in user
 
-router.get('/get-feed/:id/:page', valtokenchecker, extractIdFromToken, getTimelineForLoginUser)
+router.post('/get-feed/:id', valtokenchecker, extractIdFromToken, getFeedForLoginUser)
 
 //get feed for non logged in user
 
-router.get('/get-general-feed/', getGeneralTimeline)
+router.get('/get-general-feed/:page', getGeneralFeed)
 
 
 
