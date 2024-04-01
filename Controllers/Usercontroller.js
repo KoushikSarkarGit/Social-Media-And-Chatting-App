@@ -580,13 +580,8 @@ const getFeedForLoginUser = async (req, res) => {
     const popularindex = parseInt(req.body.popularindex)
 
     const { curuserid } = req.body;
-    const postsPerPage = 20;
-    const followingPostsLimit = 15;
-
-    const fiveDaysAgo = new Date();
-    fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5);
-    const TenDaysAgo = new Date();
-    TenDaysAgo.setDate(TenDaysAgo.getDate() - 20)
+    const postsPerPage = 10;
+    const followingPostsLimit = 7;
 
     try {
         const user = await Usermodel.findById(curuserid).select('_id following');
@@ -605,7 +600,7 @@ const getFeedForLoginUser = async (req, res) => {
         if (followingUserIds.length > 0) {
 
 
-            for (let i = 0; followingPosts.length < followingPostsLimit && i < 15; i++) {
+            for (let i = 0; followingPosts.length < followingPostsLimit && i < 7; i++) {
                 // Loop through each followed user and fetch their posts
                 for (const userId of followingUserIds) {
                     if (iterator < curindex) {
@@ -617,6 +612,29 @@ const getFeedForLoginUser = async (req, res) => {
                     const curpost = await Postmodel.aggregate([
                         { $match: { userId: new mongoose.Types.ObjectId(userId) } },
                         {
+                            $lookup: {
+                                from: 'users', // my user model is named 'user' so it becomes users
+                                let: { userId: '$userId' },
+                                pipeline: [
+                                    {
+                                        $match: {
+                                            $expr: { $eq: ['$_id', '$$userId'] }
+                                        }
+                                    },
+                                    {
+                                        $project: {
+                                            username: 1,
+                                            profilePicture: 1,
+                                            _id: 1
+                                            // Add other fields from the user model as needed
+                                        }
+                                    }
+                                ],
+                                as: 'userDetails'
+
+                            }
+                        },
+                        {
                             $project: {
                                 '_id': '$_id',
                                 'userId': '$userId',
@@ -625,8 +643,11 @@ const getFeedForLoginUser = async (req, res) => {
                                 'postPublicID': '$postPublicID',
                                 'createdAt': '$createdAt',
                                 'likescount': { $size: '$likes' },
-                                'repostedcount': { $size: '$reposts' },
-                                'tags': '$tags'
+                                'repostscount': { $size: '$reposts' },
+                                'tags': '$tags',
+                                commentNo: 1,
+                                'userDetails.username': 1,
+                                'userDetails.profilePicture': 1
                             }
                         },
 
@@ -668,6 +689,29 @@ const getFeedForLoginUser = async (req, res) => {
 
         popularPosts = await Postmodel.aggregate([
             { $match: { _id: { $nin: followingPostIds } } },
+            {
+                $lookup: {
+                    from: 'users', // my user model is named 'user' so it becomes users
+                    let: { userId: '$userId' },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: { $eq: ['$_id', '$$userId'] }
+                            }
+                        },
+                        {
+                            $project: {
+                                username: 1,
+                                profilePicture: 1,
+                                _id: 1
+                                // Add other fields from the user model as needed
+                            }
+                        }
+                    ],
+                    as: 'userDetails'
+
+                }
+            },
 
             {
                 $project: {
@@ -678,8 +722,11 @@ const getFeedForLoginUser = async (req, res) => {
                     'postPublicID': '$postPublicID',
                     'createdAt': '$createdAt',
                     'likescount': { $size: '$likes' },
-                    'repostedcount': { $size: '$reposts' },
-                    'tags': '$tags'
+                    'repostscount': { $size: '$reposts' },
+                    'tags': '$tags',
+                    commentNo: 1,
+                    'userDetails.username': 1,
+                    'userDetails.profilePicture': 1
                 }
             },
             { $sort: { likescount: -1 } },
@@ -713,7 +760,33 @@ const getGeneralFeed = async (req, res) => {
         let yourFeed = [];
 
         yourFeed = await Postmodel.aggregate([
+
             {
+                $lookup: {
+                    from: 'users', // my user model is named 'user' so it becomes users
+                    let: { userId: '$userId' },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: { $eq: ['$_id', '$$userId'] }
+                            }
+                        },
+                        {
+                            $project: {
+                                username: 1,
+                                profilePicture: 1,
+                                _id: 1
+                                // Add other fields from the user model as needed
+                            }
+                        }
+                    ],
+                    as: 'userDetails'
+
+                }
+            },
+
+            {
+
                 $project: {
                     '_id': '$_id',
                     'userId': '$userId',
@@ -722,13 +795,16 @@ const getGeneralFeed = async (req, res) => {
                     'postPublicID': '$postPublicID',
                     'createdAt': '$createdAt',
                     'likescount': { $size: '$likes' },
-                    'repostedcount': { $size: '$reposts' },
-                    'tags': '$tags'
+                    'repostscount': { $size: '$reposts' },
+                    'tags': '$tags',
+                    commentNo: 1,
+                    'userDetails.username': 1,
+                    'userDetails.profilePicture': 1
                 }
             },
             { $sort: { likescount: -1 } },
-            { $skip: (page - 1) * 20 },
-            { $limit: 20 }
+            { $skip: (page - 1) * 10 },
+            { $limit: 10 }
         ]);
 
         res.status(200).json({ success: true, feed: yourFeed });
@@ -802,6 +878,79 @@ const getPeopleByKeyword = async (req, res) => {
 
 
 
+
+
+
+
+
+const getNewPeople = async (req, res) => {
+
+    try {
+        const page = req.params.page;
+        const USER_ID = req.body.userId;
+
+        let newpeople = [];
+
+        if (USER_ID) {
+
+
+            const user = await Usermodel.findById(USER_ID).select('_id following');
+
+            if (!user) {
+                res.status(200).json({ success: false, msg: 'User does not exist' });
+            }
+
+            const followingUserIds = user.following;
+
+
+
+            newpeople = await Usermodel.aggregate([
+                { $match: { _id: { $nin: followingUserIds } } },
+                {
+                    $project: {
+                        username: 1,
+                        firstname: 1,
+                        lastname: 1,
+                        profilePicture: 1,
+                        'createdAt': '$createdAt',
+                        followerscount: { $size: { $ifNull: ["$followers", []] } }
+                    }
+                },
+                { $sort: { followerscount: -1 } },
+                { $skip: (page - 1) * 10 },
+                { $limit: 10 }
+            ]);
+
+        }
+        else {
+
+            newpeople = await Usermodel.aggregate([
+                {
+                    $project: {
+                        username: 1,
+                        firstname: 1,
+                        lastname: 1,
+                        profilePicture: 1,
+                        'createdAt': '$createdAt',
+                        followerscount: { $size: { $ifNull: ["$followers", []] } }
+                    }
+                },
+                { $sort: { followerscount: -1 } },
+                { $skip: (page - 1) * 10 },
+                { $limit: 10 }
+            ]);
+        }
+
+
+
+
+
+        res.status(200).json({ success: true, newpeople });
+    } catch (error) {
+        res.status(500).json({ success: false, error });
+    }
+
+};
 
 
 
@@ -984,4 +1133,4 @@ const checkIfLoggedUserFollowsUser = async (req, res) => {
 
 
 
-module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getFeedForLoginUser, getGeneralFeed, getUserFollowersid, getFollowerListByPage, getSingleUserLite, checkfrontendtoken, getSingleUserMedium, getPeopleByKeyword, getStatusIfPostIsLiked, getStatusIfPostIsReposted, refershLoggedUserData, checkIfLoggedUserFollowsUser }
+module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getFeedForLoginUser, getGeneralFeed, getUserFollowersid, getFollowerListByPage, getSingleUserLite, checkfrontendtoken, getSingleUserMedium, getPeopleByKeyword, getStatusIfPostIsLiked, getStatusIfPostIsReposted, refershLoggedUserData, checkIfLoggedUserFollowsUser, getNewPeople }

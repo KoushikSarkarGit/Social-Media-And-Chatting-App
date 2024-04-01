@@ -73,3 +73,28 @@
 .mutedtext {
     color: gray;
 }
+
+.morefeed {
+    width: 100%;
+    /* height: 2.5rem; */
+    color: #355ff9;
+    border-radius: 5px 5px 10px 10px;
+    background: var(--cardColor);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* padding-bottom: 20px; */
+    cursor: pointer;
+    /* padding-top: 5px; */
+    border: none;
+    margin-bottom: 5px;
+}
+
+.morefeedhr {
+    width: 100%;
+    border: 1px solid var(--hrColor);
+    margin-bottom: 5px;
+    padding-bottom: 0px;
+    margin-top: 1px;
+}

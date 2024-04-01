@@ -56,6 +56,14 @@
     border-radius: 50%;
     object-fit: cover;
     cursor: pointer;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    ;
+}
+
+.posterpic:hover {
+    transform: scale(1.08);
+    cursor: pointer;
+    box-shadow: rgba(255, 179, 49, 0.904) 0px 0px 5px 2px;
 }
 
 /* .singlepostviewbox>img {
@@ -223,10 +231,20 @@
 
 
 .showtagsbtn {
-    border: 1px solid rgb(154, 205, 251);
+    border: 2.5px solid rgb(108, 186, 255);
     border-radius: 1rem;
     padding: 2px 6px 2px 6px;
     margin-right: 3px;
     cursor: pointer;
     font-size: 12px;
+}
+
+.tagitembox {
+    background-color: #355ff9;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: smaller;
+    padding-left: 3px;
+    padding-right: 3px;
 }

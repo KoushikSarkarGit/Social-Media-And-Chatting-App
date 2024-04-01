@@ -39,6 +39,8 @@ export default function ViewSinglepost({ pid }) {
 
     const [isfollwedbyuser, setIsfollwedbyuser] = useState()
 
+    const [isloading, setIsloading] = useState(false)
+
     const checkIfUserLikesThePost = async () => {
         try {
             if (jwtToken) {
@@ -99,23 +101,25 @@ export default function ViewSinglepost({ pid }) {
 
     const getPostDetails = async () => {
         try {
-
+            setIsloading(true)
             await axios.get(`http://localhost:9000/api/v1/post/get-post/${pid}`).then(async (res) => {
 
                 if (res.data.success === true) {
                     setPostdetails(res.data.fetchedpost)
                     setTaglist(res.data.fetchedpost.tags)
-                    setIsfollwedbyuser(checkIfLoggedUserFollowsUser(res.data.fetchedpost.userId))
-                    // console.log(res.data.fetchedpost)
+
                 }
+                setIsloading(false)
 
             }).catch((err) => {
+                setIsloading(false)
                 console.log(err)
                 toast.error('some internal axios error occured')
             })
 
 
         } catch (error) {
+            setIsloading(false)
             console.log(error)
             toast.error('some internal error occured')
         }
@@ -195,6 +199,25 @@ export default function ViewSinglepost({ pid }) {
     }
 
 
+    useEffect(() => {
+        if (jwtToken && isloading === false) {
+            async function checkfollowedstatus(id) {
+                let result = await checkIfLoggedUserFollowsUser(id)
+
+                if (result) {
+                    setIsfollwedbyuser(true)
+                }
+                else {
+                    setIsfollwedbyuser(false)
+                }
+            }
+
+            checkfollowedstatus(postdetails?.userId);
+        }
+
+
+
+    }, [isloading, postdetails]);
 
 
 
@@ -344,7 +367,7 @@ export default function ViewSinglepost({ pid }) {
                 {taglist.length >= 1 && <div className='text-sm-end' style={{ marginBottom: '-40px', marginTop: '-5px' }}>
                     <p className="d-inline-flex ">
                         <a className="showtagsbtn btn btn-outline-primary " data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                            Show Tags
+                            <b>Show Tags</b>
                         </a>
 
                     </p>
@@ -353,7 +376,7 @@ export default function ViewSinglepost({ pid }) {
 
                             {taglist.map((item, index) => {
 
-                                return <a className='mx-1' href='#' key={index} >#{item.tagname}</a>
+                                return <a className='mx-1 tagitembox' href='#' key={index} >#{item.tagname}</a>
                             })}
                         </div>
                     </div>

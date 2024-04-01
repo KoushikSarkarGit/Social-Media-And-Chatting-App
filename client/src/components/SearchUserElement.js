@@ -3,7 +3,7 @@ import React from 'react'
 import '../pagecss/explorepage.css'
 import '../pagecss/followercard.css'
 
-import postPic1 from '../img/postpic1.jpg'
+
 import dpi3 from '../img/defaultImage3.png'
 import { useNavigate } from 'react-router-dom'
 import { useContext } from 'react'

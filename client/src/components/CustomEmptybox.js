@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 
-export default function CustomEmptybox({ lodaingTime, cfontsize, textshown, loadingstatus }) {
+export default function CustomEmptybox({ loadingTime, cfontsize, textshown }) {
 
 
-    // const [fakeloadingtime, setFakeloadingtime] = useState(true)
+    const [loadingstatus, setLoadingstatus] = useState(true)
 
     useEffect(() => {
         setTimeout(() => {
-            loadingstatus = false
-        }, lodaingTime || 3000);
+            setLoadingstatus(false)
+        }, loadingTime || 3000);
 
     }, []);
 
@@ -22,7 +22,7 @@ export default function CustomEmptybox({ lodaingTime, cfontsize, textshown, load
                     <>
                         <div className='text-center'>
 
-                            <div className='Cemptyboxtxt text-center' style={{ fontSize: cfontsize || '1 rem' }}>
+                            <div className='Cemptyboxtxt text-center' style={{ fontSize: cfontsize || '1 rem', color: '#7f8188' }}>
                                 Please Wait. Loading...
                             </div>
 
@@ -35,7 +35,7 @@ export default function CustomEmptybox({ lodaingTime, cfontsize, textshown, load
                     </>
                     :
                     <>
-                        <div className='Cemptyboxtxt text-center' style={{ fontSize: cfontsize || '1 rem' }}>
+                        <div className='Cemptyboxtxt text-center' style={{ fontSize: cfontsize || '1 rem', color: '#7f8188' }}>
                             {textshown || 'No Results'}
                         </div>
 

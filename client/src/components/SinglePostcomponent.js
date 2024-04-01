@@ -90,6 +90,7 @@ export default function SinglePostcomponent({ pdata }) {
     useEffect(() => {
         checkIfUserLikesThePost()
         checkIfUserRepostedPost()
+        // console.log(pdata)
     }, [jwtToken]);
 
     return (
@@ -193,16 +194,17 @@ export default function SinglePostcomponent({ pdata }) {
 
 
 
-                {/* <div className="detail d-flex flex-column my-1">
-                <span><b>From {pdata.userDetails[0].username} :</b></span>
-                <span> {pdata.postdescription}</span>
-            </div> */}
 
                 <div className="detail d-flex flex-column">
                     <div className="d-flex align-items-center justify-content-between spebox ">
                         <div>
-                            <img src={pdata.userDetails[0].profilePicture ? pdata.userDetails[0].profilePicture : defaultprofileimg2} alt="userphoto" className='singlepostuserphoto mx-1 ' />
-                            <span className='mx-1'><b>From  <i style={{ color: 'grey' }}>@{pdata.userDetails[0].username}</i></b></span>
+                            <img src={pdata.userDetails[0]?.profilePicture ? pdata.userDetails[0]?.profilePicture : defaultprofileimg2} alt="userphoto"
+                                className='singlepostuserphoto mx-1 '
+                                onClick={(event) => {
+                                    event.stopPropagation();
+                                    navigate(`/view-user-profile/${pdata?.userId}`)
+                                }} />
+                            <span className='mx-1'><b>From  <i style={{ color: 'grey' }}>@{pdata.userDetails[0]?.username}</i></b></span>
                         </div>
                         <div className="creationdatebox mx-2">
                             <span className='creationtext'>
@@ -224,8 +226,14 @@ export default function SinglePostcomponent({ pdata }) {
                     <div className="detail d-flex flex-column">
                         <div className="d-flex align-items-center justify-content-between spebox ">
                             <div>
-                                <img src={pdata.userDetails[0].profilePicture ? pdata.userDetails[0].profilePicture : defaultprofileimg2} alt="userphoto" className='singlepostuserphoto mx-1 ' />
-                                <span className='mx-1'><b>From  <i style={{ color: 'grey' }}>@{pdata.userDetails[0].username}</i></b></span>
+                                <img src={pdata.userDetails[0]?.profilePicture ? pdata.userDetails[0]?.profilePicture : defaultprofileimg2} alt="userphoto"
+                                    className='singlepostuserphoto mx-1 '
+                                    onClick={(event) => {
+                                        event.stopPropagation();
+                                        navigate(`/view-user-profile/${pdata?.userId}`)
+                                    }}
+                                />
+                                <span className='mx-1'><b>From  <i style={{ color: 'grey' }}>@{pdata.userDetails[0]?.username}</i></b></span>
                             </div>
 
                             <div className="creationdatebox mx-2">
