@@ -142,7 +142,7 @@ export default function AllPostsComponent() {
 
 
 
-                <CustomEmptybox loadingTime={10000} cfontsize={'40px'} textshown={'Follow people or Search to Explore'} />
+                <CustomEmptybox loadingTime={15000} cfontsize={'40px'} textshown={'Follow people or Search to Explore'} />
 
                 :
                 <>

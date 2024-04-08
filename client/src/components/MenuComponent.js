@@ -12,7 +12,7 @@ import SharePostModal from './SharePostModal';
 import { UilSignin } from '@iconscout/react-unicons'
 import { Appcontext } from '../ContextFolder/ContextCreator';
 // import { UilRepeat } from '@iconscout/react-unicons'
-
+import toast from 'react-hot-toast'
 
 export default function MenuComponent() {
 
@@ -37,13 +37,22 @@ export default function MenuComponent() {
                 <span className='optiontext'>Explore</span>
             </Link>
 
-            <div className="menuoptions">
+            <div className="menuoptions" onClick={() => {
+                toast('Will be added in future updates', {
+                    icon: '🐣',
+                })
+            }} >
                 <UilBell className='menuicons' />
                 <span className='optiontext'>Notifications</span>
 
 
             </div>
-            <div className="menuoptions">
+            <div className="menuoptions"
+                onClick={() => {
+                    toast('Will be added in future updates', {
+                        icon: '🐣',
+                    })
+                }}>
                 <UilCommentDots className='menuicons' />
                 <span className='optiontext'>Messages</span>
             </div>

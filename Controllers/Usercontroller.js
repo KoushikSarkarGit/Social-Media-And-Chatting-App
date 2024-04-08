@@ -5,7 +5,6 @@ const Postmodel = require('../Models/PostModel')
 const { encrytpassword, checkpassword } = require('../Middlewares/Encryptiontools')
 const { createBase64AndUpload } = require('../Tools/ImageToBase64')
 const { checkAdmin } = require('../Tools/checkingFunction')
-const { getTrendingTags } = require('../Controllers/TagsController');
 const Tagsmodel = require("../Models/TagsModel")
 
 const jwt = require('jsonwebtoken')
@@ -900,8 +899,8 @@ const getNewPeople = async (req, res) => {
                 res.status(200).json({ success: false, msg: 'User does not exist' });
             }
 
-            const followingUserIds = user.following;
-
+            let followingUserIds = user.following;
+            await followingUserIds.push(user._id);
 
 
             newpeople = await Usermodel.aggregate([

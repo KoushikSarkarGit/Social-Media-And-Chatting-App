@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react'
 import '../pagecss/followercard.css'
 
-import img1 from '../img/img1.png'
+
 import defaultPrifileImg from '../img/defaultImage.jpg'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 import { Appcontext } from '../ContextFolder/ContextCreator'
 import toast from 'react-hot-toast'
 
@@ -15,7 +16,7 @@ export default function FollowerElement(props) {
     const cur = useContext(Appcontext);
     const { jwtToken } = cur;
 
-
+    const navigate = useNavigate();
 
 
     const getFollowerData2 = async () => {
@@ -62,7 +63,13 @@ export default function FollowerElement(props) {
         <div className="indivFollower" >
             <div>
 
-                <img src={follower.profilePicture ? follower.profilePicture : defaultPrifileImg} alt="userphoto" className='userphoto' />
+                <img
+                    src={follower.profilePicture ? follower.profilePicture : defaultPrifileImg}
+                    alt="userphoto"
+                    className='userphoto'
+                    onClick={() => {
+                        navigate(`/view-user-profile/${follower?._id}`)
+                    }} />
                 <div className="followerdetails">
                     <span> <b>{follower.firstname}</b> </span>
                     <span>@{follower.username}</span>
