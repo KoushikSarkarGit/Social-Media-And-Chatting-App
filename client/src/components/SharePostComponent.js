@@ -107,7 +107,15 @@ export default function SharePostComponent() {
             navigate('/login')
             return
         }
+        if (taglist.length < 1) {
 
+            toast('Please Add Some Tags', {
+                icon: '🐣',
+            })
+            setTagmodal(true)
+            return;
+
+        }
         const selectedFile = postimgref.current.files[0];
         if (selectedFile && textareaval.length < 1) { return }
 

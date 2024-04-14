@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function MyContextPool(props) {
 
-
+    const [curdevice, setCurdevice] = useState('pc');
     const [jwtToken, setjwtToken] = useState('');
     const [username, setusername] = useState(null)
     const [isAdmin, setisAdmin] = useState(false)
@@ -85,6 +85,43 @@ export default function MyContextPool(props) {
 
 
     }, [])
+
+
+
+    
+
+    useEffect(() => {
+        function handleResize() {
+          const width = window.innerWidth;
+          if (width >= 1024) {
+            setCurdevice('pc');
+          } else if (width >= 768) {
+            setCurdevice('tablet');
+          } else {
+            setCurdevice('mobile');
+          }
+
+          
+        }
+    
+        // Call handleResize initially to set the initial device type
+        handleResize();
+    
+        // Add event listener for window resize
+        window.addEventListener('resize', handleResize);
+    
+        // Remove event listener on component unmount
+        return () => {
+          window.removeEventListener('resize', handleResize);
+        };
+      }, []);
+
+
+
+
+
+
+
 
 
 
@@ -484,7 +521,7 @@ export default function MyContextPool(props) {
 
 
     return (
-        <Appcontext.Provider value={{ jwtToken, username, isAdmin, userlastname, userfristname, userprofileimg, setisAdmin, setjwtToken, setUserdata, setusername, userdata, logoutfunction, userId, setUserId, LikePost, UnLikePost, RepostThePost, UnRepostThePost, getRelativeTime, refreshLoggedUserDetails, followSomeone, UnfollowSomeone, checkIfLoggedUserFollowsUser }}>
+        <Appcontext.Provider value={{ jwtToken, username, isAdmin, userlastname, userfristname, userprofileimg, setisAdmin, setjwtToken, setUserdata, setusername, userdata, logoutfunction, userId, setUserId, LikePost, UnLikePost, RepostThePost, UnRepostThePost, getRelativeTime, refreshLoggedUserDetails, followSomeone, UnfollowSomeone, checkIfLoggedUserFollowsUser, curdevice, setCurdevice }}>
             {!loading && props.children
             }
         </Appcontext.Provider>

@@ -11,6 +11,7 @@ import '../pagecss/menucomponent.css'
 import SharePostModal from './SharePostModal';
 import { UilSignin } from '@iconscout/react-unicons'
 import { Appcontext } from '../ContextFolder/ContextCreator';
+import { UilEllipsisH } from '@iconscout/react-unicons'
 // import { UilRepeat } from '@iconscout/react-unicons'
 import toast from 'react-hot-toast'
 
@@ -18,7 +19,7 @@ export default function MenuComponent() {
 
     const [opensharemodal, setopensharemodal] = useState(false)
     const cur = useContext(Appcontext);
-    const { userdata, jwtToken, logoutfunction } = cur;
+    const { userdata, jwtToken, logoutfunction, curdevice } = cur;
 
 
     return (<>
@@ -66,6 +67,13 @@ export default function MenuComponent() {
                 <UilUser className='menuicons' />
                 <span className='optiontext'>Profile</span>
             </Link>
+
+
+            {(curdevice === 'mobile' || curdevice === 'tablet') && <div className="menuoptions">
+                <UilEllipsisH className='menuicons' />
+                <span className='optiontext'>More</span>
+            </div>}
+
             {/* <div className="menuoptions">
                 <UilSetting className='menuicons' />
                 <span className='optiontext'>Settings</span>

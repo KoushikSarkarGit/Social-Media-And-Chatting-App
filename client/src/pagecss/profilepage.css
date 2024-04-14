@@ -1,8 +1,22 @@
 .profilepagebox {
     position: relative;
     display: grid;
-    grid-template-columns: 18rem auto 20rem;
+    grid-template-columns: 18vw auto 20vw;
     gap: 1rem;
     height: 95.7vh;
 
+}
+
+/* Breakpoint for tablets (adjust as needed) */
+@media (max-width: 1024px) {
+    .profilepagebox {
+        grid-template-columns: 1fr auto;
+    }
+}
+
+/* Breakpoint for mobiles (adjust as needed) */
+@media (max-width: 768px) {
+    .profilepagebox {
+        grid-template-columns: auto;
+    }
 }

@@ -99,6 +99,16 @@ export default function SharePostWithTexarea({ setopensharemodal }) {
             return
         }
 
+        if (taglist.length < 1) {
+
+            toast('Please Add Some Tags', {
+                icon: '🐣',
+            })
+            setTagmodal(true)
+            return;
+
+        }
+
         const selectedFile = postimgref.current.files[0];
         if (selectedFile && textareaval.length < 1) { return }
         if (textareaval.length < 1) { return }

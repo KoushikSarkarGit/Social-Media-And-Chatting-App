@@ -1,8 +1,22 @@
 .homepage {
     position: relative;
     display: grid;
-    grid-template-columns: 18rem auto 20rem;
+    grid-template-columns: 18vw auto 20vw;
     gap: 1rem;
     max-height: 95.7vh;
 
+}
+
+/* Breakpoint for tablets (adjust as needed) */
+@media (max-width: 1024px) {
+    .homepage {
+        grid-template-columns: 23vw auto;
+    }
+}
+
+/* Breakpoint for mobiles (adjust as needed) */
+@media (max-width: 768px) {
+    .homepage {
+        grid-template-columns: auto;
+    }
 }

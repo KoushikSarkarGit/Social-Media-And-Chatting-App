@@ -11,7 +11,7 @@
     justify-content: flex-start;
     /* margin-top: 1rem; */
     align-items: center;
-    padding: 16px 10px 18px 30px;
+    padding: 15px 10px 15px 26px;
     background: rgb(255, 255, 255);
     text-decoration: none;
     color: black;
@@ -22,9 +22,24 @@
 }
 
 .optiontext {
-    padding-left: 20px;
-    font-size: large;
+    padding-left: 16px;
+    font-size: 19px;
 
+}
+
+@media (max-width: 1024px) {
+    .optiontext {
+        padding-left: 16px;
+        font-size: 1.6vw;
+    }
+}
+
+/* Breakpoint for mobiles (adjust as needed) */
+@media (max-width: 768px) {
+    .optiontext {
+        padding-left: 16px;
+        font-size: 1.6vw;
+    }
 }
 
 

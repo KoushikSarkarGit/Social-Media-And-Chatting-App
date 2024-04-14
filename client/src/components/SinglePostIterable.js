@@ -5,8 +5,7 @@ import "../pagecss/singlepostcomp.css";
 import { UilRedo } from '@iconscout/react-unicons'
 import { UilCommentAltNotes } from '@iconscout/react-unicons'
 import { UilShare } from '@iconscout/react-unicons'
-// import { AiTwotoneLike } from 'react-icons/ai'
-import { UilEdit } from '@iconscout/react-unicons'
+
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { AiFillLike } from "react-icons/ai";
@@ -27,7 +26,7 @@ export default function SinglePostIterable({ pid, jwtToken }) {
 
 
     const cur = useContext(Appcontext);
-    const { LikePost, UnLikePost, RepostThePost, UnRepostThePost, getRelativeTime } = cur;
+    const { LikePost, UnLikePost, RepostThePost, UnRepostThePost, getRelativeTime, userId } = cur;
 
     const getLikedPostsofLoggedUserLiteversion = async () => {
         try {
@@ -121,22 +120,30 @@ export default function SinglePostIterable({ pid, jwtToken }) {
                     </div>
 
                     {isRepostedByUser ?
-                        <div className='featureicon' style={{ color: '#00ff00' }} >
+                        <div className='featureicon' style={{ color: postdetails?.userId === userId ? '#bebebe' : '#00ff00', cursor: postdetails?.userId === userId ? 'text' : 'pointer' }} >
                             <UilRedo
                                 onClick={() => {
-                                    UnRepostThePost(pid, jwtToken)
-                                    setIsRepostedByUser(false)
-                                    postdetails.repostCount = (postdetails?.repostCount - 1)
+                                    if (postdetails.userId !== userId) {
+                                        UnRepostThePost(pid, jwtToken)
+                                        setIsRepostedByUser(false)
+                                        postdetails.repostCount = (postdetails?.repostCount - 1)
+                                    }
+
                                 }} />
                             <span style={{ fontSize: '12px' }}>{postdetails?.repostCount}</span>
                         </div>
                         :
-                        <div className='featureicon'  >
+                        <div className='featureicon' style={{ color: postdetails?.userId === userId ? '#bebebe' : 'black', cursor: postdetails?.userId === userId ? 'text' : 'pointer' }} >
                             <UilRedo
                                 onClick={() => {
-                                    RepostThePost(pid, jwtToken)
-                                    setIsRepostedByUser(true)
-                                    postdetails.repostCount = (postdetails?.repostCount + 1)
+                                    if (postdetails.userId !== userId) {
+
+                                        RepostThePost(pid, jwtToken)
+                                        setIsRepostedByUser(true)
+                                        postdetails.repostCount = (postdetails?.repostCount + 1)
+
+                                    }
+
                                 }}
                             />
                             <span style={{ fontSize: '12px' }}>{postdetails?.repostCount}</span>
@@ -240,22 +247,30 @@ export default function SinglePostIterable({ pid, jwtToken }) {
 
 
                         {isRepostedByUser ?
-                            <div className='featureicon' style={{ color: '#00ff00' }} >
+                            <div className='featureicon' style={{ color: postdetails?.userId === userId ? '#bebebe' : '#00ff00', cursor: postdetails?.userId === userId ? 'text' : 'pointer' }} >
                                 <UilRedo
                                     onClick={() => {
-                                        UnRepostThePost(pid, jwtToken)
-                                        setIsRepostedByUser(false)
-                                        postdetails.repostCount = (postdetails?.repostCount - 1)
+                                        if (postdetails.userId !== userId) {
+
+                                            UnRepostThePost(pid, jwtToken)
+                                            setIsRepostedByUser(false)
+                                            postdetails.repostCount = (postdetails?.repostCount - 1)
+                                        }
+
                                     }} />
                                 <span style={{ fontSize: '12px' }}>{postdetails?.repostCount}</span>
                             </div>
                             :
-                            <div className='featureicon'  >
+                            <div className='featureicon' style={{ color: postdetails?.userId === userId ? '#bebebe' : 'black', cursor: postdetails?.userId === userId ? 'text' : 'pointer' }} >
                                 <UilRedo
                                     onClick={() => {
-                                        RepostThePost(pid, jwtToken)
-                                        setIsRepostedByUser(true)
-                                        postdetails.repostCount = (postdetails?.repostCount + 1)
+                                        if (postdetails.userId !== userId) {
+                                            RepostThePost(pid, jwtToken)
+                                            setIsRepostedByUser(true)
+                                            postdetails.repostCount = (postdetails?.repostCount + 1)
+
+                                        }
+
                                     }}
                                 />
                                 <span style={{ fontSize: '12px' }}>{postdetails?.repostCount}</span>
