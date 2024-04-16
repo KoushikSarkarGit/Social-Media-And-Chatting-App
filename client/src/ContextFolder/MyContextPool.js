@@ -88,33 +88,33 @@ export default function MyContextPool(props) {
 
 
 
-    
+
 
     useEffect(() => {
         function handleResize() {
-          const width = window.innerWidth;
-          if (width >= 1024) {
-            setCurdevice('pc');
-          } else if (width >= 768) {
-            setCurdevice('tablet');
-          } else {
-            setCurdevice('mobile');
-          }
+            const width = window.innerWidth;
+            if (width > 1024) {
+                setCurdevice('pc');
+            } else if (width > 768) {
+                setCurdevice('tablet');
+            } else {
+                setCurdevice('mobile');
+            }
 
-          
+
         }
-    
+
         // Call handleResize initially to set the initial device type
         handleResize();
-    
+
         // Add event listener for window resize
         window.addEventListener('resize', handleResize);
-    
+
         // Remove event listener on component unmount
         return () => {
-          window.removeEventListener('resize', handleResize);
+            window.removeEventListener('resize', handleResize);
         };
-      }, []);
+    }, []);
 
 
 

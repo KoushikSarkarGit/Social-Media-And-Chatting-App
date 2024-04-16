@@ -75,7 +75,7 @@ export default function Trendingcard() {
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
             <div className='trendingbox'>
                 <div className="h3box">
-                    <h5 style={{ color: 'rgb(255, 94, 0)' }}>What's Trending Today</h5>
+                    <span className='align-self' style={{ color: 'rgb(255, 94, 0)' }}>What's Trending Today</span>
                 </div>
 
 

@@ -3,14 +3,21 @@
     display: grid;
     grid-template-columns: 18vw auto 20vw;
     gap: 1rem;
-    height: 95.7vh;
+    height: 100vh;
+    padding: 1rem 1rem;
+}
 
+
+@media (max-width: 1190px) {
+    .profilepagebox {
+        grid-template-columns: 20vw auto 23vw;
+    }
 }
 
 /* Breakpoint for tablets (adjust as needed) */
 @media (max-width: 1024px) {
     .profilepagebox {
-        grid-template-columns: 1fr auto;
+        grid-template-columns: 23vw auto;
     }
 }
 

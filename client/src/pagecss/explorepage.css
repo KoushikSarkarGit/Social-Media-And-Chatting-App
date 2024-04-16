@@ -1,11 +1,32 @@
 .explorepagebox {
     position: relative;
     display: grid;
-    grid-template-columns: 18rem auto 20rem;
+    grid-template-columns: 18vw auto 20vw;
     gap: 1rem;
-    max-height: 95.7vh;
-
+    max-height: 100vh;
+    padding: 1rem 1rem;
 }
+
+
+
+@media (max-width: 1024px) {
+    .explorepagebox {
+        grid-template-columns: 23vw auto;
+    }
+}
+
+/* Breakpoint for mobiles (adjust as needed) */
+@media (max-width: 768px) {
+    .explorepagebox {
+        grid-template-columns: auto;
+    }
+}
+
+
+
+
+
+
 
 .exploremiddlebox {
     display: flex;

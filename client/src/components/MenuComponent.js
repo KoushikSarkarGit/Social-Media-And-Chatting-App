@@ -1,18 +1,17 @@
 import React, { useContext, useState } from 'react'
 import { UilEstate } from '@iconscout/react-unicons'
 import { UilBell } from '@iconscout/react-unicons'
-// import { UilSetting } from "@iconscout/react-unicons";
 import { UilCommentDots } from '@iconscout/react-unicons'
 import { UilUser } from '@iconscout/react-unicons'
 import { UilTablet } from '@iconscout/react-unicons'
 import { UilSearch } from '@iconscout/react-unicons'
 import { Link } from 'react-router-dom';
 import '../pagecss/menucomponent.css'
+
 import SharePostModal from './SharePostModal';
 import { UilSignin } from '@iconscout/react-unicons'
 import { Appcontext } from '../ContextFolder/ContextCreator';
 import { UilEllipsisH } from '@iconscout/react-unicons'
-// import { UilRepeat } from '@iconscout/react-unicons'
 import toast from 'react-hot-toast'
 
 export default function MenuComponent() {
@@ -38,25 +37,32 @@ export default function MenuComponent() {
                 <span className='optiontext'>Explore</span>
             </Link>
 
-            <div className="menuoptions" onClick={() => {
-                toast('Will be added in future updates', {
-                    icon: '🐣',
-                })
-            }} >
-                <UilBell className='menuicons' />
-                <span className='optiontext'>Notifications</span>
+
+            {(curdevice === 'pc') &&
+                <div className="menuoptions"
+                    onClick={() => {
+                        toast('Will be added in future updates', {
+                            icon: '🐣',
+                        })
+                    }}>
+                    <UilBell className='menuicons' />
+                    <span className='optiontext'>Notifications</span>
+                </div>}
 
 
-            </div>
-            <div className="menuoptions"
-                onClick={() => {
-                    toast('Will be added in future updates', {
-                        icon: '🐣',
-                    })
-                }}>
-                <UilCommentDots className='menuicons' />
-                <span className='optiontext'>Messages</span>
-            </div>
+            {(curdevice === 'pc') &&
+                <div className="menuoptions"
+                    onClick={() => {
+                        toast('Will be added in future updates', {
+                            icon: '🐣',
+                        })
+                    }}>
+                    <UilCommentDots className='menuicons' />
+                    <span className='optiontext'>Messages</span>
+                </div>
+            }
+
+
 
             <Link to='/timeline' className="menuoptions">
                 <UilTablet className='menuicons' />

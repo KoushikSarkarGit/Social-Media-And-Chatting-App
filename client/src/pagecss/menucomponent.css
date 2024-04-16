@@ -4,6 +4,7 @@
     width: 100%;
     background-color: var(--cardColor);
     border-radius: 31px;
+
 }
 
 .menuoptions {
@@ -11,7 +12,7 @@
     justify-content: flex-start;
     /* margin-top: 1rem; */
     align-items: center;
-    padding: 15px 10px 15px 26px;
+    padding: 14px 12px 14px 22px;
     background: rgb(255, 255, 255);
     text-decoration: none;
     color: black;

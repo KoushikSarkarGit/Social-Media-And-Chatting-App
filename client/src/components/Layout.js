@@ -5,6 +5,7 @@ import { Helmet } from "react-helmet";
 
 
 
+
 export default function Layout({ children, title, description, keywords, author }) {
     return (
         <div>
@@ -21,7 +22,12 @@ export default function Layout({ children, title, description, keywords, author 
             <main className='main '>
 
                 {children}
+
+
+
             </main>
+
+
         </div>
     )
 }

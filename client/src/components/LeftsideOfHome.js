@@ -10,9 +10,14 @@ export default function LeftsideOfHome() {
     return (
         <div className='leftsideprofilebox'>
             <LogoComponent />
-            <MiniProfileCompund />
+            <div className='minibox'>
+                <MiniProfileCompund />
+            </div>
+
 
             <MenuComponent />
+
+
 
         </div>
     )

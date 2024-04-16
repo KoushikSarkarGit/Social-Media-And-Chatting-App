@@ -5,6 +5,7 @@ import MiddleofHome from '../components/MiddleofHome'
 import RightofHome from '../components/RightofHome'
 import Layout from '../components/Layout'
 import { Appcontext } from '../ContextFolder/ContextCreator'
+import Navbar from '../components/Navbar'
 
 export default function Home() {
 
@@ -15,6 +16,7 @@ export default function Home() {
 
     return (
         <Layout title={'Home Page'}>
+
             <div className="homepage">
                 {(curdevice === 'pc' || curdevice === 'tablet') && <LeftsideOfHome />}
 
@@ -22,7 +24,11 @@ export default function Home() {
 
                 {(curdevice === 'pc') && <RightofHome />}
 
+
             </div>
+
+            {(curdevice === 'mobile') && <Navbar />}
+
         </Layout>
     )
 }

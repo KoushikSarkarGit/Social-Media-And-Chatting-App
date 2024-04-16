@@ -277,59 +277,70 @@ export default function MiniProfileCompund() {
                 <img src={userdata?.profilePicture ? userdata?.profilePicture : defaultprofileimg2} alt="myprofilepic" />
             </div>
 
-            <div className="ProfileDetails">
-                <span> <b> {userdata ? (userdata?.firstname + ' ' + userdata.lastname) : <div style={{ color: 'grey' }}>Please Sign In</div>}</b> </span>
-                <span >{username ? '@' + username : ''}</span>
+
+            <div className='infocontainer'>
+
+                <div className="ProfileDetails">
+                    <span style={{ fontSize: '1.1vw' }}> <b> {userdata ? (userdata?.firstname + ' ' + userdata.lastname) : <div style={{ color: 'grey' }}>Please Sign In</div>}</b> </span>
+                    <span style={{ fontSize: '1vw' }} >{username ? '@' + username : ''}</span>
+                </div>
+
+
+                {/* dropdown option  */}
+                <div className="moreicon dropend" >
+                    {jwtToken ? <UilEllipsisV className="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" /> : <UilEllipsisV onClick={() => {
+                        toast('Please Login First!', {
+                            icon: '🐣',
+                        })
+                    }} />}
+
+
+                    <ul className="dropdown-menu " style={{ position: 'absolute', minWidth: 'auto' }}>
+                        <li>
+                            <button
+                                className="dropdown-item px-3 "
+                                type="button"
+                                style={{ color: 'rgb(255 92 7)' }}
+                                data-bs-toggle="modal"
+                                data-bs-target="#staticBackdrop"
+                                onClick={() => {
+                                    setProfilepicselected(true)
+                                    setCoverpicselected(false)
+                                }}
+                            >
+
+                                Change Profile Image
+                            </button>
+                        </li>
+
+
+                        <li>
+                            <button
+                                className="dropdown-item px-3 "
+                                type="button"
+                                style={{ color: 'rgb(255 92 7)' }}
+                                data-bs-toggle="modal"
+                                data-bs-target="#staticBackdrop"
+                                onClick={() => {
+                                    setProfilepicselected(false)
+                                    setCoverpicselected(true)
+                                }}
+                            >
+                                Change Cover Image
+                            </button>
+                        </li>
+
+                    </ul>
+
+                </div>
+
             </div>
 
 
-            {/* dropdown option  */}
-            <div className="moreicon dropend" >
-                {jwtToken ? <UilEllipsisV className="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" /> : <UilEllipsisV onClick={() => {
-                    toast('Please Login First!', {
-                        icon: '🐣',
-                    })
-                }} />}
 
 
-                <ul className="dropdown-menu " style={{ position: 'absolute', minWidth: 'auto' }}>
-                    <li>
-                        <button
-                            className="dropdown-item px-3 "
-                            type="button"
-                            style={{ color: 'rgb(255 92 7)' }}
-                            data-bs-toggle="modal"
-                            data-bs-target="#staticBackdrop"
-                            onClick={() => {
-                                setProfilepicselected(true)
-                                setCoverpicselected(false)
-                            }}
-                        >
-
-                            Change Profile Image
-                        </button>
-                    </li>
 
 
-                    <li>
-                        <button
-                            className="dropdown-item px-3 "
-                            type="button"
-                            style={{ color: 'rgb(255 92 7)' }}
-                            data-bs-toggle="modal"
-                            data-bs-target="#staticBackdrop"
-                            onClick={() => {
-                                setProfilepicselected(false)
-                                setCoverpicselected(true)
-                            }}
-                        >
-                            Change Cover Image
-                        </button>
-                    </li>
-
-                </ul>
-
-            </div>
 
 
 

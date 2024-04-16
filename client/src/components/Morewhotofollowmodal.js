@@ -61,7 +61,7 @@ export default function Morewhotofollowmodal({ openfollower, setopenfollower, in
         setNewpeople(initialdata)
         setPage(1)
         setReachedend(false)
-        console.log(initialdata)
+        // console.log(initialdata)
     }, [openfollower]);
 
 

@@ -365,12 +365,16 @@ export default function ViewSinglepost({ pid }) {
 
 
                 {taglist.length >= 1 && <div className='text-sm-end' style={{ marginBottom: '-40px', marginTop: '-5px' }}>
-                    <p className="d-inline-flex ">
-                        <a className="showtagsbtn btn btn-outline-primary " data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                            <b>Show Tags</b>
-                        </a>
+                    <div className='showtagsboxholder'>
 
-                    </p>
+                        <p className="d-inline-flex ">
+                            <a className="showtagsbtn btn btn-outline-primary " data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                <b>Show Tags</b>
+                            </a>
+
+                        </p>
+                    </div>
+
                     <div className="collapse mb-4" id="collapseExample">
                         <div className="card card-body text-start d-flex flex-row flex-wrap">
 

@@ -1,10 +1,36 @@
 .viewpostpagebox {
     position: relative;
     display: grid;
-    grid-template-columns: 18rem auto 20rem;
+    grid-template-columns: 18vw auto 20vw;
     gap: 1rem;
-    max-height: 95.7vh;
+    max-height: 100vh;
+    padding: 1rem 1rem;
 }
+
+
+@media (max-width: 1190px) {
+    .viewpostpagebox {
+        grid-template-columns: 20vw auto 23vw;
+    }
+}
+
+
+@media (max-width: 1024px) {
+    .viewpostpagebox {
+        grid-template-columns: 23vw auto;
+    }
+}
+
+/* Breakpoint for mobiles (adjust as needed) */
+@media (max-width: 768px) {
+    .viewpostpagebox {
+        grid-template-columns: auto;
+    }
+}
+
+
+
+
 
 .superviewsinglepostbox {
     display: flex;
@@ -116,6 +142,16 @@
     align-items: center;
     cursor: pointer;
 }
+
+
+.showtagsboxholder {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    margin-bottom: 5px;
+}
+
+
 
 
 /* css for comment section */

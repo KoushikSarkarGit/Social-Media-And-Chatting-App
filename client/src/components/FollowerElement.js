@@ -77,7 +77,7 @@ export default function FollowerElement(props) {
 
             </div>
 
-            <button className='basicbutton followerbtn px-2'  >Unfollow</button>
+            <button className='basicbutton followerbtn px-1'  >Unfollow</button>
         </div>
     )
 }

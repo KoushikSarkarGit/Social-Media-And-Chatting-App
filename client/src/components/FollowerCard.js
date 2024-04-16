@@ -62,7 +62,7 @@ export default function FollowerCard() {
     return (
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
             <div className='followercardbox'>
-                <h5 style={{ color: 'rgb(255, 94, 0)' }} >Your Followers </h5>
+                <span style={{ color: 'rgb(255, 94, 0)', fontSize: '1.6vw' }} >Your Followers </span>
 
                 {followerlist.length > 0 ?
                     <>
