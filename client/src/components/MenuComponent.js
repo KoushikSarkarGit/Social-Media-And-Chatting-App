@@ -68,23 +68,26 @@ export default function MenuComponent() {
                 <UilTablet className='menuicons' />
                 <span className='optiontext'>Your Timeline</span>
             </Link>
+            {(userdata && jwtToken) ?
+                <Link to='/profile' className="menuoptions"
+                >
+                    <UilUser className='menuicons' />
+                    <span className='optiontext'>Profile</span>
+                </Link>
+                :
 
-            <Link to='/profile' className="menuoptions">
-                <UilUser className='menuicons' />
-                <span className='optiontext'>Profile</span>
-            </Link>
-
+                <Link to='/login' className="menuoptions"
+                >
+                    <UilUser className='menuicons' />
+                    <span className='optiontext'>Profile</span>
+                </Link>
+            }
 
             {(curdevice === 'mobile' || curdevice === 'tablet') && <div className="menuoptions">
                 <UilEllipsisH className='menuicons' />
                 <span className='optiontext'>More</span>
             </div>}
 
-            {/* <div className="menuoptions">
-                <UilSetting className='menuicons' />
-                <span className='optiontext'>Settings</span>
-
-            </div> */}
 
             <Link to='/login' className="menuoptions" onClick={() => {
                 if (userdata && jwtToken) {

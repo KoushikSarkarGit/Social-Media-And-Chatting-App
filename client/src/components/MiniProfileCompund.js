@@ -281,8 +281,8 @@ export default function MiniProfileCompund() {
             <div className='infocontainer'>
 
                 <div className="ProfileDetails">
-                    <span style={{ fontSize: '1.1vw' }}> <b> {userdata ? (userdata?.firstname + ' ' + userdata.lastname) : <div style={{ color: 'grey' }}>Please Sign In</div>}</b> </span>
-                    <span style={{ fontSize: '1vw' }} >{username ? '@' + username : ''}</span>
+                    <span className="pspan1" > <b> {userdata ? (userdata?.firstname + ' ' + userdata.lastname) : <div style={{ color: 'grey' }}>Please Sign In</div>}</b> </span>
+                    <span className="pspan2"  >{username ? '@' + username : ''}</span>
                 </div>
 
 

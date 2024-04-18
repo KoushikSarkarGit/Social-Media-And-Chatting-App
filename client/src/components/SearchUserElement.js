@@ -15,7 +15,7 @@ export default function SearchUserElement({ udata }) {
     const navigate = useNavigate()
 
     const cur = useContext(Appcontext);
-    const { jwtToken, userId, followSomeone, UnfollowSomeone, checkIfLoggedUserFollowsUser } = cur;
+    const { jwtToken, userId, followSomeone, UnfollowSomeone, checkIfLoggedUserFollowsUser, curdevice } = cur;
 
     const [isfollwedbyuser, setIsfollwedbyuser] = useState(false)
 
@@ -77,20 +77,32 @@ export default function SearchUserElement({ udata }) {
             </div> */}
             <div className="verticalHr mx-1">    </div>
 
-            <div className="minidetails">
-                <span>
-                    {udata.followerscount}
-                </span>
-                <span>Followers</span>
-            </div>
-            <div className="verticalHr mx-2">    </div>
-            <div className="minidetails">
-                <span>
-                    {udata.followingcount}
-                </span>
-                <span>Following</span>
-            </div>
-            <div className="verticalHr mx-2">    </div>
+
+            {
+                curdevice !== 'mobile' && <>
+                    <div className="minidetails">
+                        <span>
+                            {udata.followerscount}
+                        </span>
+                        <span>Followers</span>
+                    </div>
+                    <div className="verticalHr mx-2">    </div>
+                    <div className="minidetails">
+                        <span>
+                            {udata.followingcount}
+                        </span>
+                        <span>Following</span>
+                    </div>
+                    <div className="verticalHr mx-2">    </div>
+                </>
+
+            }
+
+
+
+
+
+
 
             {/* <button className='basicbutton followerbtn px-2 m-4 ms-2'  >Unfollow</button> */}
 
@@ -98,7 +110,7 @@ export default function SearchUserElement({ udata }) {
             {userId !== udata._id ?
                 <>
                     {isfollwedbyuser ? <div type='button'
-                        className="basicbutton followerbtn px-2 m-4 ms-2"
+                        className="basicbutton followerbtn2 px-2 m-4 ms-2"
                         onClick={() => {
                             if (!jwtToken) {
                                 navigate('/login')
@@ -107,12 +119,13 @@ export default function SearchUserElement({ udata }) {
                                 setIsfollwedbyuser(false)
                             }
                         }}
+
                     >
                         Unfollow
                     </div>
                         :
                         <div type='button'
-                            className="basicbutton followerbtn px-2 m-4 ms-2"
+                            className="basicbutton followerbtn2 px-2 m-4 ms-2"
                             onClick={() => {
                                 if (!jwtToken) {
                                     navigate('/login')
@@ -121,6 +134,7 @@ export default function SearchUserElement({ udata }) {
                                     setIsfollwedbyuser(true)
                                 }
                             }}
+
                         >
                             follow
                         </div>

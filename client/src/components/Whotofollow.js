@@ -98,7 +98,7 @@ export default function Whotofollow() {
     return (
         <div className='mb-4' style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
             <div className='followercardbox '>
-                <span style={{ color: 'rgb(255, 94, 0)', fontSize: '1.6vw' }} >Find New People </span>
+                <span style={{ color: 'rgb(255, 94, 0)' }} >Find New People </span>
 
                 {
                     newpeople.map((person, index) => {

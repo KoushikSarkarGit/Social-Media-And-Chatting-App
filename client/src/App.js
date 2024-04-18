@@ -11,6 +11,13 @@ import TimelinePage from './pages/TimelinePage';
 import ViewPostpage from './pages/ViewPostpage';
 import UserProfile from './pages/UserProfile';
 import PageNotFound from './pages/PageNotFound';
+import MobileEditProfile from './pages/MobileEditProfile';
+import MtrendingPage from './pages/MtrendingPage';
+import MobileFollowers from './pages/MobileFollowers';
+import MobileFindNewPeople from './pages/MobileFindNewPeople';
+
+
+
 
 
 
@@ -33,6 +40,10 @@ function App() {
           <Route path='/explore/:type/:keyword' element={<ExplorePage />} />
           <Route path='/explore' element={<ExplorePage />} />
           <Route path='/timeline' element={<TimelinePage />} />
+          <Route path='/m/editprofile' element={<MobileEditProfile />} />
+          <Route path='/m/trending' element={<MtrendingPage />} />
+          <Route path='/m/followers' element={<MobileFollowers />} />
+          <Route path='/m/findnewpeople' element={<MobileFindNewPeople />} />
           <Route path='/viewpost/:postId' element={<ViewPostpage />} />
           <Route path='/view-user-profile/:viewOtherUserProfileuserId' element={<UserProfile />} />
 

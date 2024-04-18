@@ -28,6 +28,16 @@
 }
 
 
+/* Breakpoint for mobiles (adjust as needed) */
+@media (max-width: 768px) {
+    .miniprofileimg>img {
+        height: 17vw;
+        width: 17vw;
+    }
+}
+
+
+
 .infocontainer {
     display: flex;
     justify-content: space-evenly;

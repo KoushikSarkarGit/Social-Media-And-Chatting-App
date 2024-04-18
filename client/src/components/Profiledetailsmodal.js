@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Modal, useMantineTheme } from '@mantine/core';
 import '../pagecss/profiledetails.css'
+import { Appcontext } from '../ContextFolder/ContextCreator';
 
 export default function Profiledetailsmodal({ pmodal, setpmodal, jwtToken, userlastname, userfristname, username, userdata }) {
 
     const theme = useMantineTheme();
-
+    const cur = useContext(Appcontext);
+    const { curdevice } = cur;
 
     return (
         <>
@@ -19,7 +21,7 @@ export default function Profiledetailsmodal({ pmodal, setpmodal, jwtToken, userl
                     blur: 3,
                 }}
 
-                size="70%"
+                size={curdevice == 'mobile' ? "99%" : "70%"}
                 opened={pmodal}
                 onClose={() => setpmodal(false)}
 

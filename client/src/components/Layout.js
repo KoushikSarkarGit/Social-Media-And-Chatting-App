@@ -1,12 +1,18 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Toaster } from 'react-hot-toast';
 import { Helmet } from "react-helmet";
+import { Appcontext } from '../ContextFolder/ContextCreator';
+import Navbar from './Navbar';
 
 
 
 
 
 export default function Layout({ children, title, description, keywords, author }) {
+
+    const cur = useContext(Appcontext);
+    const { curdevice } = cur;
+
     return (
         <div>
             <Helmet>
@@ -27,7 +33,7 @@ export default function Layout({ children, title, description, keywords, author 
 
             </main>
 
-
+            {(curdevice === 'mobile') && <Navbar />}
         </div>
     )
 }

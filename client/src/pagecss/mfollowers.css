@@ -1,0 +1,32 @@
+.mfollowers {
+    position: relative;
+    display: grid;
+    grid-template-columns: 18vw auto;
+    gap: 1rem;
+    min-height: 100vh;
+    max-height: 100vh;
+    padding: 1rem 1rem;
+}
+
+
+
+@media (max-width: 1190px) {
+    .mfollowers {
+        grid-template-columns: 27vw auto;
+    }
+}
+
+/* Breakpoint for tablets (adjust as needed) */
+@media (max-width: 1024px) {
+    .mfollowers {
+        grid-template-columns: 25vw auto;
+    }
+}
+
+/* Breakpoint for mobiles (adjust as needed) */
+@media (max-width: 768px) {
+    .mfollowers {
+        min-height: 100vh;
+        grid-template-columns: auto;
+    }
+}

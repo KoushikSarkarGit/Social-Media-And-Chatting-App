@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import '../pagecss/navbar.css'
 
 import { UilEstate } from '@iconscout/react-unicons'
@@ -21,6 +21,12 @@ import toast from 'react-hot-toast'
 
 
 export default function Navbar() {
+
+    const cur = useContext(Appcontext);
+    const { userdata, jwtToken, logoutfunction, curdevice } = cur;
+
+
+
     return (
 
         <nav className="navbar navcolor sticky-bottom" style={{ marginTop: '-50px' }} >
@@ -28,15 +34,29 @@ export default function Navbar() {
 
 
                 <div className='customnav'>
-                    <div>
+
+                    <Link to='/' className=" nav-link">
                         <UilEstate className='menuicons2' />
-                    </div>
-                    <div>
+                    </Link>
+
+
+                    <Link to='/explore' className=" nav-link">
                         <UilSearch className='menuicons2' />
-                    </div>
-                    <div>
-                        <UilUser className='menuicons2' />
-                    </div>
+                    </Link>
+
+                    {(userdata && jwtToken) ?
+                        <Link to='/profile' className=" nav-link">
+                            <UilUser className='menuicons2' />
+                        </Link>
+                        :
+                        <Link to='/login' className=" nav-link">
+                            <UilUser className='menuicons2' />
+                        </Link>
+                    }
+
+
+
+
                     <button className="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
                         <UilEllipsisH className='menuicons2' />
                     </button>
@@ -66,66 +86,61 @@ export default function Navbar() {
                                     Home
                                 </Link>
                             </li>
-
-                            <li className="nav-item">
-                                <Link to='/' className=" nav-link">
-                                    Logout
+                            {(userdata && jwtToken) && <li className="nav-item">
+                                <Link to='/profile' className=" nav-link">
+                                    Your Profile
                                 </Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link to='/' className=" nav-link">
+                            </li>}
+
+                            {(userdata && jwtToken) && <li className="nav-item">
+                                <Link to='/m/editprofile' className=" nav-link">
                                     Edit Profile
                                 </Link>
-                            </li>
+                            </li>}
 
                             <li className="nav-item">
-                                <Link to='/' className=" nav-link">
+                                <Link to='/m/trending' className=" nav-link">
                                     Trending
                                 </Link>
                             </li>
 
+                            {(userdata && jwtToken) && <li className="nav-item">
+                                <Link to='/timeline' className=" nav-link">
+                                    Your Timeline
+                                </Link>
+                            </li>}
+
+
+                            {(userdata && jwtToken) && <li className="nav-item">
+                                <Link to='/m/followers' className=" nav-link">
+                                    Followers
+                                </Link>
+                            </li>}
+
+
+                            {(userdata && jwtToken) && <li className="nav-item">
+                                <Link to='/m/findnewpeople' className=" nav-link">
+                                    Find New People
+                                </Link>
+                            </li>}
+
                             <li className="nav-item">
-                                <Link to='/' className=" nav-link">
-                                    Followers and followee
+                                <Link to='/login' className=" nav-link"
+                                    onClick={() => {
+                                        if (userdata && jwtToken) {
+                                            logoutfunction();
+                                        }
+                                    }}
+                                >
+                                    {userdata ? 'LogOut' : 'Login'}
                                 </Link>
                             </li>
 
 
 
-
-
-
-
-
-
-
-
-                            {/* 
-            <Link to='/timeline' className="menuoptions">
-                <UilTablet className='menuicons' />
-                <span className='optiontext'>Your Timeline</span>
-            </Link>
-
-            <Link to='/profile' className="menuoptions">
-                <UilUser className='menuicons' />
-                <span className='optiontext'>Profile</span>
-            </Link>
-
-
-            <Link to='/login' className="menuoptions" onClick={() => {
-                if (userdata && jwtToken) {
-                    logoutfunction();
-                }
-            }} >
-                <UilSignin className='menuicons' />
-                <span className='optiontext'> {userdata ? 'LogOut' : 'Login'}</span>
-
-            </Link> */}
-
-
                             <li className="nav-item dropdown">
                                 <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Dropdown
+                                    More
                                 </a>
                                 <ul className="dropdown-menu">
                                     <li><a className="dropdown-item" href="#">Action</a></li>

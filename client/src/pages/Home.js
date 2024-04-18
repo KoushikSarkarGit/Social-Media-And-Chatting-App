@@ -27,7 +27,7 @@ export default function Home() {
 
             </div>
 
-            {(curdevice === 'mobile') && <Navbar />}
+            {/* {(curdevice === 'mobile') && <Navbar />} */}
 
         </Layout>
     )

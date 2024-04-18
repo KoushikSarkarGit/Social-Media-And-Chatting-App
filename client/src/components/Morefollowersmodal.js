@@ -19,7 +19,7 @@ export default function SharePostModal({ openfollower, setopenfollower, initialL
     const [morefollowerlist, setMorefollowerlist] = useState()
     const [pageno, setPageno] = useState(2)
     const cur = useContext(Appcontext);
-    const { jwtToken } = cur;
+    const { jwtToken, curdevice } = cur;
 
 
     const getFollowerList = async (manualpage) => {
@@ -77,7 +77,7 @@ export default function SharePostModal({ openfollower, setopenfollower, initialL
                     blur: 3,
                 }}
 
-                size="50%"
+                size={curdevice === "mobile" ? "98%" : "50%"}
                 opened={openfollower}
                 onClose={() => setopenfollower(false)}
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import '../pagecss/followercard.css'
 import '../pagecss/trendcard.css'
 
@@ -7,6 +7,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import CustomEmptybox from './CustomEmptybox';
 import { useNavigate } from 'react-router-dom';
+import { Appcontext } from '../ContextFolder/ContextCreator';
 
 
 
@@ -22,6 +23,11 @@ export default function TrendingModal({ opentrending, setopentrending, initialta
     const [totalTags15days, setTotalTags15days] = useState(pretotalTags15days)
 
     const [pageno, setpageno] = useState(1)
+
+    const cur = useContext(Appcontext);
+    const { curdevice } = cur;
+
+
 
     const updateTotalTags = () => {
         setTotalTags5days(pretotalTags5days);
@@ -81,7 +87,7 @@ export default function TrendingModal({ opentrending, setopentrending, initialta
                     blur: 3,
                 }}
 
-                size="30%"
+                size={curdevice === "mobile" ? "98%" : "30%"}
                 opened={opentrending}
                 onClose={() => {
 

@@ -1,0 +1,32 @@
+.findnewbox {
+    position: relative;
+    display: grid;
+    grid-template-columns: 18vw auto;
+    gap: 1rem;
+    min-height: 100vh;
+    max-height: 100vh;
+    padding: 1rem 1rem;
+}
+
+
+
+@media (max-width: 1190px) {
+    .findnewbox {
+        grid-template-columns: 27vw auto;
+    }
+}
+
+/* Breakpoint for tablets (adjust as needed) */
+@media (max-width: 1024px) {
+    .findnewbox {
+        grid-template-columns: 25vw auto;
+    }
+}
+
+/* Breakpoint for mobiles (adjust as needed) */
+@media (max-width: 768px) {
+    .findnewbox {
+        min-height: 100vh;
+        grid-template-columns: auto;
+    }
+}

@@ -25,7 +25,18 @@
     margin-bottom: 0px;
     align-self: center;
     justify-content: center;
+    font-size: 1.6vw;
 }
+
+
+@media (max-width: 768px) {
+    .followercardbox>span {
+        /* font-weight:; */
+        font-size: 5vw;
+
+    }
+}
+
 
 .indivFollower {
     display: flex;
@@ -68,6 +79,28 @@
     padding-right: 10px; */
     font-size: 1vw;
 }
+
+@media (max-width: 768px) {
+    .followerbtn {
+
+        font-size: 3vw;
+
+    }
+}
+
+.followerbtn2 {
+    height: 2rem;
+    font-size: 1vw;
+}
+
+
+/* Breakpoint for mobiles (adjust as needed) */
+@media (max-width: 768px) {
+    .followerbtn2 {
+        font-size: 2.8vw;
+    }
+}
+
 
 .morefollowers {
     width: 100%;

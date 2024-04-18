@@ -12,6 +12,16 @@
 
 }
 
+@media (max-width: 768px) {
+    .trendingbox {
+
+        background-color: rgba(255, 255, 255, 0.886);
+        min-height: 70vh;
+
+    }
+}
+
+
 
 .h3box {
     display: flex;
@@ -19,6 +29,14 @@
     align-items: center;
     font-size: 1.6vw;
 
+}
+
+@media (max-width: 768px) {
+    .h3box {
+
+        font-size: 4vw;
+
+    }
 }
 
 .singletrend {

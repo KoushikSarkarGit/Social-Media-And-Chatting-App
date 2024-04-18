@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import '../pagecss/followercard.css'
 
 import df2 from '../img/defaultprofimg2.jpg'
@@ -6,6 +6,7 @@ import { Modal, useMantineTheme } from '@mantine/core';
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import toast from 'react-hot-toast'
+import { Appcontext } from '../ContextFolder/ContextCreator';
 
 
 
@@ -19,7 +20,8 @@ export default function Morewhotofollowmodal({ openfollower, setopenfollower, in
     const [reachedend, setReachedend] = useState(false)
 
     const [page, setPage] = useState(1)
-
+    const cur = useContext(Appcontext);
+    const { curdevice } = cur;
 
     const getNewPeopleListLogged = async (manualpage) => {
         try {
@@ -78,7 +80,7 @@ export default function Morewhotofollowmodal({ openfollower, setopenfollower, in
                     blur: 3,
                 }}
 
-                size="50%"
+                size={curdevice === "mobile" ? "98%" : "50%"}
                 opened={openfollower}
                 onClose={() => setopenfollower(false)}
 
