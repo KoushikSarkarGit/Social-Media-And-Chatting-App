@@ -23,9 +23,14 @@ const userRegistration = async (req, res) => {
 
 
     const user = await Usermodel.findOne({ email: email });
+    const usernameOfuser = await Usermodel.findOne({ username: username });
+    if (usernameOfuser) {
+        return res.status(200).json({ success: false, msg: 'Username already taken, please choose another one' });
+
+    }
 
     if (user) {
-        return res.status(200).json({ success: true, msg: 'User already exist. Please Login' });
+        return res.status(200).json({ success: false, msg: 'User already exist. Please Login' });
 
     }
 
@@ -262,8 +267,10 @@ const updateUserDetails = async (req, res) => {
 
     if (id === curuserid || adminresult) {
         try {
-            // if (newpassword) {
-            //     hashednewpassword = await encrytpassword(newpassword);
+
+            // const userNameCheck = await Usermodel.findOne({ username: req.body.username }).select("_id username");
+            // if (userNameCheck) {
+            //     return res.status(204).json({ success: false, msg: 'Username Already Taken' });
             // }
 
             const updateduser = await Usermodel.findByIdAndUpdate(id, { ...req.body }, {
@@ -353,6 +360,75 @@ const updateCoverpic = async (req, res) => {
 };
 
 
+//get inital 10 followers ids
+const getUserFollowersid = async (req, res) => {
+
+    const { curuserid } = req.body;
+
+
+    const user = await Usermodel.findById(curuserid);
+
+    if (!user) {
+        return res.status(200).json({ success: false, msg: 'User does not exist' });
+    }
+
+    try {
+
+        let yourFollowers = await Usermodel.aggregate([
+            { $match: { _id: user._id } },
+            {
+                $project: {
+                    followers: {
+
+                        $slice: ['$followers', 0, 10]
+                    }
+                }
+            }
+        ]);
+
+
+        return res.status(200).json({ success: true, yourFollowers });
+    } catch (error) {
+        res.status(500).json({ success: false, error });
+    }
+
+};
+
+
+const getUserFollowingsid = async (req, res) => {
+
+    const { curuserid } = req.body;
+
+
+    const user = await Usermodel.findById(curuserid);
+
+    if (!user) {
+        return res.status(200).json({ success: false, msg: 'User does not exist' });
+    }
+
+    try {
+
+        let yourFollowings = await Usermodel.aggregate([
+            { $match: { _id: user._id } },
+            {
+                $project: {
+                    following: {
+
+                        $slice: ['$following', 0, 10]
+                    }
+                }
+            }
+        ]);
+
+
+        return res.status(200).json({ success: true, yourFollowings });
+    } catch (error) {
+        res.status(500).json({ success: false, error });
+    }
+
+};
+
+
 // get followerlist
 
 const getFollowerListByPage = async (req, res) => {
@@ -380,6 +456,42 @@ const getFollowerListByPage = async (req, res) => {
             ]);
 
             return res.status(200).json({ success: true, msg: 'follwer list fetched successful', myuser });
+        }
+
+    } catch (error) {
+        res.status(500).json({ success: false, error });
+    }
+
+};
+
+
+
+
+const getFollowingListByPage = async (req, res) => {
+    const { curuserid } = req.body;
+
+    let page = req.params.pageno
+
+    try {
+        const user = await Usermodel.findById(curuserid);
+
+        if (!user) {
+            res.status(200).json({ success: false, msg: 'User does not exist' });
+        }
+
+        if (user._id) {
+            const followinglist = await Usermodel.aggregate([
+                { $match: { _id: user._id } },
+                {
+                    $project: {
+                        following: {
+                            $slice: ['$following', (page - 1) * 10, 10]
+                        }
+                    }
+                }
+            ]);
+
+            return res.status(200).json({ success: true, msg: 'follwer list fetched successful', followinglist });
         }
 
     } catch (error) {
@@ -954,38 +1066,6 @@ const getNewPeople = async (req, res) => {
 
 
 
-const getUserFollowersid = async (req, res) => {
-
-    const { curuserid } = req.body;
-
-
-    const user = await Usermodel.findById(curuserid);
-
-    if (!user) {
-        return res.status(200).json({ success: false, msg: 'User does not exist' });
-    }
-
-    try {
-
-        let yourFollowers = await Usermodel.aggregate([
-            { $match: { _id: user._id } },
-            {
-                $project: {
-                    followers: {
-
-                        $slice: ['$followers', 0, 10]
-                    }
-                }
-            }
-        ]);
-
-
-        return res.status(200).json({ success: true, yourFollowers });
-    } catch (error) {
-        res.status(500).json({ success: false, error });
-    }
-
-};
 
 
 
@@ -1132,4 +1212,4 @@ const checkIfLoggedUserFollowsUser = async (req, res) => {
 
 
 
-module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getFeedForLoginUser, getGeneralFeed, getUserFollowersid, getFollowerListByPage, getSingleUserLite, checkfrontendtoken, getSingleUserMedium, getPeopleByKeyword, getStatusIfPostIsLiked, getStatusIfPostIsReposted, refershLoggedUserData, checkIfLoggedUserFollowsUser, getNewPeople }
+module.exports = { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getFeedForLoginUser, getGeneralFeed, getUserFollowersid, getFollowerListByPage, getSingleUserLite, checkfrontendtoken, getSingleUserMedium, getPeopleByKeyword, getStatusIfPostIsLiked, getStatusIfPostIsReposted, refershLoggedUserData, checkIfLoggedUserFollowsUser, getNewPeople, getUserFollowingsid, getFollowingListByPage }

@@ -173,8 +173,8 @@ export default function Loginpage() {
 
                         </div>
                         <div className="btncase">
-                            <button style={{ height: '2.5rem', width: '7.5rem', fontSize: 'medium' }} className="basicbutton infoButton" onClick={() => { navigate('/') }} >Back to Home</button>
-                            <button style={{ height: '2.5rem', fontSize: 'medium' }} type='submit' className="basicbutton infoButton">Login</button>
+                            <button className="basicbutton infoButton" onClick={() => { navigate('/') }} >Back to Home</button>
+                            <button type='submit' className="basicbutton infoButton">Login</button>
                         </div>
 
                     </form>

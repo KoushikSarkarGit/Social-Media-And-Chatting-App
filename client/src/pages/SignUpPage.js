@@ -53,13 +53,19 @@ export default function SignUpPage() {
                     email: values.email,
                     password: values.password,
                 }).then(async (res) => {
-                    await console.log(res.data);
+                    // await console.log(res.data);
+                    if (res.data.success === true) {
+                        navigate('/login');
 
-                    navigate('/login');
+                        setTimeout(() => {
+                            toast.success(`${res.data.msg}`)
+                        }, 100);
+                    }
+                    else {
+                        toast.error(`${res.data.msg}`)
+                    }
 
-                    setTimeout(() => {
-                        toast.success(`${res.data.msg}`)
-                    }, 100);
+
 
                 }).catch((err) => {
 
@@ -91,37 +97,43 @@ export default function SignUpPage() {
                     <form className="infoForm " onSubmit={handleSubmit}>
                         <h3>Sign up</h3>
                         <div className='firstinputholder'>
-                            <div className='formdata' >
 
-                                <input
-                                    type="text"
-                                    placeholder="First Name"
-                                    className="infoInput"
-                                    name="firstname"
-                                    value={firstname}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                />
+                            <div className='newdiv' >
+                                <div className='horinewdiv'>
+                                    <input
+                                        type="text"
+                                        placeholder="First Name"
+                                        className="infoInput"
+                                        name="firstname"
+                                        value={firstname}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                    />
 
 
 
-                                <input
-                                    type="text"
-                                    placeholder="Last Name"
-                                    className="infoInput"
-                                    name="lastname"
-                                    value={lastname}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                />
+                                    <input
+                                        type="text"
+                                        placeholder="Last Name"
+                                        className="infoInput"
+                                        name="lastname"
+                                        value={lastname}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                    />
+                                </div>
+
+                                <div className='horinewdiv'>
+                                    {errors.firstname && touched.firstname && <span className="formerrortext mx-2 "> {errors.firstname} </span>}
+                                    {errors.lastname && touched.lastname && <span className="formerrortext mx-2"> {errors.lastname} </span>}
+
+                                </div>
+
 
 
 
                             </div>
-                            <div className="d-flex justify-content-space-between">
-                                {errors.firstname && touched.firstname && <span className="formerrortext me-5 "> {errors.firstname} </span>}
-                                {errors.lastname && touched.lastname && <span className="formerrortext ms-4"> {errors.lastname} </span>}
-                            </div>
+
 
                         </div>
 
@@ -142,7 +154,7 @@ export default function SignUpPage() {
 
                             </div>
                             <div className="d-flex justify-content-space-between">
-                                {errors.username && touched.username && <span className="formerrortext me-2 "> {errors.username} </span>}
+                                {errors.username && touched.username && <span className="formerrortext  "> {errors.username} </span>}
 
                             </div>
                         </div>
@@ -161,7 +173,7 @@ export default function SignUpPage() {
                             </div>
 
                             <div className="d-flex justify-content-space-between">
-                                {errors.email && touched.email && <span className="formerrortext me-2 "> {errors.email} </span>}
+                                {errors.email && touched.email && <span className="formerrortext "> {errors.email} </span>}
 
                             </div>
                         </div>
@@ -169,31 +181,48 @@ export default function SignUpPage() {
 
 
                         <div className='firstinputholder'>
-                            <div className='formdata' >
-                                <input
-                                    type="text"
-                                    className="infoInput"
-                                    name="password"
-                                    placeholder="Password"
-                                    value={password}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                />
-                                <input
-                                    type="text"
-                                    className="infoInput"
-                                    name="confirmpassword"
-                                    placeholder="Confirm Password"
-                                    value={confirmpassword}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                />
+                            <div className='newdiv' >
+                                <div className='horinewdiv'>
+                                    <input
+                                        type="text"
+                                        className="infoInput"
+                                        name="password"
+                                        placeholder="Password"
+                                        value={password}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                    />
+
+                                    <input
+                                        type="text"
+                                        className="infoInput"
+                                        name="confirmpassword"
+                                        placeholder="Confirm Password"
+                                        value={confirmpassword}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                    />
+                                </div>
+
+                                <div className='horinewdiv'>
+
+
+
+                                    {errors.password && touched.password && <span className="formerrortext mx-2"> {errors.password} </span>}
+                                    {errors.confirmpassword && touched.confirmpassword && <span className="formerrortext mx-2"> {errors.confirmpassword} </span>}
+
+
+
+                                </div>
+
+
+
                             </div>
 
-                            <div className="d-flex justify-content-space-between ">
+                            {/* <div className="d-flex justify-content-space-between ">
                                 {errors.password && touched.password && <span className="formerrortext me-5 pe-3 "> {errors.password} </span>}
                                 {errors.confirmpassword && touched.confirmpassword && <span className="formerrortext ms-2 me-3"> {errors.confirmpassword} </span>}
-                            </div>
+                            </div> */}
                         </div>
 
 
@@ -204,9 +233,9 @@ export default function SignUpPage() {
                         </div>
 
                         <div className="btncase mb-2">
-                            <button style={{ height: '2.5rem', width: '7.5rem', fontSize: 'medium' }} className="basicbutton infoButton" onClick={() => { navigate('/') }} >Back to Home</button>
+                            <button className="basicbutton infoButton" onClick={() => { navigate('/') }} >Back to Home</button>
 
-                            <button style={{ height: '2.5rem', fontSize: 'medium' }} type='submit' className="basicbutton infoButton"
+                            <button type='submit' className="basicbutton infoButton"
                             >Sign Up</button>
                         </div>
 

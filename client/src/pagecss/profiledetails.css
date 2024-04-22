@@ -7,7 +7,27 @@
     border-radius: 1rem;
     width: auto;
 
+
 }
+
+
+
+
+/* Breakpoint for tablets (adjust as needed) */
+@media (max-width: 1024px) {
+    .profiledetailsbox {
+        height: 90vh;
+    }
+}
+
+/* Breakpoint for mobiles (adjust as needed) */
+@media (max-width: 768px) {
+    .profiledetailsbox {
+        height: auto;
+    }
+}
+
+
 
 
 

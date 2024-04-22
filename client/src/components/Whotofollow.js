@@ -63,7 +63,7 @@ export default function Whotofollow() {
 
                 if (res.data.success === true) {
                     setNewpeople(res.data.newpeople)
-                    console.log(res.data.newpeople)
+                    // console.log(res.data.newpeople)
                 }
 
             }).catch((err) => {

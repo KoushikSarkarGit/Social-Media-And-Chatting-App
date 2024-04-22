@@ -80,7 +80,7 @@ export default function Morewhotofollowmodal({ openfollower, setopenfollower, in
                     blur: 3,
                 }}
 
-                size={curdevice === "mobile" ? "98%" : "50%"}
+                size={curdevice === "mobile" ? "98%" : "65%"}
                 opened={openfollower}
                 onClose={() => setopenfollower(false)}
 

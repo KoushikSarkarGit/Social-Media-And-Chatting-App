@@ -15,6 +15,7 @@ import MobileEditProfile from './pages/MobileEditProfile';
 import MtrendingPage from './pages/MtrendingPage';
 import MobileFollowers from './pages/MobileFollowers';
 import MobileFindNewPeople from './pages/MobileFindNewPeople';
+import MFollowingPage from './pages/MFollowingPage';
 
 
 
@@ -44,6 +45,8 @@ function App() {
           <Route path='/m/trending' element={<MtrendingPage />} />
           <Route path='/m/followers' element={<MobileFollowers />} />
           <Route path='/m/findnewpeople' element={<MobileFindNewPeople />} />
+          <Route path='/m/following' element={<MFollowingPage />} />
+
           <Route path='/viewpost/:postId' element={<ViewPostpage />} />
           <Route path='/view-user-profile/:viewOtherUserProfileuserId' element={<UserProfile />} />
 

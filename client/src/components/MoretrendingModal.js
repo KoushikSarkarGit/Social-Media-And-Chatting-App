@@ -87,7 +87,7 @@ export default function TrendingModal({ opentrending, setopentrending, initialta
                     blur: 3,
                 }}
 
-                size={curdevice === "mobile" ? "98%" : "30%"}
+                size={curdevice === "mobile" ? "98%" : "60%"}
                 opened={opentrending}
                 onClose={() => {
 

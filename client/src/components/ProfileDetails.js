@@ -233,7 +233,7 @@ export default function ProfileDetails() {
             </div>
 
 
-            <div className="info">
+            <div className="info" >
                 {username ? <div><b>Username:</b>  @{username}   </div> : <div><b>Username:</b>  ...  </div>}
             </div>
 
@@ -314,11 +314,11 @@ export default function ProfileDetails() {
                                 </div>
 
                                 <div className="row mb-3">
-                                    <div className="col">
+                                    <div className="col" >
                                         <label htmlFor="exampleInputEmail1" className="form-label">Username</label>
-                                        <input type="text" className="form-control" aria-label="First name" name='usernamef' value={usernamef} defaultValue={username} onChange={handleChange} onBlur={handleBlur} />
+                                        <input type="text" className="form-control" aria-label="First name" disabled name='usernamef' value={usernamef} defaultValue={'@' + username} onChange={handleChange} onBlur={handleBlur} />
 
-                                        {(errors.usernamef && touched.usernamef) ? <p className="formerrortext2 text-center"> {errors.usernamef} </p> : null}
+                                        {/* {(errors.usernamef && touched.usernamef) ? <p className="formerrortext2 text-center"> {errors.usernamef} </p> : null} */}
                                     </div>
                                     <div className="col">
                                         <label htmlFor="exampleInputEmail1" className="form-label">Gender</label>

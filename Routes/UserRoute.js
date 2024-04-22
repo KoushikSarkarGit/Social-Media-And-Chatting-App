@@ -1,5 +1,5 @@
 const express = require('express');
-const { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getUserFollowersid, getFollowerListByPage, getSingleUserLite, checkfrontendtoken, getSingleUserMedium, getPeopleByKeyword, getPostsByKeyword, getStatusIfPostIsLiked, getStatusIfPostIsReposted, refershLoggedUserData, checkIfLoggedUserFollowsUser, getFeedForLoginUser, getGeneralFeed, getNewPeople } = require('../Controllers/Usercontroller');
+const { userRegistration, loginBackend, getSingleUser, updateUserDetails, updateProfilepic, updateCoverpic, followSomeOne, unfollowSomeOne, deleteAccount, likePost, unlikePost, rePost, unrePost, getUserFollowersid, getFollowerListByPage, getSingleUserLite, checkfrontendtoken, getSingleUserMedium, getPeopleByKeyword, getPostsByKeyword, getStatusIfPostIsLiked, getStatusIfPostIsReposted, refershLoggedUserData, checkIfLoggedUserFollowsUser, getFeedForLoginUser, getGeneralFeed, getNewPeople, getUserFollowingsid, getFollowingListByPage } = require('../Controllers/Usercontroller');
 const router = express.Router();
 const formidable = require('express-formidable')
 const { valtokenchecker, extractIdFromToken } = require('../Middlewares/Encryptiontools')
@@ -39,19 +39,36 @@ router.put('/update-coverpic/:id', valtokenchecker, extractIdFromToken, formidab
 router.delete('/delete-user-account/:id', valtokenchecker, extractIdFromToken, deleteAccount)
 
 
+// get followers id 1st 10
 
+router.get('/get-followersOf-user', valtokenchecker, extractIdFromToken, getUserFollowersid)
 
 
 // get followers of a user by page
 router.get('/get-follower-list/:pageno', valtokenchecker, extractIdFromToken, getFollowerListByPage)
+
+
+
+// get following id 1st 10
+
+router.get('/get-followingsOf-user', valtokenchecker, extractIdFromToken, getUserFollowingsid)
+
+
+// get following of a user by page
+router.get('/get-following-list/:pageno', valtokenchecker, extractIdFromToken, getFollowingListByPage)
+
+
+
+
+
+
+
 
 // follow a user
 router.put('/follow-user/:id', valtokenchecker, extractIdFromToken, followSomeOne)
 
 // unfollow a user
 router.put('/unfollow-user/:id', valtokenchecker, extractIdFromToken, unfollowSomeOne)
-
-
 
 
 
@@ -70,7 +87,6 @@ router.put('/unrepost/:id', valtokenchecker, extractIdFromToken, unrePost)
 
 
 
-
 //get feed for logged in user
 
 router.post('/get-feed/:id', valtokenchecker, extractIdFromToken, getFeedForLoginUser)
@@ -82,13 +98,8 @@ router.get('/get-general-feed/:page', getGeneralFeed)
 
 
 
-
 // get new people
 router.post('/get-new-people/:page', getNewPeople)
-
-
-
-
 
 
 
@@ -102,9 +113,7 @@ router.get('/get-people-by-keyword/:keyword/:page', getPeopleByKeyword)
 
 
 
-// get followers id
 
-router.get('/get-followersOf-user', valtokenchecker, extractIdFromToken, getUserFollowersid)
 
 
 //checking token for frontend

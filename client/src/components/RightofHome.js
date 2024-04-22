@@ -7,6 +7,7 @@ import FollowerCard from './FollowerCard';
 import Searchbar from './Searchbar';
 import Whotofollow from './Whotofollow';
 import { Appcontext } from '../ContextFolder/ContextCreator';
+import FollowingCard from './FollowingCard';
 
 export default function RightofHome() {
 
@@ -19,8 +20,9 @@ export default function RightofHome() {
         <div className='rightofhomebox'>
 
             <Searchbar />
-            {jwtToken && <FollowerCard />}
+            {jwtToken && <FollowingCard />}
             <Trendingcard />
+            {jwtToken && <FollowerCard />}
             <Whotofollow />
 
 

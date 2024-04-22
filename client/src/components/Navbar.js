@@ -15,6 +15,8 @@ import SharePostModal from './SharePostModal';
 import { UilSignin } from '@iconscout/react-unicons'
 import { Appcontext } from '../ContextFolder/ContextCreator';
 import toast from 'react-hot-toast'
+import Swal from 'sweetalert2'
+import { useNavigate } from 'react-router-dom/dist/umd/react-router-dom.development'
 
 
 
@@ -24,6 +26,33 @@ export default function Navbar() {
 
     const cur = useContext(Appcontext);
     const { userdata, jwtToken, logoutfunction, curdevice } = cur;
+    const navigate = useNavigate()
+
+    const profiledetailslogout = () => {
+        try {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This will log you Out',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                confirmButtonText: 'Yes, LogOut'
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+                    logoutfunction()
+                    setTimeout(() => {
+                        navigate('/login')
+                    }, 200);
+                }
+
+            })
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
 
 
 
@@ -110,6 +139,11 @@ export default function Navbar() {
                                 </Link>
                             </li>}
 
+                            {(userdata && jwtToken) && <li className="nav-item">
+                                <Link to='/m/following' className=" nav-link">
+                                    Following
+                                </Link>
+                            </li>}
 
                             {(userdata && jwtToken) && <li className="nav-item">
                                 <Link to='/m/followers' className=" nav-link">
@@ -125,10 +159,10 @@ export default function Navbar() {
                             </li>}
 
                             <li className="nav-item">
-                                <Link to='/login' className=" nav-link"
+                                <Link to='' className=" nav-link"
                                     onClick={() => {
                                         if (userdata && jwtToken) {
-                                            logoutfunction();
+                                            profiledetailslogout();
                                         }
                                     }}
                                 >

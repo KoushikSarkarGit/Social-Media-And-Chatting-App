@@ -16,30 +16,26 @@ import FollowerElement from './FollowerElement';
 export default function SharePostModal({ openfollower, setopenfollower, initialList }) {
 
 
-    const [morefollowerlist, setMorefollowerlist] = useState()
-    const [endreached, setEndreached] = useState(false)
+    const [morefollowinglist, setmorefollowinglist] = useState()
     const [pageno, setPageno] = useState(2)
     const cur = useContext(Appcontext);
     const { jwtToken, curdevice } = cur;
 
 
-    const getFollowerList = async (manualpage) => {
+    const getFollowingList = async (manualpage) => {
         try {
 
             if (jwtToken) {
 
-                await axios.get(`http://localhost:9000/api/v1/user/get-following-list/${manualpage || 1}`, {
+                await axios.get(`http://localhost:9000/api/v1/user/get-follower-list/${manualpage || 1}`, {
                     headers: {
                         token: jwtToken
                     }
                 }).then(async (res) => {
 
-                    // console.log(pageno, res.data.followinglist[0].followers)
+                    console.log(pageno, res.data.myuser[0].followers)
                     // setFollowerlist(res.data.yourFollowers[0].followers)
-                    if (res.data.followinglist[0]?.following == [] || res.data.followinglist[0]?.following?.length < 1) {
-                        setEndreached(true)
-                    }
-                    setMorefollowerlist([...morefollowerlist, ...res.data.followinglist[0]?.following])
+                    setmorefollowinglist([...morefollowinglist, ...res.data.myuser[0].followers])
 
 
                 }).catch((err) => {
@@ -61,8 +57,8 @@ export default function SharePostModal({ openfollower, setopenfollower, initialL
 
 
     useEffect(() => {
-        setEndreached(false)
-        setMorefollowerlist(initialList)
+
+        setmorefollowinglist(initialList)
         setPageno(2)
     }, [openfollower]);
 
@@ -91,19 +87,19 @@ export default function SharePostModal({ openfollower, setopenfollower, initialL
                     <div className="morefollowerbox">
 
                         {
-                            morefollowerlist?.map((personid, index) => {
+                            morefollowinglist?.map((personid, index) => {
                                 return <FollowerElement key={index} fdata={personid} />
 
                             })
                         }
-                        {!endreached &&
-                            <div className="seemorebtn" onClick={async () => {
-                                await getFollowerList(pageno + 1);
-                                await setPageno(pageno + 1)
 
-                                // await console.log(pageno, morefollowerlist)
-                            }} > See More</div>
-                        }
+                        <div className="seemorebtn" onClick={async () => {
+                            await getFollowingList(pageno + 1);
+                            await setPageno(pageno + 1)
+
+                            // await console.log(pageno, morefollowinglist)
+                        }} > See More</div>
+
                     </div>
                 </>
 

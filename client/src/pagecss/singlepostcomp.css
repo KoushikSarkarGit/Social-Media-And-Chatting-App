@@ -18,8 +18,8 @@
 
 .singlepostbox>img {
     max-width: 100%;
-    max-height: 20rem;
-    object-fit: cover;
+    max-height: 23rem;
+    object-fit: contain;
     border-radius: 0.5rem;
 
 }

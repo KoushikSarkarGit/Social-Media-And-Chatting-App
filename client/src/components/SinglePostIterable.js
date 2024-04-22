@@ -91,136 +91,12 @@ export default function SinglePostIterable({ pid, jwtToken }) {
 
     return (
         <>
-            {postdetails?.postimage ? <div className='singlepostbox my-1' onClick={() => { navigate(`/viewpost/${pid}`) }}>
-                {postdetails?.postimage && <img src={postdetails.postimage} alt="postimage" />}
+            {postdetails && (<>
+                {postdetails?.postimage ? <div className='singlepostbox my-1' onClick={() => { navigate(`/viewpost/${pid}`) }}>
+                    {postdetails?.postimage && <img src={postdetails.postimage} alt="postimage" />}
 
-                <div className="spostfeatures" onClick={(event) => { event.stopPropagation(); }}>
-
-
-                    <div className='featureicon'>
-                        {isLikedByUser ? <AiFillLike
-                            style={{ width: '29px', color: 'orange', height: '29px', marginTop: '-3px', paddingLeft: '2px', marginRight: '-3px' }}
-                            onClick={() => {
-                                UnLikePost(pid, jwtToken)
-                                setIsLikedByUser(false)
-                                postdetails.likeCount = (postdetails?.likeCount - 1)
-                            }}
-                        />
-                            :
-                            <AiOutlineLike
-                                style={{ width: '29px', height: '29px', marginTop: '-3px', paddingLeft: '2px', marginRight: '-3px' }}
-                                onClick={() => {
-                                    LikePost(pid, jwtToken)
-                                    setIsLikedByUser(true)
-                                    postdetails.likeCount = (postdetails?.likeCount + 1)
-                                }}
-                            />}
-
-                        <span style={{ color: "var(--gray)", fontSize: '12px' }}>{postdetails?.likeCount}</span>
-                    </div>
-
-                    {isRepostedByUser ?
-                        <div className='featureicon' style={{ color: postdetails?.userId === userId ? '#bebebe' : '#00ff00', cursor: postdetails?.userId === userId ? 'text' : 'pointer' }} >
-                            <UilRedo
-                                onClick={() => {
-                                    if (postdetails.userId !== userId) {
-                                        UnRepostThePost(pid, jwtToken)
-                                        setIsRepostedByUser(false)
-                                        postdetails.repostCount = (postdetails?.repostCount - 1)
-                                    }
-
-                                }} />
-                            <span style={{ fontSize: '12px' }}>{postdetails?.repostCount}</span>
-                        </div>
-                        :
-                        <div className='featureicon' style={{ color: postdetails?.userId === userId ? '#bebebe' : 'black', cursor: postdetails?.userId === userId ? 'text' : 'pointer' }} >
-                            <UilRedo
-                                onClick={() => {
-                                    if (postdetails.userId !== userId) {
-
-                                        RepostThePost(pid, jwtToken)
-                                        setIsRepostedByUser(true)
-                                        postdetails.repostCount = (postdetails?.repostCount + 1)
-
-                                    }
-
-                                }}
-                            />
-                            <span style={{ fontSize: '12px' }}>{postdetails?.repostCount}</span>
-                        </div>
-                    }
-
-                    <div className='featureicon'>
-                        <UilCommentAltNotes onClick={(event) => { navigate(`/viewpost/${pid}`) }} />
-                        <span style={{ color: "var(--gray)", fontSize: '12px' }}>{postdetails?.commentNo}</span>
-                    </div>
-
-
-                    <div className='featureicon'>
-                        <UilShare />
-                        <span style={{ color: "var(--gray)", fontSize: '12px' }}></span>
-                    </div>
-
-                </div>
-
-
-
-                <div className="detail d-flex flex-column ">
-                    <div className="d-flex align-items-center justify-content-between spebox ">
-                        <div>
-                            <img src={postdetails?.userDetails[0].profilePicture ? postdetails?.userDetails[0].profilePicture : defaultprofileimg2}
-                                alt="userphoto"
-                                className='singlepostuserphoto mx-1 '
-                                onClick={(event) => {
-                                    event.stopPropagation();
-                                    navigate(`/view-user-profile/${postdetails?.userId}`)
-                                }}
-                            />
-                            <span className='mx-1'><b>From  <i style={{ color: 'grey' }}>@{postdetails?.userDetails[0].username}</i></b></span>
-                        </div>
-
-                        <div className="creationdatebox mx-2">
-                            <span className='creationtext'>
-                                {getRelativeTime(postdetails?.createdAt)}
-                            </span>
-                        </div>
-                    </div>
-
-                    <span className='mx-2 mt-3  mb-3'> {postdetails?.postdescription}</span>
-                </div>
-
-
-            </div>
-
-                :
-                <div className='singlepostbox ' onClick={() => { navigate(`/viewpost/${pid}`) }}>
-
-                    <div className="detail d-flex flex-column ">
-                        <div className="d-flex align-items-center justify-content-between spebox ">
-                            <div>
-                                <img src={postdetails?.userDetails[0].profilePicture ? postdetails?.userDetails[0].profilePicture : defaultprofileimg2}
-                                    alt="userphoto"
-                                    className='singlepostuserphoto mx-1 '
-                                    onClick={(event) => {
-                                        event.stopPropagation();
-                                        navigate(`/view-user-profile/${postdetails?.userId}`)
-                                    }}
-                                />
-                                <span className='mx-1'><b>From  <i style={{ color: 'grey' }}>@{postdetails?.userDetails[0].username}</i></b></span>
-                            </div>
-
-                            <div className="creationdatebox mx-2">
-                                <span className='creationtext'>
-                                    {getRelativeTime(postdetails?.createdAt)}
-                                </span>
-                            </div>
-
-
-                        </div>
-
-                        <span className='mx-2 mt-3  mb-3'> {postdetails?.postdescription}</span>
-                    </div>
                     <div className="spostfeatures" onClick={(event) => { event.stopPropagation(); }}>
+
 
                         <div className='featureicon'>
                             {isLikedByUser ? <AiFillLike
@@ -244,14 +120,11 @@ export default function SinglePostIterable({ pid, jwtToken }) {
                             <span style={{ color: "var(--gray)", fontSize: '12px' }}>{postdetails?.likeCount}</span>
                         </div>
 
-
-
                         {isRepostedByUser ?
                             <div className='featureicon' style={{ color: postdetails?.userId === userId ? '#bebebe' : '#00ff00', cursor: postdetails?.userId === userId ? 'text' : 'pointer' }} >
                                 <UilRedo
                                     onClick={() => {
                                         if (postdetails.userId !== userId) {
-
                                             UnRepostThePost(pid, jwtToken)
                                             setIsRepostedByUser(false)
                                             postdetails.repostCount = (postdetails?.repostCount - 1)
@@ -265,6 +138,7 @@ export default function SinglePostIterable({ pid, jwtToken }) {
                                 <UilRedo
                                     onClick={() => {
                                         if (postdetails.userId !== userId) {
+
                                             RepostThePost(pid, jwtToken)
                                             setIsRepostedByUser(true)
                                             postdetails.repostCount = (postdetails?.repostCount + 1)
@@ -277,13 +151,10 @@ export default function SinglePostIterable({ pid, jwtToken }) {
                             </div>
                         }
 
-
-
                         <div className='featureicon'>
                             <UilCommentAltNotes onClick={(event) => { navigate(`/viewpost/${pid}`) }} />
                             <span style={{ color: "var(--gray)", fontSize: '12px' }}>{postdetails?.commentNo}</span>
                         </div>
-
 
 
                         <div className='featureicon'>
@@ -293,14 +164,147 @@ export default function SinglePostIterable({ pid, jwtToken }) {
 
                     </div>
 
+
+
+                    <div className="detail d-flex flex-column ">
+                        <div className="d-flex align-items-center justify-content-between spebox ">
+                            <div>
+                                <img src={postdetails?.userDetails[0].profilePicture ? postdetails?.userDetails[0].profilePicture : defaultprofileimg2}
+                                    alt="userphoto"
+                                    className='singlepostuserphoto mx-1 '
+                                    onClick={(event) => {
+                                        event.stopPropagation();
+                                        navigate(`/view-user-profile/${postdetails?.userId}`)
+                                    }}
+                                />
+                                <span className='mx-1'><b>From  <i style={{ color: 'grey' }}>@{postdetails?.userDetails[0].username}</i></b></span>
+                            </div>
+
+                            <div className="creationdatebox mx-2">
+                                <span className='creationtext'>
+                                    {getRelativeTime(postdetails?.createdAt)}
+                                </span>
+                            </div>
+                        </div>
+
+                        <span className='mx-2 mt-3  mb-3'> {postdetails?.postdescription}</span>
+                    </div>
+
+
                 </div>
 
+                    :
+                    <div className='singlepostbox ' onClick={() => { navigate(`/viewpost/${pid}`) }}>
+
+                        <div className="detail d-flex flex-column ">
+                            <div className="d-flex align-items-center justify-content-between spebox ">
+                                <div>
+                                    <img src={postdetails?.userDetails[0].profilePicture ? postdetails?.userDetails[0].profilePicture : defaultprofileimg2}
+                                        alt="userphoto"
+                                        className='singlepostuserphoto mx-1 '
+                                        onClick={(event) => {
+                                            event.stopPropagation();
+                                            navigate(`/view-user-profile/${postdetails?.userId}`)
+                                        }}
+                                    />
+                                    <span className='mx-1'><b>From  <i style={{ color: 'grey' }}>@{postdetails?.userDetails[0].username}</i></b></span>
+                                </div>
+
+                                <div className="creationdatebox mx-2">
+                                    <span className='creationtext'>
+                                        {getRelativeTime(postdetails?.createdAt)}
+                                    </span>
+                                </div>
+
+
+                            </div>
+
+                            <span className='mx-2 mt-3  mb-3'> {postdetails?.postdescription}</span>
+                        </div>
+                        <div className="spostfeatures" onClick={(event) => { event.stopPropagation(); }}>
+
+                            <div className='featureicon'>
+                                {isLikedByUser ? <AiFillLike
+                                    style={{ width: '29px', color: 'orange', height: '29px', marginTop: '-3px', paddingLeft: '2px', marginRight: '-3px' }}
+                                    onClick={() => {
+                                        UnLikePost(pid, jwtToken)
+                                        setIsLikedByUser(false)
+                                        postdetails.likeCount = (postdetails?.likeCount - 1)
+                                    }}
+                                />
+                                    :
+                                    <AiOutlineLike
+                                        style={{ width: '29px', height: '29px', marginTop: '-3px', paddingLeft: '2px', marginRight: '-3px' }}
+                                        onClick={() => {
+                                            LikePost(pid, jwtToken)
+                                            setIsLikedByUser(true)
+                                            postdetails.likeCount = (postdetails?.likeCount + 1)
+                                        }}
+                                    />}
+
+                                <span style={{ color: "var(--gray)", fontSize: '12px' }}>{postdetails?.likeCount}</span>
+                            </div>
+
+
+
+                            {isRepostedByUser ?
+                                <div className='featureicon' style={{ color: postdetails?.userId === userId ? '#bebebe' : '#00ff00', cursor: postdetails?.userId === userId ? 'text' : 'pointer' }} >
+                                    <UilRedo
+                                        onClick={() => {
+                                            if (postdetails.userId !== userId) {
+
+                                                UnRepostThePost(pid, jwtToken)
+                                                setIsRepostedByUser(false)
+                                                postdetails.repostCount = (postdetails?.repostCount - 1)
+                                            }
+
+                                        }} />
+                                    <span style={{ fontSize: '12px' }}>{postdetails?.repostCount}</span>
+                                </div>
+                                :
+                                <div className='featureicon' style={{ color: postdetails?.userId === userId ? '#bebebe' : 'black', cursor: postdetails?.userId === userId ? 'text' : 'pointer' }} >
+                                    <UilRedo
+                                        onClick={() => {
+                                            if (postdetails.userId !== userId) {
+                                                RepostThePost(pid, jwtToken)
+                                                setIsRepostedByUser(true)
+                                                postdetails.repostCount = (postdetails?.repostCount + 1)
+
+                                            }
+
+                                        }}
+                                    />
+                                    <span style={{ fontSize: '12px' }}>{postdetails?.repostCount}</span>
+                                </div>
+                            }
+
+
+
+                            <div className='featureicon'>
+                                <UilCommentAltNotes onClick={(event) => { navigate(`/viewpost/${pid}`) }} />
+                                <span style={{ color: "var(--gray)", fontSize: '12px' }}>{postdetails?.commentNo}</span>
+                            </div>
+
+
+
+                            <div className='featureicon'>
+                                <UilShare />
+                                <span style={{ color: "var(--gray)", fontSize: '12px' }}></span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                }
+
+
+
+
+            </>)
 
             }
-
-
-
-
         </>
 
 
